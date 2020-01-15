@@ -36,13 +36,14 @@ if (isset($old['description'])) {
 }
 
 ?>
-<div class="mb-3">
-	<h3 class="mb-0">
-		<span>Editar producto #<?php echo isset($product['id']) ? $product['id'] : '' ?></span>
-	</h3>
-</div>
-<div class="row">
+
+<div class="row justify-content-center">
 	<div class="col-12 col-md-12 col-lg-10 col-xl-8">
+		<div class="mb-3">
+			<h3 class="mb-0">
+				<span>Editar producto #<?php echo isset($product['id']) ? $product['id'] : '' ?></span>
+			</h3>
+		</div>
 		<div class="card bg-white shadow">
 			<div class="card-body">
 				<form id="new_product" method="post" action="<?php echo base_url('admin/products/edit_product_validation') ?>">
@@ -97,7 +98,7 @@ if (isset($old['description'])) {
 					<div class="d-flex justify-content-between">
 						<a href="<?php echo base_url('admin/productos') ?>"
 						   class="btn btn-lg btn-secondary">Cancelar</a>
-						<button id="submit_btn" type="submit" class="btn btn-lg btn-primary btn-user">Guardar cambios
+						<button id="submit_btn" type="submit" class="btn btn-lg btn-success">Guardar cambios
 						</button>
 					</div>
 				</form>

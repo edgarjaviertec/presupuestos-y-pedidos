@@ -28,18 +28,15 @@ class Customers extends CI_Controller
 		if ($this->customers->count_all_records() <= 0) {
 			$data['page'] = 'no_customers';
 			$data['title'] = 'No hay clientes';
-			$this->load->view('layouts/default_layout', $data);
+			$this->load->view('layouts/dashboard_layout', $data);
 		} else {
 			$data['page'] = 'customer_list';
 			$data['title'] = 'Clientes';
 			$data['js_files'] = [
-				base_url('assets/vendor/sweetalert2/sweetalert2.all.min.js'),
-				base_url('assets/vendor/datatables/jquery.dataTables.min.js'),
-				base_url('assets/vendor/datatables/dataTables.bootstrap4.min.js'),
-				base_url('assets/js/customers.js')
+				base_url('assets/js/list.vendor.min.js'),
+				base_url('assets/js/customers.min.js')
 			];
-			$data['css_files'] = base_url('assets/vendor/datatables/dataTables.bootstrap4.min.css');
-			$this->load->view('layouts/default_layout', $data);
+			$this->load->view('layouts/dashboard_layout', $data);
 		}
 
 
@@ -50,11 +47,10 @@ class Customers extends CI_Controller
 		$data['page'] = 'new_customer';
 		$data['title'] = 'Nuevo cliente';
 		$data['js_files'] = [
-			base_url('assets/vendor/select2/select2.min.js'),
-			base_url('assets/js/new_customer.js')
+			base_url('assets/js/new-edit.vendor.min.js'),
+			base_url('assets/js/new-customer.min.js')
 		];
-		$data['css_files'] = base_url('assets/vendor/select2/select2.min.css');
-		$this->load->view('layouts/default_layout', $data);
+		$this->load->view('layouts/dashboard_layout', $data);
 	}
 
 	public function new_customer_validation()
@@ -126,7 +122,7 @@ class Customers extends CI_Controller
 
 
 		$datatables->edit('id', function ($data) {
-			return '<span class="px-3 badge badge-pill badge-secondary"><span class="font-weight-bold h6">#' . $data['id'] . '</span></span>';
+			return '<span class="px-3 badge badge-pill badge-light"><span class="font-weight-bold h6">#' . $data['id'] . '</span></span>';
 		});
 
 		$datatables->add('action', function ($data) {
@@ -138,12 +134,12 @@ class Customers extends CI_Controller
 			$delete_button = '<form class="d-inline" method="POST" action="' . base_url('admin/customers/delete_customer_validation') . '">';
 			$delete_button .= '<input type="hidden" name="id" value="' . $data['id'] . '" />';
 			$delete_button .= '<input type="hidden" name="' . $csrf['name'] . '" value="' . $csrf['hash'] . '" />';
-			$delete_button .= '<button class="btn btn-danger delete_btn"><i class="fas fa-trash-alt"></i></button>';
+			$delete_button .= '<button class="btn btn-danger delete_btn"><i class="fas fa-times"></i></button>';
 			$delete_button .= '</form>';
 
 			$edit_button = '<a ';
 			$edit_button .= 'href="' . base_url('admin/clientes/' . $data['id']) . '"';
-			$edit_button .= 'class="btn btn-primary mr-1">';
+			$edit_button .= 'class="btn btn-primary mr-2">';
 			$edit_button .= '<i class="fas fa-pencil-alt"></i>';
 			$edit_button .= '</a>';
 
@@ -161,12 +157,12 @@ class Customers extends CI_Controller
 		$data['page'] = 'edit_customer';
 		$data['title'] = 'Editar cliente #' . $id;
 		$data['js_files'] = [
-			base_url('assets/vendor/select2/select2.min.js'),
-			base_url('assets/js/edit_customer.js')
+			base_url('assets/js/new-edit.vendor.min.js'),
+			base_url('assets/js/edit-customer.min.js')
 		];
-		$data['css_files'] = base_url('assets/vendor/select2/select2.min.css');
+		//$data['css_files'] = base_url('assets/vendor/select2/select2.min.css');
 		$data['customer'] = $customer;
-		$this->load->view('layouts/default_layout', $data);
+		$this->load->view('layouts/dashboard_layout', $data);
 	}
 
 	public function edit_customer_validation()

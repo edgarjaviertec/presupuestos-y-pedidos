@@ -40,14 +40,15 @@ if (isset($old['role'])) {
 ?>
 
 
-<div class="mb-3">
-	<h3 class="mb-0">
-		<span>Nuevo usuario</span>
-	</h3>
-</div>
 
-<div class="row">
-	<div class="col-12 col-lg-6">
+
+<div class="row justify-content-center">
+	<div class="col-12 col-lg-10 col-xl-8">
+		<div class="mb-3">
+			<h3 class="mb-0">
+				<span>Nuevo usuario</span>
+			</h3>
+		</div>
 		<div class="card bg-white shadow">
 			<div class="card-body">
 				<form method="post" action="<?php echo base_url('admin/users/new_user_validation') ?>">
@@ -111,7 +112,7 @@ if (isset($old['role'])) {
 					</div>
 					<div class="d-flex justify-content-between">
 						<a href="<?php echo base_url('admin/usuarios') ?>" class="btn btn-lg btn-secondary">Cancelar</a>
-						<button type="submit" class="btn btn-lg btn-primary btn-user">Crear usuario</button>
+						<button type="submit" class="btn btn-lg btn-success btn-user">Crear usuario</button>
 					</div>
 				</form>
 			</div>

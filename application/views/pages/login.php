@@ -6,21 +6,13 @@ $csrf = array(
 	'hash' => $this->security->get_csrf_hash()
 );
 ?>
-<!--<div class="m-5 p-3 bg-white">-->
-<!--	--><?php
-//	echo "<pre>";
-//	print_r($old);
-//	echo "</pre>";
-//	?>
-<!--</div>-->
-<div class="container d-flex align-items-center h-100 w-100">
-	<div class="row w-100 justify-content-center">
-		<div class="col-12 col-sm-12 col-md-6 col-lg-5">
-			<div class="card o-hidden border-0 shadow-lg">
-				<div class="card-body p-4">
-					<div class="text-center">
-						<h1 class="h4 text-gray-900 mb-4">Iniciar sesión</h1>
-					</div>
+
+<div class="full-height-layout bg-primary">
+	<main class="main">
+		<div class="login">
+			<div class="card shadow">
+				<div class="card-body">
+					<h1 class="h4 mb-4">Ingrese a su cuenta</h1>
 					<form action="<?php echo base_url('auth/login_validation') ?>" method="post">
 						<input type="hidden" name="<?= $csrf['name']; ?>" value="<?= $csrf['hash']; ?>"/>
 						<div class="form-group">
@@ -45,10 +37,12 @@ $csrf = array(
 								<?php echo isset($errors['password']) ? $errors['password'] : '' ?>
 							</div>
 						</div>
-						<input class="btn btn-primary btn-block" type="submit" value="Iniciar sesión">
+						<input class="btn btn-lg btn-success btn-block" type="submit" value="Iniciar sesión">
 					</form>
 				</div>
 			</div>
 		</div>
-	</div>
+	</main>
 </div>
+
+

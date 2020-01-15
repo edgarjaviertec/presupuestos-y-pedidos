@@ -166,13 +166,17 @@ if (isset($old['notes'])) {
 ?>
 
 
-<div class="mb-3">
-	<h3 class="mb-0">
-		<span>Editar usuario #<?php echo isset($customer['id']) ? $customer['id'] : '' ?></span>
-	</h3>
-</div>
-<div class="row">
-	<div class="col-12 col-md-12 col-lg-10 col-xl-8">
+
+<div class="row justify-content-center">
+	<div class="col-12 col-md-12 col-xl-10">
+
+		<div class="mb-3">
+			<h3 class="mb-0">
+				<span>Editar usuario #<?php echo isset($customer['id']) ? $customer['id'] : '' ?></span>
+			</h3>
+		</div>
+
+
 		<div class="card bg-white shadow">
 			<div class="card-body">
 				<form method="post" action="<?php echo base_url('admin/customers/edit_customer_validation') ?>">
@@ -295,7 +299,7 @@ if (isset($old['notes'])) {
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-12 col-md-3">
+						<div class="col-12 col-md-6 col-lg-3">
 							<div class="form-group">
 								<label>Ciudad</label>
 								<input
@@ -309,7 +313,7 @@ if (isset($old['notes'])) {
 								</div>
 							</div>
 						</div>
-						<div class="col-12 col-md-3">
+						<div class="col-12 col-md-6 col-lg-3">
 							<div class="form-group">
 								<label>Estado</label>
 								<input
@@ -323,7 +327,7 @@ if (isset($old['notes'])) {
 								</div>
 							</div>
 						</div>
-						<div class="col-12 col-md-3">
+						<div class="col-12 col-md-6 col-lg-3">
 							<div class="form-group">
 								<label>País</label>
 								<select
@@ -967,7 +971,7 @@ if (isset($old['notes'])) {
 								</div>
 							</div>
 						</div>
-						<div class="col-12 col-md-3">
+						<div class="col-12 col-md-6 col-lg-3">
 							<div class="form-group">
 								<label>Código postal</label>
 								<input
@@ -996,7 +1000,7 @@ if (isset($old['notes'])) {
 					</div>
 					<div class="d-flex justify-content-between">
 						<a href="<?php echo base_url('admin/clientes') ?>" class="btn btn-lg btn-secondary">Cancelar</a>
-						<button type="submit" class="btn btn-lg btn-primary btn-user">Guardar cambios</button>
+						<button type="submit" class="btn btn-lg btn-success">Guardar cambios</button>
 					</div>
 				</form>
 			</div>

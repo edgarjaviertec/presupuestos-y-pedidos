@@ -25,18 +25,15 @@ class Users extends CI_Controller
 	{
 		if ($this->users->count_all_records() <= 0) {
 			$data['page'] = 'no_users';
-			$this->load->view('layouts/default_layout', $data);
+			$this->load->view('layouts/dashboard_layout', $data);
 		} else {
 			$data['page'] = 'user_list';
 			$data['title'] = 'Usuarios';
 			$data['js_files'] = [
-				'https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.all.min.js',
-				base_url('assets/vendor/datatables/jquery.dataTables.min.js'),
-				base_url('assets/vendor/datatables/dataTables.bootstrap4.min.js'),
-				base_url('assets/js/users.js')
+				base_url('assets/js/list.vendor.min.js'),
+				base_url('assets/js/users.min.js')
 			];
-			$data['css_files'] = base_url('assets/vendor/datatables/dataTables.bootstrap4.min.css');
-			$this->load->view('layouts/default_layout', $data);
+			$this->load->view('layouts/dashboard_layout', $data);
 		}
 	}
 
@@ -44,7 +41,10 @@ class Users extends CI_Controller
 	{
 		$data['page'] = 'new_user';
 		$data['title'] = 'Nuevo usuario';
-		$this->load->view('layouts/default_layout', $data);
+		$data['js_files'] = [
+			base_url('assets/js/new-edit.vendor.min.js')
+		];
+		$this->load->view('layouts/dashboard_layout', $data);
 	}
 
 	public function new_user_validation()
@@ -110,8 +110,11 @@ class Users extends CI_Controller
 		}
 		$data['page'] = 'change_password';
 		$data['title'] = 'Cambiar contraseña del usuario #' . $id;
+		$data['js_files'] = [
+			base_url('assets/js/new-edit.vendor.min.js')
+		];
 		$data['user'] = $user;
-		$this->load->view('layouts/default_layout', $data);
+		$this->load->view('layouts/dashboard_layout', $data);
 	}
 
 	public function change_password_validation()
@@ -153,8 +156,11 @@ class Users extends CI_Controller
 		}
 		$data['page'] = 'edit_user';
 		$data['title'] = 'Editar usuario #' . $id;
+		$data['js_files'] = [
+			base_url('assets/js/new-edit.vendor.min.js')
+		];
 		$data['user'] = $user;
-		$this->load->view('layouts/default_layout', $data);
+		$this->load->view('layouts/dashboard_layout', $data);
 	}
 
 	public function edit_user_validation()
@@ -208,7 +214,7 @@ class Users extends CI_Controller
 		$datatables->query('SELECT id, nombre_usuario, correo_electronico, rol FROM usuarios WHERE eliminado_en IS NULL');
 
 		$datatables->edit('id', function ($data) {
-			return '<span class="px-3 badge badge-pill badge-secondary"><span class="font-weight-bold h6">#' . $data['id'] . '</span></span>';
+			return '<span class="px-3 badge badge-pill badge-light"><span class="font-weight-bold h6">#' . $data['id'] . '</span></span>';
 		});
 
 		$datatables->add('action', function ($data) {
@@ -221,16 +227,16 @@ class Users extends CI_Controller
 			$delete_button = '<form class="d-inline" method="POST" action="' . base_url('admin/users/delete_user_validation') . '">';
 			$delete_button .= '<input type="hidden" name="id" value="' . $data['id'] . '" />';
 			$delete_button .= '<input type="hidden" name="' . $csrf['name'] . '" value="' . $csrf['hash'] . '" />';
-			$delete_button .= '<button class="btn btn-danger delete_btn" ' . $disabled_attr . '><i class="fas fa-trash-alt"></i></button>';
+			$delete_button .= '<button class="btn btn-danger delete_btn" ' . $disabled_attr . '><i class="fas fa-times"></i></button>';
 			$delete_button .= '</form>';
 			$edit_button = '<a ';
 			$edit_button .= 'href="' . base_url('admin/usuarios/' . $data['id']) . '"';
-			$edit_button .= 'class="btn btn-primary mr-1">';
+			$edit_button .= 'class="btn btn-primary mr-2">';
 			$edit_button .= '<i class="fas fa-pencil-alt"></i>';
 			$edit_button .= '</a>';
 			$change_pass_button = '<a ';
 			$change_pass_button .= 'href="' . base_url('admin/usuarios/cambiar_contrasena/' . $data['id']) . '"';
-			$change_pass_button .= 'class="btn btn-primary mr-1">';
+			$change_pass_button .= 'class="btn btn-primary mr-2">';
 			$change_pass_button .= '<i class="fas fa-key"></i>';
 			$change_pass_button .= '</a>';
 			return $change_pass_button . $edit_button . $delete_button;

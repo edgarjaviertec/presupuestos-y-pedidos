@@ -23,7 +23,10 @@ class Auth extends CI_Controller
 		}
 		$data['page'] = 'login';
 		$data['title'] = 'Iniciar sesión';
-		$this->load->view('layouts/auth', $data);
+		$data['js_files'] = [
+			base_url('assets/js/login.vendor.min.js')
+		];
+		$this->load->view('layouts/full_height_layout', $data);
 	}
 
 	public function login_validation()

@@ -9,18 +9,19 @@ $csrf = array(
 	'hash' => $this->security->get_csrf_hash()
 );
 ?>
-<div class="mb-3">
-	<h3 class="mb-0">
-		<span>Nuevo cliente</span>
-	</h3>
-</div>
-<div class="row">
-	<div class="col-12 col-md-12 col-lg-10 col-xl-8">
+
+<div class="row justify-content-center">
+	<div class="col-12 col-md-12 col-xl-10">
+		<div class="mb-3">
+			<h3 class="mb-0">
+				<span>Nuevo cliente</span>
+			</h3>
+		</div>
+
 		<div class="card bg-white shadow">
 			<div class="card-body">
 				<form method="post" action="<?php echo base_url('admin/customers/new_customer_validation') ?>">
 					<input type="hidden" name="<?= $csrf['name']; ?>" value="<?= $csrf['hash']; ?>"/>
-
 
 					<div class="row">
 						<div class="col-12 col-md-6">
@@ -160,7 +161,7 @@ $csrf = array(
 
 
 					<div class="row">
-						<div class="col-12 col-md-3">
+						<div class="col-12 col-md-6 col-lg-3">
 							<div class="form-group">
 								<label>Ciudad</label>
 
@@ -176,7 +177,7 @@ $csrf = array(
 								</div>
 							</div>
 						</div>
-						<div class="col-12 col-md-3">
+						<div class="col-12 col-md-6 col-lg-3">
 							<div class="form-group">
 								<label>Estado</label>
 								<input
@@ -190,7 +191,7 @@ $csrf = array(
 								</div>
 							</div>
 						</div>
-						<div class="col-12 col-md-3">
+						<div class="col-12 col-md-6 col-lg-3">
 							<div class="form-group">
 								<label>País</label>
 								<select
@@ -402,7 +403,7 @@ $csrf = array(
 							</div>
 
 						</div>
-						<div class="col-12 col-md-3">
+						<div class="col-12 col-md-6 col-lg-3">
 							<div class="form-group">
 								<label>Código postal</label>
 								<input
@@ -417,7 +418,6 @@ $csrf = array(
 							</div>
 
 						</div>
-
 					</div>
 
 
@@ -438,7 +438,7 @@ $csrf = array(
 					</div>
 					<div class="d-flex justify-content-between">
 						<a href="<?php echo base_url('admin/clientes') ?>" class="btn btn-lg btn-secondary">Cancelar</a>
-						<button type="submit" class="btn btn-lg btn-primary btn-user">Crear cliente</button>
+						<button type="submit" class="btn btn-lg btn-success">Crear cliente</button>
 					</div>
 				</form>
 			</div>

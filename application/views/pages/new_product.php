@@ -9,13 +9,14 @@ $csrf = array(
 	'hash' => $this->security->get_csrf_hash()
 );
 ?>
-<div class="mb-3">
-	<h3 class="mb-0">
-		<span>Nuevo producto</span>
-	</h3>
-</div>
-<div class="row">
+
+<div class="row justify-content-center">
 	<div class="col-12 col-md-12 col-lg-10 col-xl-8">
+		<div class="mb-3">
+			<h3 class="mb-0">
+				<span>Nuevo producto</span>
+			</h3>
+		</div>
 		<div class="card bg-white shadow">
 			<div class="card-body">
 				<form id="new_product" method="post"
@@ -70,7 +71,7 @@ $csrf = array(
 					<div class="d-flex justify-content-between">
 						<a href="<?php echo base_url('admin/productos') ?>"
 						   class="btn btn-lg btn-secondary">Cancelar</a>
-						<button id="submit_btn" type="submit" class="btn btn-lg btn-primary btn-user">Crear producto
+						<button id="submit_btn" type="submit" class="btn btn-lg btn-success">Crear producto
 						</button>
 					</div>
 				</form>

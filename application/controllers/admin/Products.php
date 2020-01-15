@@ -28,18 +28,15 @@ class Products extends CI_Controller
 		if ($this->products->count_all_records() <= 0) {
 			$data['page'] = 'no_products';
 			$data['title'] = 'No hay productos';
-			$this->load->view('layouts/default_layout', $data);
+			$this->load->view('layouts/dashboard_layout', $data);
 		} else {
 			$data['page'] = 'product_list';
 			$data['title'] = 'Productos';
 			$data['js_files'] = [
-				base_url('assets/vendor/sweetalert2/sweetalert2.all.min.js'),
-				base_url('assets/vendor/datatables/jquery.dataTables.min.js'),
-				base_url('assets/vendor/datatables/dataTables.bootstrap4.min.js'),
-				base_url('assets/js/products.js')
+				base_url('assets/js/list.vendor.min.js'),
+				base_url('assets/js/products.min.js')
 			];
-			$data['css_files'] = base_url('assets/vendor/datatables/dataTables.bootstrap4.min.css');
-			$this->load->view('layouts/default_layout', $data);
+			$this->load->view('layouts/dashboard_layout', $data);
 		}
 
 
@@ -50,10 +47,10 @@ class Products extends CI_Controller
 		$data['page'] = 'new_product';
 		$data['title'] = 'Nuevo producto';
 		$data['js_files'] = [
-			base_url('assets/vendor/cleave/cleave.min.js'),
-			base_url('assets/js/new_product.js')
+			base_url('assets/js/new-edit.vendor.min.js'),
+			base_url('assets/js/new-product.min.js')
 		];
-		$this->load->view('layouts/default_layout', $data);
+		$this->load->view('layouts/dashboard_layout', $data);
 	}
 
 	public function new_product_validation()
@@ -119,7 +116,7 @@ class Products extends CI_Controller
 
 
 		$datatables->edit('id', function ($data) {
-			return '<span class="px-3 badge badge-pill badge-secondary"><span class="font-weight-bold h6">#' . $data['id'] . '</span></span>';
+			return '<span class="px-3 badge badge-pill badge-light"><span class="font-weight-bold h6">#' . $data['id'] . '</span></span>';
 		});
 
 
@@ -136,12 +133,12 @@ class Products extends CI_Controller
 			$delete_button = '<form class="d-inline" method="POST" action="' . base_url('admin/products/delete_product_validation') . '">';
 			$delete_button .= '<input type="hidden" name="id" value="' . $data['id'] . '" />';
 			$delete_button .= '<input type="hidden" name="' . $csrf['name'] . '" value="' . $csrf['hash'] . '" />';
-			$delete_button .= '<button class="btn btn-danger delete_btn"><i class="fas fa-trash-alt"></i></button>';
+			$delete_button .= '<button class="btn btn-danger delete_btn"><i class="fas fa-times"></i></button>';
 			$delete_button .= '</form>';
 
 			$edit_button = '<a ';
 			$edit_button .= 'href="' . base_url('admin/productos/' . $data['id']) . '"';
-			$edit_button .= 'class="btn btn-primary mr-1">';
+			$edit_button .= 'class="btn btn-primary mr-2">';
 			$edit_button .= '<i class="fas fa-pencil-alt"></i>';
 			$edit_button .= '</a>';
 
@@ -159,11 +156,11 @@ class Products extends CI_Controller
 		$data['page'] = 'edit_product';
 		$data['title'] = 'Editar producto #' . $id;
 		$data['js_files'] = [
-			base_url('assets/vendor/cleave/cleave.min.js'),
-			base_url('assets/js/edit_product.js')
+			base_url('assets/js/new-edit.vendor.min.js'),
+			base_url('assets/js/edit-product.min.js')
 		];
 		$data['product'] = $product;
-		$this->load->view('layouts/default_layout', $data);
+		$this->load->view('layouts/dashboard_layout', $data);
 	}
 
 	public function edit_product_validation()
