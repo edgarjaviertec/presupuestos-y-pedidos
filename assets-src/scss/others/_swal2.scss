@@ -1,0 +1,86 @@
+.confirmation-modal {
+	background-color: rgba($gray-800, .5) !important;
+	.swal2-popup {
+		padding: 0;
+		box-shadow: $box-shadow;
+		.swal2-header {
+			border-top-left-radius: .3rem;
+			border-top-right-radius: .3rem;
+			border: $global-border-width solid $global-border-color;
+			border-bottom: none;
+			background-color: $gray-100;
+			padding: 1rem 1rem;
+			align-items: flex-start;
+			.swal2-title {
+				font-size: 1.25rem;
+				font-weight: normal;
+				text-align: left;
+				margin-bottom: 0;
+				color: $body-color;
+			}
+		}
+		.swal2-content {
+			padding: 1rem;
+			border: $global-border-width solid $global-border-color;
+			border-bottom: none;
+			#swal2-content {
+				text-align: left;
+				color: $body-color;
+
+			}
+		}
+		.swal2-actions {
+			justify-content: flex-end;
+			border-bottom-left-radius: .3rem;
+			border-bottom-right-radius: .3rem;
+			margin: 0;
+			padding: 0.75rem;
+			padding-top: 0;
+			border: $global-border-width solid $global-border-color;
+			border-top: none;
+			.swal2-cancel {
+				background: $secondary;
+				&:focus {
+					outline: 0;
+					box-shadow: 0 0 0 0.2rem rgba($secondary, .25);
+				}
+			}
+
+			.swal2-confirm {
+				background: $success;
+				&:focus {
+					outline: 0;
+					box-shadow: 0 0 0 0.2rem rgba($success, .25);
+				}
+			}
+		}
+	}
+}
+
+
+.flash-message{
+	&.flash-success {
+		.swal2-popup{
+			&.swal2-toast {
+				border: $global-border-width solid $global-border-color;
+				box-shadow: $box-shadow;
+				.swal2-header{
+					.swal2-icon{
+						font-family: "Font Awesome 5 Free";
+						border:none;
+						color: $success;
+						&.swal2-success{
+							&:before {
+								content: "\f058";
+							}
+						}
+						>*{
+						display: none;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+

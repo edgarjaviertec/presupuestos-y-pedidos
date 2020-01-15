@@ -1,0 +1,32 @@
+.sidebar{
+  .sidebar-heading{
+	text-transform: uppercase;
+	font-weight: bold;
+	color: rgba(white, 0.75);
+	font-size: 0.75rem;
+	padding:1rem;
+	padding-bottom:0.25rem;
+	margin:0;
+  }
+  .nav{
+	.nav-item{
+	  .nav-link{
+		display:flex;
+		align-items:center;
+		color: rgba(white, 0.75);
+		i{
+		  display:flex;
+		  height: 2.5rem;
+		  width: 3rem;
+		  font-size: 2rem;
+		}
+		&.active{
+		  color: white;
+		  font-weight: bold;
+		}
+	  }
+	}
+  }
+}
+
+

@@ -1,0 +1,24 @@
+.full-height-layout {
+  display: flex;
+  height: 100vh;
+
+  .main {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	.login {
+	  width: 100%;
+	  padding: 0 1rem;
+	  @media (min-width: 576px) {
+		padding: 0;
+		width: 400px;
+	  }
+	}
+
+  }
+
+}
+
+

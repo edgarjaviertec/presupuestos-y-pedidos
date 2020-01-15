@@ -1,0 +1,25 @@
+.dashboard-layout {
+  .main {
+	.form-control {
+	  background-color: $main-input-bg;
+	}
+
+	.custom-select {
+	  background: $main-input-bg $custom-select-background;
+	}
+
+	.select2-container {
+	  .select2-selection--single {
+		background-color: $main-input-bg;
+	  }
+	}
+  }
+
+  & ~ .select2-container--default {
+	.select2-search--dropdown {
+	  .select2-search__field {
+		background-color: $main-input-bg;
+	  }
+	}
+  }
+}

@@ -1,0 +1,20 @@
+@import "vars";
+@import "bootstrap-components";
+
+@import "custom-bootstrap/custom_navs";
+@import "custom-bootstrap/custom-modal";
+@import "custom-bootstrap/custom_popover";
+@import "custom-bootstrap/custom-tables";
+
+@import "others/font-awesome";
+@import "others/swal2";
+@import "others/dt-bs4";
+@import "others/dt-responsive-bs4";
+@import "others/select2";
+
+@import "styles/headings";
+@import "styles/layouts/full-height";
+@import "styles/layouts/dashboard-layout";
+@import "styles/sidebar";
+@import "styles/topbar";
+@import "styles/main";
