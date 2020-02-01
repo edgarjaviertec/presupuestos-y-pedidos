@@ -55,7 +55,7 @@ if (isset($old['role'])) {
 					<input type="hidden" name="<?= $csrf['name']; ?>" value="<?= $csrf['hash']; ?>"/>
 					<input type="hidden" name="id" value="<?php echo isset($user['id']) ? $user['id'] : '' ?>">
 					<div class="form-group">
-						<label for="name">Nombre de usuario</label>
+						<label for="name">Nombre de usuario <small class="text-muted">(requerido)</small></label>
 						<input
 							autocomplete="off"
 							type="text"
@@ -68,7 +68,7 @@ if (isset($old['role'])) {
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="email">Correo electrónico</label>
+						<label for="email">Correo electrónico <small class="text-muted">(requerido)</small></label>
 						<input
 							autocomplete="off"
 							type="text"

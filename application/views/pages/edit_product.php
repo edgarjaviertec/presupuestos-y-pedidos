@@ -50,7 +50,7 @@ if (isset($old['description'])) {
 					<input type="hidden" name="<?= $csrf['name']; ?>" value="<?= $csrf['hash']; ?>"/>
 					<input type="hidden" name="id" value="<?php echo isset($product['id']) ? $product['id'] : '' ?>">
 					<div class="form-group">
-						<label>Nombre</label>
+						<label>Nombre <small class="text-muted">(requerido)</small></label>
 						<input
 							autocomplete="off"
 							type="text"
@@ -63,7 +63,7 @@ if (isset($old['description'])) {
 					</div>
 					<div class="form-group">
 
-						<label>Precio unitario</label>
+						<label>Precio unitario <small class="text-muted">(requerido)</small></label>
 						<div class="input-group">
 							<div class="input-group-prepend">
 								<span class="input-group-text">$</span>

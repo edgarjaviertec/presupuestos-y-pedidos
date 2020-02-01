@@ -54,7 +54,7 @@ if (isset($old['role'])) {
 				<form method="post" action="<?php echo base_url('admin/users/new_user_validation') ?>">
 					<input type="hidden" name="<?= $csrf['name']; ?>" value="<?= $csrf['hash']; ?>"/>
 					<div class="form-group">
-						<label>Nombre de usuario</label>
+						<label>Nombre de usuario <small class="text-muted">(requerido)</small></label>
 						<input
 							autocomplete="off"
 							type="text"
@@ -67,7 +67,7 @@ if (isset($old['role'])) {
 						</div>
 					</div>
 					<div class="form-group">
-						<label>Correo electrónico</label>
+						<label>Correo electrónico <small class="text-muted">(requerido)</small></label>
 						<input
 							autocomplete="off"
 							type="text"
@@ -80,7 +80,7 @@ if (isset($old['role'])) {
 						</div>
 					</div>
 					<div class="form-group">
-						<label>Contraseña</label>
+						<label>Contraseña <small class="text-muted">(requerido)</small></label>
 						<input
 							autocomplete="off"
 							type="password"

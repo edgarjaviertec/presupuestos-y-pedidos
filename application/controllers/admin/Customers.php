@@ -28,6 +28,9 @@ class Customers extends CI_Controller
 		if ($this->customers->count_all_records() <= 0) {
 			$data['page'] = 'no_customers';
 			$data['title'] = 'No hay clientes';
+			$data['js_files'] = [
+				base_url('assets/js/empty.vendor.min.js'),
+			];
 			$this->load->view('layouts/dashboard_layout', $data);
 		} else {
 			$data['page'] = 'customer_list';
@@ -59,7 +62,7 @@ class Customers extends CI_Controller
 			show_404();
 		}
 		$common_error_messages = [
-			'required' => 'El campo "%s" es obligatorio',
+			'required' => 'El campo "%s"  es requerido',
 			'max_length' => 'El tamaño máximo del campo "%s" es de 255 caracteres ',
 			'valid_email' => 'El correo electrónico es inválido',
 			'valid_phone' => 'El número de teléfono es inválido',
@@ -171,7 +174,7 @@ class Customers extends CI_Controller
 			show_404();
 		}
 		$common_error_messages = [
-			'required' => 'El campo "%s" es obligatorio',
+			'required' => 'El campo "%s"  es requerido',
 			'max_length' => 'El tamaño máximo del campo "%s" es de 255 caracteres ',
 			'valid_email' => 'El correo electrónico es inválido',
 			'valid_phone' => 'El número de teléfono es inválido',

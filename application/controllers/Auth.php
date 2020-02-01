@@ -35,7 +35,7 @@ class Auth extends CI_Controller
 			show_404();
 		}
 		$error_messages = [
-			'required' => 'Este campo es obligatorio',
+			'required' => 'Este campo  es requerido',
 			'max_length' => 'El tamaño máximo del campo "%s" es de 255 caracteres ',
 			'valid_username' => 'Nombre de usuario o correo electrónico inválido'
 		];

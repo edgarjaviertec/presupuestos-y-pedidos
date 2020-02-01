@@ -23,7 +23,7 @@ $csrf = array(
 					  action="<?php echo base_url('admin/products/new_product_validation') ?>">
 					<input type="hidden" name="<?= $csrf['name']; ?>" value="<?= $csrf['hash']; ?>"/>
 					<div class="form-group">
-						<label>Nombre</label>
+						<label>Nombre <small class="text-muted">(requerido)</small></label>
 						<input
 							autocomplete="off"
 							type="text"
@@ -36,7 +36,7 @@ $csrf = array(
 					</div>
 					<div class="form-group">
 
-						<label>Precio unitario</label>
+						<label>Precio unitario <small class="text-muted">(requerido)</small></label>
 						<div class="input-group">
 							<div class="input-group-prepend">
 								<span class="input-group-text">$</span>

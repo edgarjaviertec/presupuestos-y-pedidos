@@ -28,6 +28,9 @@ class Products extends CI_Controller
 		if ($this->products->count_all_records() <= 0) {
 			$data['page'] = 'no_products';
 			$data['title'] = 'No hay productos';
+			$data['js_files'] = [
+				base_url('assets/js/empty.vendor.min.js'),
+			];
 			$this->load->view('layouts/dashboard_layout', $data);
 		} else {
 			$data['page'] = 'product_list';
@@ -64,7 +67,7 @@ class Products extends CI_Controller
 		}
 
 		$common_error_messages = [
-			'required' => 'El campo "%s" es obligatorio',
+			'required' => 'El campo "%s"  es requerido',
 			'max_length' => 'El tamaño máximo del campo "%s" es de 255 caracteres ',
 			'numeric' => 'El campo "%s" debe contener solo números',
 			'greater_than' => 'El campo "%s" debe contener un número mayor que 0',
@@ -175,7 +178,7 @@ class Products extends CI_Controller
 		}
 
 		$common_error_messages = [
-			'required' => 'El campo "%s" es obligatorio',
+			'required' => 'El campo "%s"  es requerido',
 			'max_length' => 'El tamaño máximo del campo "%s" es de 255 caracteres ',
 			'numeric' => 'El campo "%s" debe contener solo números',
 			'greater_than' => 'El campo "%s" debe contener un número mayor que 0',

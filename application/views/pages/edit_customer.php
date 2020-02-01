@@ -185,7 +185,7 @@ if (isset($old['notes'])) {
 					<div class="row">
 						<div class="col-12 col-md-6">
 							<div class="form-group">
-								<label>Nombre</label>
+								<label>Nombre <small class="text-muted">(requerido)</small></label>
 								<input
 									autocomplete="off"
 									type="text"
@@ -199,7 +199,7 @@ if (isset($old['notes'])) {
 						</div>
 						<div class="col-12 col-md-6">
 							<div class="form-group">
-								<label>Apellidos</label>
+								<label>Apellidos <small class="text-muted">(requerido)</small></label>
 								<input
 									autocomplete="off"
 									type="text"
@@ -215,7 +215,7 @@ if (isset($old['notes'])) {
 					<div class="row">
 						<div class="col-12 col-md-6">
 							<div class="form-group">
-								<label>Empresa</label>
+								<label>Empresa <small class="text-muted">(requerido)</small></label>
 								<input
 									autocomplete="off"
 									type="text"

@@ -116,7 +116,17 @@ $s2-selected-option-color: $dropdown-link-active-color;
 
 	&[aria-selected] {
 		cursor: pointer;
+
 	}
+
+  .select2-results__option__icon{
+	color: $gray-400;
+	margin-right: 0.5rem;
+  }
+
+
+
+
 }
 
 .select2-container--open {
@@ -701,4 +711,8 @@ $s2-selected-option-color: $dropdown-link-active-color;
 	&.select2-container--open .select2-dropdown {
 		border-color: $s2-highlighted-option-bg;
 	}
+}
+
+.select2-results__option__icon{
+  color:red;
 }

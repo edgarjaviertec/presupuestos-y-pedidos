@@ -69,4 +69,8 @@ $route['admin/productos'] = 'admin/products';
 $route['admin/productos/nuevo'] = 'admin/products/new_product';
 $route['admin/productos/(:num)'] = 'admin/products/edit_product/$1';
 
+$route['admin/presupuestos'] = 'admin/estimates';
+$route['admin/presupuestos/nuevo'] = 'admin/estimates/new_estimate';
+$route['admin/presupuestos/(:num)'] = 'admin/estimates/edit_estimate/$1';
+
 

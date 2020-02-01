@@ -25,6 +25,10 @@ class Users extends CI_Controller
 	{
 		if ($this->users->count_all_records() <= 0) {
 			$data['page'] = 'no_users';
+			$data['title'] = 'No hay usuarios';
+			$data['js_files'] = [
+				base_url('assets/js/empty.vendor.min.js'),
+			];
 			$this->load->view('layouts/dashboard_layout', $data);
 		} else {
 			$data['page'] = 'user_list';
@@ -54,7 +58,7 @@ class Users extends CI_Controller
 		}
 
 		$error_messages = [
-			'required' => 'El campo "%s" es obligatorio',
+			'required' => 'El campo "%s"  es requerido',
 			'alpha_dash' => 'El campo "%s" solo puede contener caracteres alfanuméricos, guiones bajos y guiones medios',
 			'alpha_numeric' => 'El campo "%s" solo puede contener caracteres alfanuméricos',
 			'max_length' => 'El tamaño máximo del campo "%s" es de 255 caracteres ',
@@ -123,7 +127,7 @@ class Users extends CI_Controller
 			show_404();
 		}
 		$error_messages = [
-			'required' => 'El campo "%s" es obligatorio',
+			'required' => 'El campo "%s"  es requerido',
 			'alpha_numeric' => 'El campo "%s" solo puede contener caracteres alfanumérico',
 			'max_length' => 'El tamaño máximo del campo "%s" es de 255 caracteres ',
 			'matches' => 'Las contraseña no coincide',
@@ -169,7 +173,7 @@ class Users extends CI_Controller
 			show_404();
 		}
 		$error_messages = [
-			'required' => 'El campo "%s" es obligatorio',
+			'required' => 'El campo "%s"  es requerido',
 			'alpha_dash' => 'El campo "%s" solo puede contener caracteres alfanuméricos, guiones bajos y guiones medios',
 			'alpha_numeric' => 'El campo "%s" solo puede contener caracteres alfanuméricos',
 			'max_length' => 'El tamaño máximo del campo "%s" es de 255 caracteres ',

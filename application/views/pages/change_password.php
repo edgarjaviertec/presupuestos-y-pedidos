@@ -40,7 +40,7 @@ if (isset($old['confirm_password'])) {
 					<input type="hidden" name="<?= $csrf['name']; ?>" value="<?= $csrf['hash']; ?>"/>
 					<input type="hidden" name="id" value="<?php echo isset($user['id']) ? $user['id'] : '' ?>">
 					<div class="form-group">
-						<label>Nueva contraseña</label>
+						<label>Nueva contraseña <small class="text-muted">(requerido)</small></label>
 						<input type="password"
 							   class="form-control<?php echo isset($errors['password']) ? ' is-invalid' : '' ?>"
 							   name="password"
@@ -50,7 +50,7 @@ if (isset($old['confirm_password'])) {
 						</div>
 					</div>
 					<div class="form-group">
-						<label>Repetir contraseña</label>
+						<label>Repetir contraseña <small class="text-muted">(requerido)</small></label>
 						<input type="password"
 							   class="form-control<?php echo isset($errors['confirm_password']) ? ' is-invalid' : '' ?>"
 							   name="confirm_password"

@@ -1,0 +1,673 @@
+.main {
+  .document-container {
+	padding: 1.25rem;
+	background-color: $body-bg;
+	border: $global-border-width solid $global-border-color;
+	border-radius: $border-radius;
+	box-shadow: $box-shadow;
+
+	label {
+	  font-weight: bold;
+	}
+
+	button:focus {
+	  outline: none;
+	  outline: none;
+	}
+
+	.meta-data {
+	  display: grid;
+	  grid-template-areas: 'logo' 'company-info' 'number-and-date' 'due-date' 'customer';
+	  grid-template-columns: 1fr;
+	  grid-gap: 1rem;
+	  @media (min-width: 992px) {
+		grid-template-areas: 'logo company-info number-and-date' 'due-date due-date due-date' 'customer customer customer';
+		grid-template-columns: 180px 1fr 250px;
+	  }
+
+	  .logo {
+		grid-area: logo;
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: flex-end;
+		order: 1;
+		overflow: hidden;
+
+		img {
+		  width: 180px;
+		  height: auto;
+		}
+	  }
+
+	  .company-info {
+		grid-area: company-info;
+		order: 2;
+		display: flex;
+		align-items: flex-end;
+		width: 100%;
+		margin: 0;
+		color: $gray-800;
+		font-weight: bold;
+		text-transform: uppercase;
+		text-align: center;
+
+		p {
+		  padding: 0.75rem;
+		  margin: 0;
+		  display: flex;
+		  align-items: center;
+		  @media (min-width: 1200px) {
+			font-size: 1rem;
+			width: 350px;
+		  }
+		}
+	  }
+
+	  .number-and-date {
+		grid-area: number-and-date;
+		width: 100%;
+		display: flex;
+		flex-wrap: wrap;
+		border: $global-border-width solid $global-border-color;
+		border-radius: $border-radius;
+		overflow: hidden;
+
+		.panel-container {
+		  display: flex;
+		  flex-wrap: wrap;
+		  width: 100%;
+		  @media (min-width: 576px) {
+			width: 100%;
+		  }
+
+		  .number-panel, .date-panel {
+			display: flex;
+			flex-wrap: wrap;
+			flex-direction: column;
+			width: 100%;
+			@media (min-width: 576px) {
+			  width: 50%;
+			}
+			@media (min-width: 992px) {
+			  width: 100%;
+			}
+
+			.panel-header, .panel-body {
+			  padding: 0.25rem;
+			  @media (min-width: 768px) {
+				padding: 0.5rem;
+			  }
+			}
+
+			.panel-header {
+			  text-transform: uppercase;
+			  font-weight: bold;
+			  background-color: $card-cap-bg;
+			  border-bottom: $global-border-width solid $global-border-color;
+			}
+
+			.panel-body {
+			  background: $card-bg;
+			  flex-grow: 1;
+			  display: flex;
+			  align-items: center;
+			}
+		  }
+
+		  .number-panel {
+			.number {
+			  display: block;
+			  font-size: 1.2rem;
+			  color: $pink;
+			}
+
+			@media (min-width: 576px) {
+			  border-right: $global-border-width solid $global-border-color;
+			}
+			@media (min-width: 992px) {
+			  border-right: none;
+			}
+		  }
+
+		  .date-panel {
+			.panel-header {
+			  border-top: $global-border-width solid $global-border-color;
+			  @media (min-width: 576px) {
+				border-top: none;
+			  }
+			  @media (min-width: 992px) {
+				border-top: $global-border-width solid $global-border-color;
+			  }
+			}
+		  }
+		}
+	  }
+
+	  .due-date {
+		grid-area: due-date;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		@media (min-width: 576px) {
+		  justify-content: flex-end;
+		}
+
+		label {
+		  margin-bottom: 0;
+		  margin-right: 0.5rem;
+		}
+
+		.custom-select {
+		  width: 6rem;
+		  margin-right: 0.5rem;
+		}
+	  }
+
+	  .customer {
+		width: 100%;
+		grid-area: customer;
+
+		.customer-select2 {
+		  width: 100%;
+		  position: relative;
+
+		  .add-customer-btn {
+			background: white;
+			display: flex;
+			width: 100%;
+			justify-content: center;
+			align-items: center;
+			padding: 1.5rem;
+			border: $global-border-width dashed $global-border-color;
+			border-radius: $border-radius;
+			color: $gray-400;
+			cursor: pointer;
+			position: relative;
+
+			&.is-invalid {
+			  border: $global-border-width dashed $danger;
+			  color: $danger;
+
+			  &:hover {
+				background-color: rgba($danger, 0.10);
+				color: $danger;
+			  }
+			}
+
+			&:focus {
+			  outline: 0;
+			}
+
+			.icon {
+			  font-size: 1.5rem;
+			}
+
+			.text {
+			  font-size: 1.25rem;
+			  margin-left: 0.5rem;
+			}
+
+			&:hover {
+			  background-color: $main-input-bg;
+			  color: $gray-600;
+			}
+		  }
+
+		  .select2-container {
+			position: absolute;
+			top: 0 !important;
+
+			.select2-selection {
+			  display: none;
+			}
+
+			.select2-dropdown {
+			  margin: 0;
+			}
+		  }
+		}
+
+		.customer-info {
+		  width: 100%;
+		  border: $global-border-width solid $global-border-color;
+		  border-radius: $border-radius;
+		  padding: 0.5rem;
+		  position: relative;
+
+		  .clear-btn {
+			border: 0;
+			padding: 0;
+			display: block;
+			font-size: 1.4rem;
+			color: $gray-400;
+			cursor: pointer;
+			position: absolute;
+			top: 0.5rem;
+			right: 0.5rem;
+
+			&:hover {
+			  color: $gray-600;
+			}
+		  }
+
+		  .field {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+
+			.label {
+			  display: block;
+			  width: 90px;
+			  margin: 0;
+			  font-weight: bold;
+			}
+
+			.text {
+			  display: block;
+			  width: calc(100% - 90px);
+			  flex-grow: 1;
+			}
+		  }
+		}
+	  }
+	}
+
+	.items-table {
+	  margin: 1rem 0;
+	  display: flex;
+	  flex-wrap: wrap;
+
+	  .table-head, .table-body {
+		.table-row {
+		  display: flex;
+		  flex-wrap: wrap;
+		  width: 100%;
+
+		}
+	  }
+
+	  .table-head {
+		width: 100%;
+
+		.table-row {
+		  border: $global-border-width solid $global-border-color;
+		  border-top-left-radius: $border-radius;
+		  border-top-right-radius: $border-radius;
+		  overflow: hidden;
+
+		  .header {
+			width: 100%;
+			height: 100%;
+			background: $gray-100;
+			padding: 0.75rem;
+			font-weight: bold;
+			text-transform: uppercase;
+			text-align: center;
+			display: none;
+			@media (min-width: 1200px) {
+			  display: block;
+			  width: 15%;
+			  &:nth-child(3) {
+				width: 52%;
+			  }
+			  &:not(:last-child) {
+				border-right: $global-border-width solid $global-border-color;
+			  }
+			  &:last-child {
+				width: 18%;
+			  }
+			}
+
+			&:nth-child(1) {
+			  display: block;
+			  @media (min-width: 1200px) {
+				display: none;
+			  }
+			}
+		  }
+		}
+	  }
+
+	  .table-body {
+		width: 100%;
+
+		.table-row {
+		  position: relative;
+		  border-left: $global-border-width solid $global-border-color;
+		  border-right: $global-border-width solid $global-border-color;
+
+		  &:last-child {
+			border-bottom: $global-border-width solid $global-border-color;
+			border-bottom-left-radius: $border-radius;
+			border-bottom-right-radius: $border-radius;
+		  }
+
+		  &:not(:last-child) {
+			border-bottom: $global-border-width solid $global-border-color;
+		  }
+
+		  .remove-item-btn {
+			cursor: pointer;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			background: $gray-400;
+			color: white;
+			position: absolute;
+			top: 0.25rem;
+			left: -2rem;
+			height: 2rem;
+			width: 2rem;
+			border-top-left-radius: $border-radius;
+			border-bottom-left-radius: $border-radius;
+
+			&:hover {
+			  background: $gray-600;
+			}
+		  }
+
+		  .qty {
+			padding: 0.25rem;
+			width: 50%;
+			order: 2;
+			@media (min-width: 768px) {
+			  padding: 0.5rem;
+			}
+			@media (min-width: 1200px) {
+			  width: 15%;
+			  order: 1;
+			  border-right: $global-border-width solid $global-border-color;
+			  align-items: flex-start;
+			  padding: 0.5rem;
+			}
+		  }
+
+		  .item-info {
+			padding: 0.25rem;
+			padding-bottom: 0;
+			width: 100%;
+			order: 1;
+			@media (min-width: 768px) {
+			  padding: 0.5rem;
+			  padding-bottom: 0;
+			}
+			@media (min-width: 1200px) {
+			  width: 52%;
+			  order: 2;
+			  border-right: $global-border-width solid $global-border-color;
+			  align-items: flex-start;
+			  padding: 0.5rem;
+			}
+
+			.twitter-typeahead {
+			  width: 100%;
+			}
+
+			.item-description {
+			  margin-top: 0.25rem;
+			  width: 100%;
+			  @media (min-width: 768px) {
+				margin-top: 0.5rem;
+			  }
+			}
+		  }
+
+		  .unit-price {
+			padding: 0.25rem;
+			width: 50%;
+			order: 3;
+			@media (min-width: 768px) {
+			  padding: 0.5rem;
+			}
+			@media (min-width: 1200px) {
+			  width: 15%;
+			  order: 3;
+			  border-right: $global-border-width solid $global-border-color;
+			  align-items: flex-start;
+			  padding: 0.5rem;
+			}
+		  }
+
+		  .total-line {
+			padding: 0.25rem;
+			display: flex;
+			align-items: center;
+			justify-content: flex-end;
+			width: 100%;
+			order: 4;
+			@media (min-width: 768px) {
+			  padding: 0.5rem;
+			}
+			@media (min-width: 1200px) {
+			  width: 18%;
+			  order: 4;
+			  align-items: flex-start;
+			  padding: 0.5rem;
+			}
+
+			.equal-sign, .currency-symbol, .amount {
+			  font-size: 1.1rem;
+			  color: $text-muted;
+			}
+
+			.equal-sign {
+			  margin-right: 0.25rem;
+			  @media (min-width: 1200px) {
+				display: none;
+			  }
+			}
+		  }
+		}
+	  }
+	}
+
+	.add-item {
+	  margin-bottom: 1rem;
+
+	  .add-item-btn {
+		background: white;
+		display: flex;
+		width: 100%;
+		justify-content: center;
+		align-items: center;
+		padding: 0.5rem;
+		border: $global-border-width dashed $global-border-color;
+		border-radius: $border-radius;
+		color: $gray-400;
+		cursor: pointer;
+		position: relative;
+
+		&.is-invalid {
+		  border: $global-border-width dashed $danger;
+		  color: $danger;
+
+		  &:hover {
+			background-color: rgba($danger, 0.10);
+			color: $danger;
+		  }
+		}
+
+		&:focus {
+		  outline: 0;
+		}
+
+		.icon {
+		  font-size: 1.5rem;
+		}
+
+		.text {
+		  font-size: 1.25rem;
+		  margin-left: 0.5rem;
+		}
+
+		&:hover {
+		  background-color: $main-input-bg;
+		  color: $gray-600;
+		}
+	  }
+	}
+
+	.summary-and-notes {
+	  display: flex;
+	  flex-wrap: wrap;
+
+	  .summary {
+		width: 100%;
+		order: 1;
+		margin-bottom: 1rem;
+		@media (min-width: 992px) {
+		  order: 2;
+		  width: 50%;
+		}
+		@media (min-width: 1200px) {
+		  width: 33%;
+		}
+
+		.summary-item {
+		  display: flex;
+
+		  &:not(:last-child) {
+			.label,
+			.amount {
+			  border-bottom: $global-border-width solid $global-border-color;
+			}
+		  }
+
+		  &:first-child {
+			.label {
+			  border-top: $global-border-width solid $global-border-color;
+			  border-top-left-radius: $border-radius;
+			}
+
+			.amount {
+			  border-top: $global-border-width solid $global-border-color;
+			  border-top-right-radius: $border-radius;
+			}
+		  }
+
+		  &:last-child {
+			.label {
+			  border-bottom: $global-border-width solid $global-border-color;
+			  border-bottom-left-radius: $border-radius;
+			}
+
+			.amount {
+			  border-bottom: $global-border-width solid $global-border-color;
+			  border-bottom-right-radius: $border-radius;
+			}
+		  }
+
+		  .label {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			justify-content: flex-end;
+			background: $gray-100;
+			width: 50%;
+			border-left: $global-border-width solid $global-border-color;
+			border-right: $global-border-width solid $global-border-color;
+			padding: 0.25rem;
+
+			@media (min-width: 768px) {
+			  padding: 0.5rem;
+			}
+			@media (min-width: 992px) {
+			  width: 45.4545%;
+			}
+
+			span {
+			  text-transform: uppercase;
+			  font-weight: bold;
+			}
+
+			.discount-type-input-group {
+			  &.is-invalid {
+				.input-group-prepend {
+				  .dropdown-toggle {
+					border-color: $danger;
+				  }
+				}
+
+
+				.form-control {
+				  border-color: $danger;
+
+				  &:focus {
+					box-shadow: 0 0 0 0.2rem rgba($danger, 0.25);
+				  }
+				}
+
+
+			  }
+
+			  .input-group-prepend {
+				.btn {
+				  border: $global-border-width solid $global-border-color;
+				  background: $gray-100;
+				  color: $gray-600;
+				}
+			  }
+			}
+		  }
+
+		  .amount {
+			width: 50%;
+			padding: 0.25rem;
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			justify-content: flex-end;
+			border-right: $global-border-width solid $global-border-color;
+			@media (min-width: 768px) {
+			  padding: 0.5rem;
+			}
+			@media (min-width: 992px) {
+			  width: 54.5454%;
+			}
+		  }
+		}
+	  }
+
+	  .notes {
+		width: 100%;
+		order: 2;
+		@media (min-width: 992px) {
+		  padding-right: 1rem;
+		  order: 1;
+		  width: 50%;
+		}
+		@media (min-width: 1200px) {
+		  width: 67%;
+		}
+	  }
+	}
+  }
+}
+
+.invalid-feedback {
+  display: block;
+}
+
+.select2-selection {
+  &.is-invalid {
+	border-color: $danger;
+
+	&:focus {
+	  border-color: $danger;
+	  box-shadow: 0 0 0 0.2rem rgba($danger, 0.25);
+	}
+  }
+}
+
+.select2-results__option.add-btn {
+  border-top: $global-border-width solid $global-border-color;
+  background: $gray-100;
+  border-bottom-left-radius: $border-radius;
+  border-bottom-right-radius: $border-radius;
+  padding: 0.5rem;
+
+  a {
+	text-decoration: none;
+  }
+}
