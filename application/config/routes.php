@@ -72,5 +72,10 @@ $route['admin/productos/(:num)'] = 'admin/products/edit_product/$1';
 $route['admin/presupuestos'] = 'admin/estimates';
 $route['admin/presupuestos/nuevo'] = 'admin/estimates/new_estimate';
 $route['admin/presupuestos/(:num)'] = 'admin/estimates/edit_estimate/$1';
+$route['admin/presupuestos/pdf/(:num)'] = 'admin/estimates/get_pdf/$1';
 
+$route['admin/pedidos'] = 'admin/orders';
+$route['admin/pedidos/nuevo'] = 'admin/orders/new_order';
+$route['admin/pedidos/(:num)'] = 'admin/orders/edit_order/$1';
+$route['admin/pedidos/pdf/(:num)'] = 'admin/orders/get_pdf/$1';
 

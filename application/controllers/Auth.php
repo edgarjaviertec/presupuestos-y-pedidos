@@ -24,7 +24,8 @@ class Auth extends CI_Controller
 		$data['page'] = 'login';
 		$data['title'] = 'Iniciar sesión';
 		$data['js_files'] = [
-			base_url('assets/js/login.vendor.min.js')
+			base_url('assets/js/login.vendor.min.js'),
+			base_url('assets/js/login.min.js')
 		];
 		$this->load->view('layouts/full_height_layout', $data);
 	}
@@ -64,6 +65,33 @@ class Auth extends CI_Controller
 			}
 		}
 	}
+
+	public function verify_password_ajax()
+	{
+		if ($this->input->server('REQUEST_METHOD') != 'POST') {
+			show_404();
+		}
+		$user = $this->users->get_user($this->input->post('username'));
+		$pass = (isset($user->clave)) ? $user->clave : '';
+
+		$res = [
+			'csrf_name' => $this->security->get_csrf_token_name(),
+			'csrf_hash' => $this->security->get_csrf_hash()
+		];
+
+		if (!$user) {
+			$res['password_is_valid'] = true;
+		}
+		elseif ($user && password_verify($this->input->post('password'), $pass)  ) {
+			$res['password_is_valid'] = true;
+		} else {
+			$res['password_is_valid'] = false;
+		}
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($res, JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE));
+	}
+
 
 	public function logout()
 	{

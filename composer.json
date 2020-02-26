@@ -12,7 +12,8 @@
 	},
 	"require": {
 		"php": ">=5.6.40",
-		"ozdemir/datatables": "^2.3"
+		"ozdemir/datatables": "^2.3",
+		"dompdf/dompdf": "^0.8.4"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"

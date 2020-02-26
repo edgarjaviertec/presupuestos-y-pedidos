@@ -22,6 +22,17 @@ if (!function_exists('remove_commas')) {
 
 
 
+if (!function_exists('text_truncate')) {
+	function text_truncate($in,$length=50)
+	{
+		$out = strlen($in) > $length ? substr($in,0,$length)."..." : $in;
+		return $out;
+	}
+}
+
+
+
+
 if (!function_exists('get_timestamp')) {
 	function get_timestamp()
 	{

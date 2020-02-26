@@ -36,7 +36,7 @@ class Products extends CI_Controller
 			$data['page'] = 'product_list';
 			$data['title'] = 'Productos';
 			$data['js_files'] = [
-				base_url('assets/js/list.vendor.min.js'),
+				base_url('assets/js/products.vendor.min.js'),
 				base_url('assets/js/products.min.js')
 			];
 			$this->load->view('layouts/dashboard_layout', $data);
@@ -50,8 +50,8 @@ class Products extends CI_Controller
 		$data['page'] = 'new_product';
 		$data['title'] = 'Nuevo producto';
 		$data['js_files'] = [
-			base_url('assets/js/new-edit.vendor.min.js'),
-			base_url('assets/js/new-product.min.js')
+			base_url('assets/js/product.vendor.min.js'),
+			base_url('assets/js/product.min.js')
 		];
 		$this->load->view('layouts/dashboard_layout', $data);
 	}
@@ -116,35 +116,24 @@ class Products extends CI_Controller
 	{
 		$datatables = new Datatables(new CodeigniterAdapter);
 		$datatables->query("SELECT id, nombre, descripcion, precio_unitario FROM productos WHERE eliminado_en IS NULL");
-
-
 		$datatables->edit('id', function ($data) {
-			return '<span class="px-3 badge badge-pill badge-light"><span class="font-weight-bold h6">#' . $data['id'] . '</span></span>';
+			return '<strong>' . $data['id'] . '</strong>';
 		});
-
-
 		$datatables->edit('precio_unitario', function ($data) {
-			return "$ " . number_format($data['precio_unitario'], 2);
+			return "$" . number_format($data['precio_unitario'], 2);
 		});
-
 		$datatables->add('action', function ($data) {
 			$csrf = array(
 				'name' => $this->security->get_csrf_token_name(),
 				'hash' => $this->security->get_csrf_hash()
 			);
-
-			$delete_button = '<form class="d-inline" method="POST" action="' . base_url('admin/products/delete_product_validation') . '">';
-			$delete_button .= '<input type="hidden" name="id" value="' . $data['id'] . '" />';
-			$delete_button .= '<input type="hidden" name="' . $csrf['name'] . '" value="' . $csrf['hash'] . '" />';
-			$delete_button .= '<button class="btn btn-danger delete_btn"><i class="fas fa-times"></i></button>';
-			$delete_button .= '</form>';
-
-			$edit_button = '<a ';
-			$edit_button .= 'href="' . base_url('admin/productos/' . $data['id']) . '"';
-			$edit_button .= 'class="btn btn-primary mr-2">';
-			$edit_button .= '<i class="fas fa-pencil-alt"></i>';
-			$edit_button .= '</a>';
-
+			$data['url'] = base_url('admin/productos/') . $data['id'];
+			$edit_button = $this->load->view('partials/edit_button', $data, true);
+			$data['url'] = base_url('admin/products/delete_product_validation');
+			$data['id'] = $data['id'];
+			$data['csrf_name'] = $csrf['name'];
+			$data['csrf_hash'] = $csrf['hash'];
+			$delete_button = $this->load->view('partials/delete_button', $data, true);
 			return $edit_button . $delete_button;
 		});
 		echo $datatables->generate();
@@ -159,8 +148,8 @@ class Products extends CI_Controller
 		$data['page'] = 'edit_product';
 		$data['title'] = 'Editar producto #' . $id;
 		$data['js_files'] = [
-			base_url('assets/js/new-edit.vendor.min.js'),
-			base_url('assets/js/edit-product.min.js')
+			base_url('assets/js/product.vendor.min.js'),
+			base_url('assets/js/product.min.js')
 		];
 		$data['product'] = $product;
 		$this->load->view('layouts/dashboard_layout', $data);

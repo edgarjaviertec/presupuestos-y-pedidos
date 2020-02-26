@@ -1,3 +1,4 @@
+
 .confirmation-modal {
 	background-color: rgba($gray-800, .5) !important;
 	.swal2-popup {
@@ -56,6 +57,82 @@
 		}
 	}
 }
+
+.modal-with-icon {
+	background-color: rgba($gray-800, .5) !important;
+	.swal2-popup {
+		padding: 0;
+		box-shadow: $box-shadow;
+		.swal2-header {
+			border-top-left-radius: .3rem;
+			border-top-right-radius: .3rem;
+			border: $global-border-width solid $global-border-color;
+			border-bottom: none;
+			background-color: white;
+			padding: 1rem 1rem;
+			align-items: flex-start;
+			padding-bottom: 0;
+
+			.swal2-icon{
+				margin: 1rem auto;
+				margin-top: 0;
+			}
+			.swal2-title {
+				display: flex;
+				justify-content: center;
+				width: 100%;
+				font-size: 1.25rem;
+				font-weight: normal;
+				text-align: center;
+				margin-bottom: 0;
+				color: $body-color;
+			}
+		}
+		.swal2-content {
+			padding: 1rem;
+			border: $global-border-width solid $global-border-color;
+			border-top: none;
+			border-bottom: none;
+			#swal2-content {
+				text-align: center;
+				color: $body-color;
+
+			}
+		}
+		.swal2-actions {
+			justify-content: center;
+			border-bottom-left-radius: .3rem;
+			border-bottom-right-radius: .3rem;
+			margin: 0;
+			padding: 0.75rem;
+			padding-top: 0;
+			border: $global-border-width solid $global-border-color;
+			border-top: none;
+			.swal2-cancel {
+				background: $secondary;
+				&:focus {
+					outline: 0;
+					box-shadow: 0 0 0 0.2rem rgba($secondary, .25);
+				}
+			}
+
+			.swal2-confirm {
+				background: $success;
+				&:focus {
+					outline: 0;
+					box-shadow: 0 0 0 0.2rem rgba($success, .25);
+				}
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
 
 
 .flash-message{

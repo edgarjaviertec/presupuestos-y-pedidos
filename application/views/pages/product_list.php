@@ -7,20 +7,18 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
 }
 ?>
 
-
-<h2 class="page-heading">
-	<span>Productos</span>
-	<a href="<?php echo base_url('admin/productos/nuevo') ?>" class="ml-3 btn btn-lg btn-success">
-		<i class="fas fa-plus"></i>
-		<span class="ml-1">Nuevo producto</span>
-	</a>
-</h2>
-
-
+<h1 class="page-heading h3 mb-3 ">
+    <span>Productos</span>
+    <a href="<?php echo base_url('admin/productos/nuevo') ?>"
+       class="ml-2 btn btn-lg btn-success  align-items-center">
+        <i class="fas fa-plus"></i>
+        <span class="ml-1 d-none d-sm-inline-block">Nuevo producto</span>
+    </a>
+</h1>
 
 <div class="card shadow">
-	<div class="card-body">
-		<table class="table table-bordered dt-responsive nowrap" id="data_tables" <?php echo $flash_msg_data_attr ?> style="width:100%">
+	<div class="card-body p-3">
+		<table class="table table-bordered dt-responsive" id="dataTables" <?php echo $flash_msg_data_attr ?> style="width:100%">
 			<thead>
 			<tr>
 				<th>Id</th>
@@ -38,7 +36,3 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
 		</table>
 	</div>
 </div>
-
-
-
-

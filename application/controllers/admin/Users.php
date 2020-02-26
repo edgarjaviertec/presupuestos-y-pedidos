@@ -34,7 +34,7 @@ class Users extends CI_Controller
 			$data['page'] = 'user_list';
 			$data['title'] = 'Usuarios';
 			$data['js_files'] = [
-				base_url('assets/js/list.vendor.min.js'),
+				base_url('assets/js/users.vendor.min.js'),
 				base_url('assets/js/users.min.js')
 			];
 			$this->load->view('layouts/dashboard_layout', $data);
@@ -46,7 +46,8 @@ class Users extends CI_Controller
 		$data['page'] = 'new_user';
 		$data['title'] = 'Nuevo usuario';
 		$data['js_files'] = [
-			base_url('assets/js/new-edit.vendor.min.js')
+			base_url('assets/js/user.vendor.min.js'),
+			base_url('assets/js/user.min.js')
 		];
 		$this->load->view('layouts/dashboard_layout', $data);
 	}
@@ -56,22 +57,19 @@ class Users extends CI_Controller
 		if ($this->input->server('REQUEST_METHOD') != 'POST') {
 			show_404();
 		}
-
 		$error_messages = [
 			'required' => 'El campo "%s"  es requerido',
 			'alpha_dash' => 'El campo "%s" solo puede contener caracteres alfanuméricos, guiones bajos y guiones medios',
-			'alpha_numeric' => 'El campo "%s" solo puede contener caracteres alfanuméricos',
-			'max_length' => 'El tamaño máximo del campo "%s" es de 255 caracteres ',
+			'min_length' => 'El tamaño mínimo del campo "%s" es de %s caracteres',
+			'max_length' => 'El tamaño máximo del campo "%s" es de %s caracteres ',
 			'valid_email' => 'El correo electrónico es inválido',
 			'username_is_unique' => 'Este nombre de usuario ya existe',
-			'email_is_unique' => 'Este correo electrónicoo ya existe',
+			'email_is_unique' => 'Este correo electrónico ya existe',
 		];
-
 		$this->form_validation->set_rules('username', 'Nombre de usuario', 'trim|required|alpha_dash|max_length[255]|username_is_unique', $error_messages);
 		$this->form_validation->set_rules('email', 'Correo electrónico', 'trim|required|max_length[255]|valid_email|email_is_unique', $error_messages);
-		$this->form_validation->set_rules('role', 'Rol', 'trim|required|alpha_numeric|max_length[255]', $error_messages);
-		$this->form_validation->set_rules('password', 'Contraseña', 'trim|required|alpha_numeric|max_length[255]', $error_messages);
-
+		$this->form_validation->set_rules('role', 'Rol', 'trim|required|max_length[255]', $error_messages);
+		$this->form_validation->set_rules('password', 'Contraseña', 'trim|required|min_length[8]|max_length[255]', $error_messages);
 		if ($this->form_validation->run() == FALSE) {
 			$this->session->set_flashdata('errors', $this->form_validation->error_array());
 			$this->session->set_flashdata('old', $this->input->post());
@@ -115,7 +113,8 @@ class Users extends CI_Controller
 		$data['page'] = 'change_password';
 		$data['title'] = 'Cambiar contraseña del usuario #' . $id;
 		$data['js_files'] = [
-			base_url('assets/js/new-edit.vendor.min.js')
+			base_url('assets/js/user.vendor.min.js'),
+			base_url('assets/js/change-password.min.js')
 		];
 		$data['user'] = $user;
 		$this->load->view('layouts/dashboard_layout', $data);
@@ -128,14 +127,11 @@ class Users extends CI_Controller
 		}
 		$error_messages = [
 			'required' => 'El campo "%s"  es requerido',
-			'alpha_numeric' => 'El campo "%s" solo puede contener caracteres alfanumérico',
 			'max_length' => 'El tamaño máximo del campo "%s" es de 255 caracteres ',
-			'matches' => 'Las contraseña no coincide',
+			'matches' => 'Ingrese la misma contraseña, para la verificación',
 		];
-
-		$this->form_validation->set_rules('password', 'Contraseña', 'trim|required|alpha_numeric|max_length[255]', $error_messages);
+		$this->form_validation->set_rules('password', 'Contraseña', 'trim|required|max_length[255]', $error_messages);
 		$this->form_validation->set_rules('confirm_password', 'Repetir contraseña', 'trim|required|matches[password]', $error_messages);
-
 		if ($this->form_validation->run() == FALSE) {
 			$this->session->set_flashdata('errors', $this->form_validation->error_array());
 			$this->session->set_flashdata('old', $this->input->post());
@@ -161,7 +157,8 @@ class Users extends CI_Controller
 		$data['page'] = 'edit_user';
 		$data['title'] = 'Editar usuario #' . $id;
 		$data['js_files'] = [
-			base_url('assets/js/new-edit.vendor.min.js')
+			base_url('assets/js/user.vendor.min.js'),
+			base_url('assets/js/user.min.js')
 		];
 		$data['user'] = $user;
 		$this->load->view('layouts/dashboard_layout', $data);
@@ -175,17 +172,15 @@ class Users extends CI_Controller
 		$error_messages = [
 			'required' => 'El campo "%s"  es requerido',
 			'alpha_dash' => 'El campo "%s" solo puede contener caracteres alfanuméricos, guiones bajos y guiones medios',
-			'alpha_numeric' => 'El campo "%s" solo puede contener caracteres alfanuméricos',
-			'max_length' => 'El tamaño máximo del campo "%s" es de 255 caracteres ',
+			'min_length' => 'El tamaño mínimo del campo "%s" es de %s caracteres',
+			'max_length' => 'El tamaño máximo del campo "%s" es de %s caracteres ',
 			'valid_email' => 'El correo electrónico es inválido',
 			'new_username_is_unique' => 'Este nombre de usuario ya existe',
 			'new_email_is_unique' => 'Este correo electrónicoo ya existe',
 		];
-
 		$this->form_validation->set_rules('username', 'Nombre de usuario', 'trim|required|alpha_dash|max_length[255]|new_username_is_unique', $error_messages);
 		$this->form_validation->set_rules('email', 'Correo electrónico', 'trim|required|max_length[255]|valid_email|new_email_is_unique', $error_messages);
-		$this->form_validation->set_rules('role', 'Rol', 'trim|required|alpha_numeric|max_length[255]', $error_messages);
-
+		$this->form_validation->set_rules('role', 'Rol', 'trim|required|max_length[255]', $error_messages);
 		if ($this->form_validation->run() == FALSE) {
 			$this->session->set_flashdata('errors', $this->form_validation->error_array());
 			$this->session->set_flashdata('old', $this->input->post());
@@ -216,33 +211,25 @@ class Users extends CI_Controller
 	{
 		$datatables = new Datatables(new CodeigniterAdapter);
 		$datatables->query('SELECT id, nombre_usuario, correo_electronico, rol FROM usuarios WHERE eliminado_en IS NULL');
-
 		$datatables->edit('id', function ($data) {
-			return '<span class="px-3 badge badge-pill badge-light"><span class="font-weight-bold h6">#' . $data['id'] . '</span></span>';
+			return '<strong>' . $data['id'] . '</strong>';
 		});
-
 		$datatables->add('action', function ($data) {
 			$csrf = array(
 				'name' => $this->security->get_csrf_token_name(),
 				'hash' => $this->security->get_csrf_hash()
 			);
 			$logged_in_user = $this->session->userdata('logged_in_user');
-			$disabled_attr = $logged_in_user['id'] === $data['id'] ? 'disabled' : '';
-			$delete_button = '<form class="d-inline" method="POST" action="' . base_url('admin/users/delete_user_validation') . '">';
-			$delete_button .= '<input type="hidden" name="id" value="' . $data['id'] . '" />';
-			$delete_button .= '<input type="hidden" name="' . $csrf['name'] . '" value="' . $csrf['hash'] . '" />';
-			$delete_button .= '<button class="btn btn-danger delete_btn" ' . $disabled_attr . '><i class="fas fa-times"></i></button>';
-			$delete_button .= '</form>';
-			$edit_button = '<a ';
-			$edit_button .= 'href="' . base_url('admin/usuarios/' . $data['id']) . '"';
-			$edit_button .= 'class="btn btn-primary mr-2">';
-			$edit_button .= '<i class="fas fa-pencil-alt"></i>';
-			$edit_button .= '</a>';
-			$change_pass_button = '<a ';
-			$change_pass_button .= 'href="' . base_url('admin/usuarios/cambiar_contrasena/' . $data['id']) . '"';
-			$change_pass_button .= 'class="btn btn-primary mr-2">';
-			$change_pass_button .= '<i class="fas fa-key"></i>';
-			$change_pass_button .= '</a>';
+			$data['url'] = base_url('admin/usuarios/') . $data['id'];
+			$edit_button = $this->load->view('partials/edit_button', $data, true);
+			$data['url'] = base_url('admin/users/delete_user_validation');
+			$data['id'] = $data['id'];
+			$data['csrf_name'] = $csrf['name'];
+			$data['csrf_hash'] = $csrf['hash'];
+			$data['is_disabled'] = $logged_in_user['id'] === $data['id'] ? TRUE : FALSE;;
+			$delete_button = $this->load->view('partials/delete_button', $data, true);
+			$data['url'] = base_url('admin/usuarios/cambiar_contrasena/') . $data['id'];
+			$change_pass_button = $this->load->view('partials/change_pass_button', $data, true);
 			return $change_pass_button . $edit_button . $delete_button;
 		});
 		echo $datatables->generate();

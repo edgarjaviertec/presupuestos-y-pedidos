@@ -74,7 +74,7 @@ $box-shadow-lg: 5px 5px 0 rgba($gray-900, .1);
 $border-radius: 0.35rem;
 
 // Configuracion del dashboard
-$sidebar-width: 12rem;
+$sidebar-width: 14rem;
 $main-bg: lighten($primary, 53%);
 $main-input-bg: lighten($primary, 53%);
 
@@ -99,14 +99,13 @@ $dropdown-link-hover-bg: $global-hover-bg;
 
 //formualrios
 
+$input-color: $body-color;
+$input-placeholder-color: $gray-300;
 $input-disabled-bg: $gray-100;
-//$input-bg:lighten($primary, 53%);
 $custom-select-border-width: $global-border-width;
 $custom-control-indicator-border-color: $global-border-color;
-
 $input-border-width: $global-border-width;
 $input-border-color: $global-border-color;
-
 $input-group-addon-bg: $gray-100;
 
 // botones

@@ -7,18 +7,19 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
 }
 ?>
 
+<h1 class="page-heading h3 mb-3 ">
+    <span>Usuarios</span>
+    <a href="<?php echo base_url('admin/usuarios/nuevo') ?>"
+       class="ml-2 btn btn-lg btn-success  align-items-center">
+        <i class="fas fa-plus"></i>
+        <span class="ml-1 d-none d-sm-inline-block">Nuevo usuario</span>
+    </a>
+</h1>
 
-<h2 class="page-heading">
-	<span>Usuarios</span>
-	<a href="<?php echo base_url('admin/usuarios/nuevo') ?>" class="ml-3 btn btn-lg btn-success">
-		<i class="fas fa-plus"></i>
-		<span class="ml-1">Nuevo usuario</span>
-	</a>
-</h2>
 
 <div class="card shadow">
-	<div class="card-body">
-		<table class="table table-bordered dt-responsive nowrap" id="data_tables" <?php echo $flash_msg_data_attr ?> style="width:100%">
+	<div class="card-body p-3">
+		<table class="table table-bordered dt-responsive" id="dataTables" <?php echo $flash_msg_data_attr ?> style="width:100%">
 			<thead>
 			<tr>
 				<th>Id</th>

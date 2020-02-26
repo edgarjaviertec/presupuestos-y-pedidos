@@ -1,11 +1,42 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+
 class Customers_model extends CI_Model
 {
 	function __construct()
 	{
 		parent::__construct();
 		$this->load->helper('app');
+	}
+
+	function get_customers_for_select2($start, $length, $search)
+	{
+		$start = intval($start);
+		$length = intval($length);
+		$search = '%' . $search . '%';
+		$sql = "SELECT * FROM clientes WHERE eliminado_en IS NULL";
+		$query = $this->db->query($sql);
+		$records_total = $query->num_rows();
+		$sql = "SELECT * FROM clientes
+				WHERE nombre LIKE ? AND eliminado_en IS NULL
+				OR apellidos LIKE ? AND eliminado_en IS NULL";
+		$query = $this->db->query($sql, [$search, $search]);
+		$records_filtered = $query->num_rows();
+		$sql = "SELECT * FROM clientes
+				WHERE nombre LIKE ? AND eliminado_en IS NULL
+				OR apellidos LIKE ? AND eliminado_en IS NULL
+				LIMIT ?, ?";
+		$query = $this->db->query($sql, [$search, $search, $start, $length]);
+		$data = $query->result();
+		foreach ($data as $row) {
+			$row->text = $row->nombre . ' ' . $row->apellidos;
+		}
+		$res = (object)[
+			'recordsTotal' => $records_total,
+			'recordsFiltered' => $records_filtered,
+			'data' => $data
+		];
+		return $res;
 	}
 
 	function count_all_records()
@@ -77,4 +108,5 @@ class Customers_model extends CI_Model
 		return $this->db->affected_rows();
 	}
 }
+
 ?>

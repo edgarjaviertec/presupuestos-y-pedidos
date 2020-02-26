@@ -1,7 +1,15 @@
 .page-heading {
-	padding-bottom: 24px;
 	margin-bottom: 0;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+}
+
+
+.svg-icon {
+	fill: currentColor;
+	width: 1em;
+	height: 1em;
+	vertical-align: middle;
+	overflow: hidden;
 }

@@ -1,20 +1,18 @@
 $(document).ready(function () {
-
-	if (typeof $("#data_tables").data('flash-msg-type') !== 'undefined' && typeof $("#data_tables").data('flash-msg-title') !== 'undefined') {
+	if (typeof $("#dataTables").data('flash-msg-type') !== 'undefined' && typeof $("#dataTables").data('flash-msg-title') !== 'undefined') {
 		Swal.fire({
 			customClass: {
 				container: 'flash-message flash-success',
 			},
 			position: 'top-end',
 			toast: true,
-			type: $("#data_tables").data('flash-msg-type'),
-			title: $("#data_tables").data('flash-msg-title'),
+			type: $("#dataTables").data('flash-msg-type'),
+			title: $("#dataTables").data('flash-msg-title'),
 			showConfirmButton: false,
 			timer: 1500
 		});
 	}
-
-	$('#data_tables').dataTable({
+	$('#dataTables').dataTable({
 		"serverSide": true,
 		"responsive": true,
 		"ajax": "/admin/users/get_users_ajax",
@@ -26,8 +24,7 @@ $(document).ready(function () {
 		],
 		"language": spanishLang
 	});
-
-	$('#data_tables').on('click', '.delete_btn', function (e) {
+	$('#dataTables').on('click', '.delete_btn', function (e) {
 		e.preventDefault();
 		var form = $(this).closest("form");
 		Swal.fire({
@@ -38,7 +35,7 @@ $(document).ready(function () {
 			text: "¿Estas seguro de querer eliminar este usuario?",
 			showCancelButton: true,
 			confirmButtonText: 'Aceptar',
-			cancelButtonText: 'Cancelar',
+			cancelButtonText: 'Regresar',
 			reverseButtons: true,
 			focusCancel: true
 		}).then((result) => {
@@ -47,7 +44,18 @@ $(document).ready(function () {
 			}
 		})
 	});
-
+	// Corrige la tabla #dataTables cuando se redimensiona la ventana
+	var $dataTables = $('#dataTables');
+	var mediaQuery = window.matchMedia('(min-width: 576px)');
+	mediaQuery.addListener(widthChange);
+	function widthChange(mediaQuery) {
+		if (mediaQuery.matches) {
+			$dataTables.addClass('nowrap');
+		} else {
+			$dataTables.removeClass('nowrap');
+		}
+	}
+	widthChange(mediaQuery);
 });
 
 

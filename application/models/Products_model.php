@@ -9,6 +9,17 @@ class Products_model extends CI_Model
 		$this->load->helper('app');
 	}
 
+	function get_products_for_typeahead($search)
+	{
+		$search = '%' . $search . '%';
+		$sql = "SELECT * FROM productos
+				WHERE nombre LIKE ? AND eliminado_en IS NULL
+				ORDER BY nombre
+				LIMIT 10";
+		$query = $this->db->query($sql, $search);
+		return $query->result();
+	}
+
 	function count_all_records()
 	{
 		$sql = "SELECT * FROM productos WHERE eliminado_en IS NULL";

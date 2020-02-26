@@ -1,19 +1,15 @@
 <?php
-
 if (isset($user)) {
 	$user = (array)$user;
 }
-
 $logged_in_user = $this->session->userdata('logged_in_user');
 $disabled_attr = $logged_in_user['id'] === $user['id'] ? 'disabled' : '';
-
 $errors = $this->session->flashdata('errors');
 $old = $this->session->flashdata('old');
 $csrf = array(
 	'name' => $this->security->get_csrf_token_name(),
 	'hash' => $this->security->get_csrf_hash()
 );
-
 if (isset($old['username'])) {
 	$username = $old['username'];
 } else if (isset($user['nombre_usuario'])) {
@@ -21,7 +17,6 @@ if (isset($old['username'])) {
 } else {
 	$username = '';
 }
-
 if (isset($old['email'])) {
 	$email = $old['email'];
 } else if (isset($user['correo_electronico'])) {
@@ -29,7 +24,6 @@ if (isset($old['email'])) {
 } else {
 	$email = '';
 }
-
 if (isset($old['role'])) {
 	$role = $old['role'];
 } else if (isset($user['rol'])) {
@@ -37,48 +31,53 @@ if (isset($old['role'])) {
 } else {
 	$role = '';
 }
-
 ?>
-
-
-
 <div class="row justify-content-center">
 	<div class="col-12 col-lg-10 col-xl-8">
-		<div class="mb-3">
-			<h3 class="mb-0">
-				<span>Editar usuario #<?php echo isset($user['id']) ? $user['id'] : '' ?></span>
-			</h3>
-		</div>
-		<div class="card bg-white shadow">
-			<div class="card-body">
-				<form method="post" action="<?php echo base_url('admin/users/edit_user_validation') ?>">
+        <?php if (!empty($errors)): ?>
+            <div class="alert alert-danger shadow">
+                <p class="mb-2">
+                    <strong>Hay algunos errores, por favor corríjalos y vuelva a intentarlo:</strong>
+                </p>
+                <ul class="mb-0">
+                    <?php foreach ($errors as $error): ?>
+                        <li><?php echo $error; ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+
+
+
+        <h1 class="mb-2 h3">Editar usuario #<?php echo isset($user['id']) ? $user['id'] : '' ?></h1>
+        <p class="mb-2 font-weight-bold">Los campos marcados con <i class="fas fa-asterisk text-danger"></i> son obligatorios</p>
+
+
+
+
+
+        <div class="card bg-white shadow">
+			<div class="card-body p-3">
+				<form id="userForm" method="post" action="<?php echo base_url('admin/users/edit_user_validation') ?>">
 					<input type="hidden" name="<?= $csrf['name']; ?>" value="<?= $csrf['hash']; ?>"/>
 					<input type="hidden" name="id" value="<?php echo isset($user['id']) ? $user['id'] : '' ?>">
 					<div class="form-group">
-						<label for="name">Nombre de usuario <small class="text-muted">(requerido)</small></label>
-						<input
-							autocomplete="off"
-							type="text"
-							class="form-control<?php echo isset($errors['username']) ? ' is-invalid' : '' ?>"
-							name="username"
-							value="<?php echo $username ?>"
-						>
-						<div class="invalid-feedback">
-							<?php echo isset($errors['username']) ? $errors['username'] : '' ?>
-						</div>
+                        <label class="font-weight-bold"><i class="fas fa-asterisk text-danger"></i>&nbsp;Nombre de usuario</label>
+						<input autocomplete="off"
+							   type="text"
+							   class="form-control"
+							   name="username"
+							   value="<?php echo $username ?>"
+							   placeholder="Ej. juanh_63">
 					</div>
 					<div class="form-group">
-						<label for="email">Correo electrónico <small class="text-muted">(requerido)</small></label>
-						<input
-							autocomplete="off"
-							type="text"
-							   class="form-control<?php echo isset($errors['email']) ? ' is-invalid' : '' ?>"
+                        <label class="font-weight-bold"><i class="fas fa-asterisk text-danger"></i>&nbsp;Correo electrónico</label>
+						<input autocomplete="off"
+							   type="text"
+							   class="form-control"
 							   name="email"
 							   value="<?php echo $email ?>"
-						>
-						<div class="invalid-feedback">
-							<?php echo isset($errors['email']) ? $errors['email'] : '' ?>
-						</div>
+							   placeholder="Ej. juanh@ejemplo.com">
 					</div>
 					<div class="form-group">
 						<label for="role">Rol</label>
@@ -90,22 +89,20 @@ if (isset($old['role'])) {
 								<option value="admin" <?php echo $role === 'admin' ? 'selected' : '' ?>>Administrador
 							</select>
 						<?php else: ?>
-							<select class="custom-select<?php echo isset($errors['role']) ? ' is-invalid' : '' ?>"
-									name="role">
+							<select class="custom-select" name="role">
 								<option value="user" <?php echo $role === 'user' ? 'selected' : '' ?>>Usuario normal
 								</option>
 								<option value="admin" <?php echo $role === 'admin' ? 'selected' : '' ?>>Administrador
 								</option>
 							</select>
 						<?php endif; ?>
-						<div class="invalid-feedback">
-							<?php echo isset($errors['role']) ? $errors['role'] : '' ?>
-						</div>
 					</div>
-					<div class="d-flex justify-content-between">
-						<a href="<?php echo base_url('admin/usuarios') ?>" class="btn btn-lg btn-secondary">Cancelar</a>
-						<button type="submit" class="btn btn-lg btn-success">Guardar cambios</button>
-					</div>
+                    <div class="action-buttons">
+                        <a href="<?php echo base_url('admin/usuarios') ?>"
+                           class="btn btn-lg btn-secondary cancel-btn">Regresar</a>
+                        <button type="submit"
+                                class="btn btn-lg btn-success ok-btn">Guardar</button>
+                    </div>
 				</form>
 			</div>
 		</div>

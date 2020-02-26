@@ -559,6 +559,7 @@
 		  }
 
 		  .label {
+
 			display: flex;
 			flex-wrap: wrap;
 			align-items: center;
@@ -626,12 +627,48 @@
 			  width: 54.5454%;
 			}
 		  }
+
+		  .tax-checkbox{
+			height: 1.5rem;
+			width: 1.5rem;
+			display: inline-flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 0.8rem;
+			color: white;
+			border: $global-border-width solid $global-border-color;
+			background: white;
+			border-radius: $border-radius;
+			overflow: hidden;
+			padding: 0;
+			margin-right: 0.5rem;
+
+			.icon{
+			  padding-top: 2px;
+			  padding-left: 1px;
+						}
+
+			&.checked{
+			  border-color:  $primary;
+			  background: $primary;
+
+			}
+
+			&:focus{
+			  border-color:  $primary;
+			  box-shadow: 0 0 0 0.2rem rgba($primary, 0.5);
+			}
+		  }
+
+
+
 		}
 	  }
 
 	  .notes {
 		width: 100%;
 		order: 2;
+		  margin-bottom: 1rem;
 		@media (min-width: 992px) {
 		  padding-right: 1rem;
 		  order: 1;
@@ -643,6 +680,51 @@
 	  }
 	}
   }
+	.payments-container{
+		background: white;
+		border: $global-border-width solid $global-border-color;
+		border-radius: $border-radius;
+		box-shadow: $box-shadow;
+		overflow: hidden;
+
+		&.disabled{
+			opacity: 0.5;
+		}
+
+		.payment{
+			padding:1rem;
+			@media (min-width: 576px) {
+				position: relative;
+			}
+			&:not(:last-child){
+				border-bottom:$global-border-width solid $global-border-color;
+			}
+			.amount{
+				font-size: 1.25rem;
+			}
+			.date{
+				font-size: 0.9rem;
+			}
+			.type{
+				font-size: 0.9rem;
+				font-weight: bold;
+			}
+			.notes{
+				margin-top: 0
+			}
+			.actions{
+				margin-top: 0.5rem;
+				@media (min-width: 576px) {
+					margin-top: 0;
+				}
+				@media (min-width: 576px) {
+					position: absolute;
+					top: 1rem;
+					right: 1rem;
+				}
+			}
+		}
+	}
 }
 
 .invalid-feedback {
@@ -671,3 +753,7 @@
 	text-decoration: none;
   }
 }
+
+
+
+
