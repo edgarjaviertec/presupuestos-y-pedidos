@@ -7,8 +7,6 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
 }
 $current_year = intval(date("Y"));
 ?>
-
-
 <h1 class="page-heading h3 mb-3 ">
     <span>Pedidos</span>
     <div>
@@ -23,9 +21,6 @@ $current_year = intval(date("Y"));
         </a>
     </div>
 </h1>
-
-
-
 <div class="card shadow">
 	<div class="card-body p-3">
 		<table class="table table-bordered dt-responsive" id="dataTables" <?php echo $flash_msg_data_attr ?> style="width:100%">
@@ -48,8 +43,6 @@ $current_year = intval(date("Y"));
 		</table>
 	</div>
 </div>
-
-
 <div class="modal fade" id="generateReportModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
@@ -101,7 +94,3 @@ $current_year = intval(date("Y"));
         </div>
     </div>
 </div>
-
-
-
-

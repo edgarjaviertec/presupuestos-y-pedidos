@@ -78,7 +78,6 @@ foreach ($full_address_array as $key => $val) {
 					<td><?php echo $current_date_dmy ?></td>
 				</tr>
 			</table>
-
 		</td>
 	</tr>
 </table>
@@ -174,8 +173,6 @@ foreach ($full_address_array as $key => $val) {
 				<span class="summary-text"><?php echo text_truncate("$" . number_format($order->total, 2), 13) ?></span>
 			</td>
 		</tr>
-
-
         <tr class="summary">
             <th>
                 <span class="summary-label">Saldo</span>

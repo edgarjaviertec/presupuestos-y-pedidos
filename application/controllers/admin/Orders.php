@@ -52,7 +52,8 @@ class Orders extends CI_Controller
         $data['title'] = 'Nuevo pedido';
         $data['js_files'] = [
             base_url('assets/js/document.vendor.min.js'),
-            base_url('assets/js/document.min.js')
+            base_url('assets/js/document.min.js'),
+            base_url('assets/js/payments.min.js')
         ];
         $this->load->view('layouts/dashboard_layout', $data);
     }
@@ -84,6 +85,7 @@ class Orders extends CI_Controller
         $this->form_validation->set_rules('include_tax', 'Con IVA', 'trim|required|integer|in_list[1,0]', $error_messages);
         $this->form_validation->set_rules('tax', 'IVA', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
         $this->form_validation->set_rules('total', 'Total', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
+        $this->form_validation->set_rules('notes', 'Notas', 'trim|max_length[255]', $error_messages);
         $items = $this->input->post('items');
         if (!empty($items)) {
             foreach ($items as $key => $val) {
@@ -95,7 +97,15 @@ class Orders extends CI_Controller
                 $this->form_validation->set_rules('items[' . $key . '][total]', 'Precio unitario', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
             }
         }
-        $this->form_validation->set_rules('notes', 'Notas', 'trim|max_length[255]', $error_messages);
+        $payments = $this->input->post('payments');
+        if (!empty($payments)) {
+            foreach ($payments as $key => $val) {
+                $this->form_validation->set_rules('payments[' . $key . '][amount]', 'Cantidad', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
+                $this->form_validation->set_rules('payments[' . $key . '][date]', 'Fecha', 'trim|required|max_length[255]', $error_messages);
+                $this->form_validation->set_rules('payments[' . $key . '][type]', 'Tipo', 'trim|required|max_length[255]', $error_messages);
+                $this->form_validation->set_rules('payments[' . $key . '][notes]', 'Notas', 'trim|max_length[255]', $error_messages);
+            }
+        }
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('errors', $this->form_validation->error_array());
             $this->session->set_flashdata('old', $this->input->post());
@@ -120,29 +130,21 @@ class Orders extends CI_Controller
         }
         $customer = $this->customers->get_customer_by_id($order->cliente_id);
         $lines = $this->orders->get_lines_by_id($id);
-
         $data = [
             'id' => $order->id,
             'customer_id' => $order->cliente_id
         ];
-
-       $payments_made = $this->payments->get_all_payments_made($data);
-//
-//        echo "<pre>";
-//        var_dump($payments_made);
-//        echo "</pre>";
-//        die();
-
-
-
-
+        $payments_made = $this->payments->get_all_payments_made($data);
+        $total_paid = $this->payments->get_total_paid($data);
         $data['page'] = 'edit_order';
         $data['title'] = 'Editar pedido ' . $order->folio;
         $data['js_files'] = [
             base_url('assets/js/document.vendor.min.js'),
-            base_url('assets/js/document.min.js')
+            base_url('assets/js/document.min.js'),
+            base_url('assets/js/payments.min.js')
         ];
         $data['payments_made'] = $payments_made;
+        $data['total_paid'] = $total_paid;
         $data['customer'] = $customer;
         $data['order'] = $order;
         $data['lines'] = $lines;
@@ -177,6 +179,7 @@ class Orders extends CI_Controller
         $this->form_validation->set_rules('tax', 'IVA', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
         $this->form_validation->set_rules('amount_due', 'Saldo', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
         $this->form_validation->set_rules('total', 'Total', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
+        $this->form_validation->set_rules('notes', 'Notas', 'trim|max_length[255]', $error_messages);
         $items = $this->input->post('items');
         if (!empty($items)) {
             foreach ($items as $key => $val) {
@@ -188,7 +191,15 @@ class Orders extends CI_Controller
                 $this->form_validation->set_rules('items[' . $key . '][total]', 'Precio unitario', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
             }
         }
-        $this->form_validation->set_rules('notes', 'Notas', 'trim|max_length[255]', $error_messages);
+        $payments = $this->input->post('payments');
+        if (!empty($payments)) {
+            foreach ($payments as $key => $val) {
+                $this->form_validation->set_rules('payments[' . $key . '][amount]', 'Cantidad', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
+                $this->form_validation->set_rules('payments[' . $key . '][date]', 'Fecha', 'trim|required|max_length[255]', $error_messages);
+                $this->form_validation->set_rules('payments[' . $key . '][type]', 'Tipo', 'trim|required|max_length[255]', $error_messages);
+                $this->form_validation->set_rules('payments[' . $key . '][notes]', 'Notas', 'trim|max_length[255]', $error_messages);
+            }
+        }
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('errors', $this->form_validation->error_array());
             $this->session->set_flashdata('old', $this->input->post());
@@ -204,8 +215,6 @@ class Orders extends CI_Controller
             }
         }
     }
-
-
 
     public function get_orders_ajax()
     {
@@ -273,11 +282,10 @@ class Orders extends CI_Controller
             $data['csrf_name'] = $csrf['name'];
             $data['csrf_hash'] = $csrf['hash'];
             $more_button = $this->load->view('partials/more_button_1', $data, true);
-            return $view_button . $edit_button . $delete_button ;
+            return $view_button . $edit_button . $delete_button;
         });
         echo $datatables->generate();
     }
-
 
     public function delete_order()
     {
@@ -297,8 +305,7 @@ class Orders extends CI_Controller
         }
     }
 
-
-    function get_products_ajax()
+    public function get_products_ajax()
     {
         $errors = [];
         if (is_null($this->input->get('search'))) {
@@ -319,7 +326,7 @@ class Orders extends CI_Controller
         }
     }
 
-    function get_customers_ajax()
+    public function get_customers_ajax()
     {
         $errors = [];
         if (is_null($this->input->get('start')) || trim($this->input->get('start')) == '') {
@@ -349,8 +356,7 @@ class Orders extends CI_Controller
         }
     }
 
-
-    function get_pdf($id)
+    public function get_pdf($id)
     {
         $order = $this->orders->get_order_by_id($id);
         if (!$order) {
@@ -367,7 +373,7 @@ class Orders extends CI_Controller
         $data['customer'] = $customer;
         $data['order'] = $order;
         $data['lines'] = $lines;
-        $html = $this->load->view('layouts/pdf', $data, true);
+        $html = $this->load->view('layouts/pdf_layout', $data, true);
         $dompdf = new Dompdf();
         $html = preg_replace('/>\s+</', "><", $html);
         $dompdf->loadHtml($html);
@@ -376,20 +382,21 @@ class Orders extends CI_Controller
         $dompdf->stream('pedido-' . strtolower($order_number) . '.pdf', array("Attachment" => false));
     }
 
-
-    function generate_pdf_report()
+    public function generate_pdf_report()
     {
         $spanish_months = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
         $month = $this->input->get('month');
         $year = $this->input->get('year');
-        if  ( !$month || !$year  || intval($month) > 12 ) {
+        if (!$month || !$year || intval($month) > 12) {
             show_404();
         }
-        $spanish_month =  $spanish_months[intval($month) - 1];
+        $spanish_month = $spanish_months[intval($month) - 1];
         $orders = $this->orders->get_orders_for_report($month, $year);
         $sum_of_subtotal = $this->orders->get_sum_of_subtotal($month, $year);
+        $sum_of_discount = $this->orders->get_sum_of_discount($month, $year);
         $sum_of_tax = $this->orders->get_sum_of_tax($month, $year);
         $sum_of_total = $this->orders->get_sum_of_total($month, $year);
+        $sum_of_amount_due = $this->orders->get_sum_of_amount_due($month, $year);
         $data['page'] = 'pdf_order_report';
         $data['title'] = 'Pedidos de ' . $spanish_month . ' del ' . $year;
         $data['css_files'] = [
@@ -399,215 +406,18 @@ class Orders extends CI_Controller
         $data['month'] = $spanish_month;
         $data['year'] = $year;
         $data['sum_of_subtotal'] = $sum_of_subtotal;
+        $data['sum_of_discount'] = $sum_of_discount;
         $data['sum_of_tax'] = $sum_of_tax;
         $data['sum_of_total'] = $sum_of_total;
-        $html = $this->load->view('layouts/pdf', $data, true);
+        $data['sum_of_amount_due'] = $sum_of_amount_due;
+        $html = $this->load->view('layouts/pdf_layout', $data, true);
         $dompdf = new Dompdf();
         $html = preg_replace('/>\s+</', "><", $html);
         $dompdf->loadHtml($html);
         $dompdf->setPaper('letter', 'portrait');
         $dompdf->render();
-        $dompdf->stream('reporte_pedidos_' . strtolower($spanish_month) .  '_' . $year . '.pdf', array("Attachment" => false));
+        $dompdf->stream('reporte_pedidos_' . strtolower($spanish_month) . '_' . $year . '.pdf', array("Attachment" => false));
     }
-
-
-
-//    public function get_total_paid_ajax()
-//    {
-//        $order_id = $this->input->get('order_id');
-//        $customer_id = $this->input->get('customer_id');
-//        if ($order_id && $customer_id) {
-//            $total_paid = $this->payments->get_total_paid($order_id, $customer_id);
-//            $res = [
-//                'total_paid' => $total_paid
-//            ];
-//            $this->output
-//                ->set_header($_SERVER['SERVER_PROTOCOL'] . ' 200 OK')
-//                ->set_content_type('application/json')
-//                ->set_output(json_encode($res, JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE));
-//        }
-//    }
-//
-//    public function get_amount_due_ajax()
-//    {
-//        $id = $this->input->get('id');
-//        if ($id) {
-//            $amount_due = $this->orders->get_amount_due_by_id($id);
-//            $res = [
-//                'amount_due' => $amount_due
-//            ];
-//            $this->output
-//                ->set_header($_SERVER['SERVER_PROTOCOL'] . ' 200 OK')
-//                ->set_content_type('application/json')
-//                ->set_output(json_encode($res, JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE));
-//
-//        }
-//    }
-
-    public function new_payment_ajax()
-    {
-        if ($this->input->server('REQUEST_METHOD') != 'POST') {
-            show_404();
-        }
-
-        if ($this->input->post('unit_price')) {
-            $_POST['unit_price'] = remove_commas($_POST['unit_price']);
-        }
-
-        $common_error_messages = [
-            'required' => 'El campo "%s" es requerido',
-            'max_length' => 'El tamaño máximo del campo "%s" es de %s caracteres',
-            'numeric' => 'El campo "%s" debe contener solo números',
-            'greater_than' => 'El campo "%s" debe contener un número mayor que %s',
-            'less_than' => 'El campo "%s" debe contener un número menor que %s',
-            'integer' => 'El campo "%s" debe ser entero'
-        ];
-
-        $this->form_validation->set_rules('customer_id', 'ID del cliente', 'trim|required|integer', $common_error_messages);
-        $this->form_validation->set_rules('order_id', 'ID del pedido', 'trim|required|integer', $common_error_messages);
-        $this->form_validation->set_rules('amount', 'Cantidad', 'trim|required|numeric|greater_than[0]|less_than[1000000]', $common_error_messages);
-        $this->form_validation->set_rules('payment_method', 'Método de pago', 'trim|max_length[255]', $common_error_messages);
-        $this->form_validation->set_rules('date', 'Fecha', 'trim|max_length[255]', $common_error_messages);
-        $this->form_validation->set_rules('notes', 'Notas', 'trim|max_length[255]', $common_error_messages);
-
-        if ($this->form_validation->run() == FALSE) {
-            $res = [
-                'message' => "error",
-                'errors' => $this->form_validation->error_array(),
-                'csrfName' => $this->security->get_csrf_token_name(),
-                'csrfHash' => $this->security->get_csrf_hash()
-            ];
-            $this->output
-                ->set_header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request')
-                ->set_content_type('application/json')
-                ->set_output(json_encode($res, JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE));
-        } else {
-            $trans = $this->payments->create_payment($this->input->post());
-            if ($trans) {
-                $order = [
-                    'id' => $this->input->post('order_id'),
-                    'customer_id' => $this->input->post('customer_id')
-                ];
-                $total_paid = $this->payments->get_total_paid($order);
-                $payments_made = $this->payments->get_all_payments_made($order);
-                $res = [
-                    'message' => "ok",
-                    'total_paid' => $total_paid,
-                    'payments_made' => $payments_made,
-                    'csrfName' => $this->security->get_csrf_token_name(),
-                    'csrfHash' => $this->security->get_csrf_hash()
-                ];
-                $this->output
-                    ->set_header($_SERVER['SERVER_PROTOCOL'] . ' 200 OK')
-                    ->set_content_type('application/json')
-                    ->set_output(json_encode($res, JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE));
-            }
-        }
-    }
-
-    public function delete_payment_ajax()
-    {
-        if ($this->input->server('REQUEST_METHOD') != 'POST') {
-            show_404();
-        }
-
-        if ($this->input->post('unit_price')) {
-            $_POST['unit_price'] = remove_commas($_POST['unit_price']);
-        }
-
-        $common_error_messages = [
-            'required' => 'El campo "%s" es requerido',
-            'integer' => 'El campo "%s" debe ser entero'
-        ];
-
-        $this->form_validation->set_rules('id', 'ID del cliente', 'trim|required|integer', $common_error_messages);
-        $this->form_validation->set_rules('order_id', 'ID del cliente', 'trim|required|integer', $common_error_messages);
-
-        if ($this->form_validation->run() == FALSE) {
-            $res = [
-                'message' => "error",
-                'errors' => $this->form_validation->error_array(),
-                'csrfName' => $this->security->get_csrf_token_name(),
-                'csrfHash' => $this->security->get_csrf_hash()
-            ];
-            $this->output
-                ->set_header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request')
-                ->set_content_type('application/json')
-                ->set_output(json_encode($res, JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE));
-        } else {
-            $trans = $this->payments->delete_payment($this->input->post());
-            if ($trans) {
-                $order = [
-                    'id' => $this->input->post('order_id'),
-                    'customer_id' => $this->input->post('customer_id')
-                ];
-                $total_paid = $this->payments->get_total_paid($order);
-                $payments_made = $this->payments->get_all_payments_made($order);
-                $res = [
-                    'message' => "ok",
-                    'total_paid' => $total_paid,
-                    'payments_made' => $payments_made,
-                    'csrfName' => $this->security->get_csrf_token_name(),
-                    'csrfHash' => $this->security->get_csrf_hash()
-                ];
-                $this->output
-                    ->set_header($_SERVER['SERVER_PROTOCOL'] . ' 200 OK')
-                    ->set_content_type('application/json')
-                    ->set_output(json_encode($res, JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE));
-            }
-        }
-    }
-
-
-
-
-
-
-
-    public function update_amount_due_ajax()
-    {
-        if ($this->input->server('REQUEST_METHOD') != 'POST') {
-            show_404();
-        }
-        if ($this->input->post('unit_price')) {
-            $_POST['unit_price'] = remove_commas($_POST['unit_price']);
-        }
-        $common_error_messages = [
-            'required' => 'El campo "%s" es requerido',
-            'numeric' => 'El campo "%s" debe contener solo números',
-            'greater_than' => 'El campo "%s" debe contener un número mayor que %s',
-            'less_than' => 'El campo "%s" debe contener un número menor que %s',
-            'integer' => 'El campo "%s" debe ser entero'
-        ];
-        $this->form_validation->set_rules('id', 'ID del pedido', 'trim|required|integer', $common_error_messages);
-        $this->form_validation->set_rules('amount_due', 'Saldo', 'trim|required|numeric|greater_than[0]|less_than[1000000]', $common_error_messages);
-        if ($this->form_validation->run() == FALSE) {
-            $res = [
-                'message' => "error",
-                'errors' => $this->form_validation->error_array(),
-                'csrfName' => $this->security->get_csrf_token_name(),
-                'csrfHash' => $this->security->get_csrf_hash()
-            ];
-            $this->output
-                ->set_header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request')
-                ->set_content_type('application/json')
-                ->set_output(json_encode($res, JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE));
-        } else {
-            $affected_rows = $this->orders->update_amount_due($this->input->post());
-            if ($affected_rows > 0) {
-                $res = [
-                    'message' => "ok",
-                    'csrfName' => $this->security->get_csrf_token_name(),
-                    'csrfHash' => $this->security->get_csrf_hash()
-                ];
-                $this->output
-                    ->set_header($_SERVER['SERVER_PROTOCOL'] . ' 200 OK')
-                    ->set_content_type('application/json')
-                    ->set_output(json_encode($res, JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE));
-            }
-        }
-    }
-
 }
 
 ?>

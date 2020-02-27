@@ -24,10 +24,6 @@ $(document).ready(function () {
         ],
         "language": spanishLang
     });
-
-
-
-
     $('#dataTables').on('click', '.delete_btn', function (e) {
         e.preventDefault();
         var form = $(this).closest("form");
@@ -48,48 +44,30 @@ $(document).ready(function () {
             }
         })
     });
-
-
     $('#dataTables').on('click', '.change-status-btn', function (e) {
         e.preventDefault();
-        console.log(e);
         var form = $(this).closest("form");
         form.submit();
     });
-
     $('#dataTables').on('click', '.duplicate-btn', function (e) {
         e.preventDefault();
-        console.log(e);
         var form = $(this).closest("form");
         form.submit();
     });
-
-
-
     $('#generateReportModal').on('show.bs.modal', function (e) {
         var year = new Date().getFullYear();
         var month = new Date().getMonth() + 1;
         year = parseInt(year);
         month = parseInt(month);
-
-
-        console.log('year', year);
-        console.log('month', month);
-        $('#generateReportModal select[name="month"]').val( month  );
-        $('#generateReportModal select[name="year"]').val( year  );
+        $('#generateReportModal select[name="month"]').val(month);
+        $('#generateReportModal select[name="year"]').val(year);
     })
-
-
     $('#generateReportModal .submit-btn').on('click', function (e) {
         e.preventDefault();
         var form = $(this).closest("form");
         form.submit();
         $('#generateReportModal').modal('hide');
     });
-
-
-
-
     // Corrige la tabla #dataTables cuando se redimensiona la ventana
     var $dataTables = $('#dataTables');
     var mediaQuery = window.matchMedia('(min-width: 576px)');
@@ -104,9 +82,4 @@ $(document).ready(function () {
     }
 
     widthChange(mediaQuery);
-
 });
-
-
-
-

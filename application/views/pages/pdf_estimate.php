@@ -78,7 +78,6 @@ foreach ($full_address_array as $key => $val) {
 					<td><?php echo $current_date_dmy ?></td>
 				</tr>
 			</table>
-
 		</td>
 	</tr>
 </table>
