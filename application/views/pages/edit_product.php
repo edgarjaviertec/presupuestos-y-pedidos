@@ -44,12 +44,8 @@ if (isset($old['description'])) {
                 </ul>
             </div>
         <?php endif; ?>
-
         <h1 class="mb-2 h3">Editar producto #<?php echo isset($product['id']) ? $product['id'] : '' ?></h1>
-        <p class="mb-2 font-weight-bold">Los campos marcados con <i class="fas fa-asterisk text-danger"></i> son
-            obligatorios</p>
-
-
+        <p class="mb-2 font-weight-bold">Los campos marcados con <i class="fas fa-asterisk text-danger"></i> son obligatorios</p>
         <div class="card bg-white shadow">
             <div class="card-body p-3">
                 <form id="productForm"

@@ -1,163 +1,178 @@
-
 .confirmation-modal {
-	background-color: rgba($gray-800, .5) !important;
-	.swal2-popup {
-		padding: 0;
-		box-shadow: $box-shadow;
-		.swal2-header {
-			border-top-left-radius: .3rem;
-			border-top-right-radius: .3rem;
-			border: $global-border-width solid $global-border-color;
-			border-bottom: none;
-			background-color: $gray-100;
-			padding: 1rem 1rem;
-			align-items: flex-start;
-			.swal2-title {
-				font-size: 1.25rem;
-				font-weight: normal;
-				text-align: left;
-				margin-bottom: 0;
-				color: $body-color;
-			}
-		}
-		.swal2-content {
-			padding: 1rem;
-			border: $global-border-width solid $global-border-color;
-			border-bottom: none;
-			#swal2-content {
-				text-align: left;
-				color: $body-color;
+  background-color: rgba($gray-800, .5) !important;
 
-			}
-		}
-		.swal2-actions {
-			justify-content: flex-end;
-			border-bottom-left-radius: .3rem;
-			border-bottom-right-radius: .3rem;
-			margin: 0;
-			padding: 0.75rem;
-			padding-top: 0;
-			border: $global-border-width solid $global-border-color;
-			border-top: none;
-			.swal2-cancel {
-				background: $secondary;
-				&:focus {
-					outline: 0;
-					box-shadow: 0 0 0 0.2rem rgba($secondary, .25);
-				}
-			}
+  .swal2-popup {
+    padding: 0;
+    box-shadow: $box-shadow;
 
-			.swal2-confirm {
-				background: $success;
-				&:focus {
-					outline: 0;
-					box-shadow: 0 0 0 0.2rem rgba($success, .25);
-				}
-			}
-		}
-	}
+    .swal2-header {
+      border-top-left-radius: .3rem;
+      border-top-right-radius: .3rem;
+      border: $global-border-width solid $global-border-color;
+      border-bottom: none;
+      background-color: $gray-100;
+      padding: 1rem 1rem;
+      align-items: flex-start;
+
+      .swal2-title {
+        font-size: 1.25rem;
+        font-weight: normal;
+        text-align: left;
+        margin-bottom: 0;
+        color: $body-color;
+      }
+    }
+
+    .swal2-content {
+      padding: 1rem;
+      border: $global-border-width solid $global-border-color;
+      border-bottom: none;
+
+      #swal2-content {
+        text-align: left;
+        color: $body-color;
+
+      }
+    }
+
+    .swal2-actions {
+      justify-content: flex-end;
+      border-bottom-left-radius: .3rem;
+      border-bottom-right-radius: .3rem;
+      margin: 0;
+      padding: 0.75rem;
+      padding-top: 0;
+      border: $global-border-width solid $global-border-color;
+      border-top: none;
+
+      .swal2-cancel {
+        background: $secondary;
+
+        &:focus {
+          outline: 0;
+          box-shadow: 0 0 0 0.2rem rgba($secondary, .25);
+        }
+      }
+
+      .swal2-confirm {
+        background: $success;
+
+        &:focus {
+          outline: 0;
+          box-shadow: 0 0 0 0.2rem rgba($success, .25);
+        }
+      }
+    }
+  }
 }
 
 .modal-with-icon {
-	background-color: rgba($gray-800, .5) !important;
-	.swal2-popup {
-		padding: 0;
-		box-shadow: $box-shadow;
-		.swal2-header {
-			border-top-left-radius: .3rem;
-			border-top-right-radius: .3rem;
-			border: $global-border-width solid $global-border-color;
-			border-bottom: none;
-			background-color: white;
-			padding: 1rem 1rem;
-			align-items: flex-start;
-			padding-bottom: 0;
+  background-color: rgba($gray-800, .5) !important;
 
-			.swal2-icon{
-				margin: 1rem auto;
-				margin-top: 0;
-			}
-			.swal2-title {
-				display: flex;
-				justify-content: center;
-				width: 100%;
-				font-size: 1.25rem;
-				font-weight: normal;
-				text-align: center;
-				margin-bottom: 0;
-				color: $body-color;
-			}
-		}
-		.swal2-content {
-			padding: 1rem;
-			border: $global-border-width solid $global-border-color;
-			border-top: none;
-			border-bottom: none;
-			#swal2-content {
-				text-align: center;
-				color: $body-color;
+  .swal2-popup {
+    box-shadow: $box-shadow;
+    border: $global-border-width solid $global-border-color;
 
-			}
-		}
-		.swal2-actions {
-			justify-content: center;
-			border-bottom-left-radius: .3rem;
-			border-bottom-right-radius: .3rem;
-			margin: 0;
-			padding: 0.75rem;
-			padding-top: 0;
-			border: $global-border-width solid $global-border-color;
-			border-top: none;
-			.swal2-cancel {
-				background: $secondary;
-				&:focus {
-					outline: 0;
-					box-shadow: 0 0 0 0.2rem rgba($secondary, .25);
-				}
-			}
+    .swal2-header {
+      flex-direction: row;
+      flex-wrap: wrap;
+      margin: 0;
+      border-top-left-radius: .3rem;
+      border-top-right-radius: .3rem;
 
-			.swal2-confirm {
-				background: $success;
-				&:focus {
-					outline: 0;
-					box-shadow: 0 0 0 0.2rem rgba($success, .25);
-				}
-			}
-		}
-	}
+      .swal2-icon {
+        font-family: "Font Awesome 5 Free";
+        border: none;
+        color: $danger;
+        margin: 0 auto;
+        margin-bottom: 1rem;
+        line-height: normal;
+        height: auto;
+        width: auto;
+
+        &.swal2-error {
+          &:before {
+            content: "\f057";
+            display: block;
+            height: auto;
+            font-size: 6rem;
+          }
+        }
+
+        &.swal2-animate-error-icon {
+          animation: none;
+        }
+
+        > * {
+          display: none;
+        }
+      }
+
+      .swal2-title {
+        display: block !important;
+        width: 100%;
+        text-align: center;
+        font-size: 1.25rem;
+        font-weight: normal;
+      }
+    }
+
+    .swal2-content {
+      padding: 0;
+    }
+
+    .swal2-actions {
+      justify-content: center;
+      margin-top: 1rem;
+
+      .swal2-cancel {
+        background: $secondary;
+        margin: 0;
+
+        &:focus {
+          outline: 0;
+          box-shadow: 0 0 0 0.2rem rgba($secondary, .25);
+        }
+      }
+
+      .swal2-confirm {
+        background: $success;
+        margin: 0;
+
+        &:focus {
+          outline: 0;
+          box-shadow: 0 0 0 0.2rem rgba($success, .25);
+        }
+      }
+    }
+  }
 }
 
+.flash-message {
+  &.flash-success {
+    .swal2-popup {
+      &.swal2-toast {
+        border: $global-border-width solid $global-border-color;
+        box-shadow: $box-shadow;
 
+        .swal2-header {
+          .swal2-icon {
+            font-family: "Font Awesome 5 Free";
+            border: none;
+            color: $success;
 
+            &.swal2-success {
+              &:before {
+                content: "\f058";
+              }
+            }
 
-
-
-
-
-
-.flash-message{
-	&.flash-success {
-		.swal2-popup{
-			&.swal2-toast {
-				border: $global-border-width solid $global-border-color;
-				box-shadow: $box-shadow;
-				.swal2-header{
-					.swal2-icon{
-						font-family: "Font Awesome 5 Free";
-						border:none;
-						color: $success;
-						&.swal2-success{
-							&:before {
-								content: "\f058";
-							}
-						}
-						>*{
-						display: none;
-						}
-					}
-				}
-			}
-		}
-	}
+            > * {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
 }
-

@@ -232,22 +232,16 @@ class Estimates extends CI_Controller
                     'title' => 'El presupuesto se duplicó con éxito',
                 ]);
                 $estimate = $this->estimates->get_estimate_by_number($next_estimate_number);
-
                 if ($estimate) {
-
                     $this->session->set_flashdata('flash_message', [
                         'type' => 'success',
                         'title' => 'El presupuesto se duplicó con éxito',
                     ]);
-
                     redirect('admin/presupuestos/' . $estimate->id);
-
                 }
             }
         }
     }
-
-    //convert_to_order
 
     public function convert_to_order()
     {
@@ -288,9 +282,7 @@ class Estimates extends CI_Controller
                 'customer_id' => $estimate->cliente_id,
                 'items' => $estimate_items,
             ];
-
             $trans = $this->orders->create_order($estimate_data);
-
             if ($trans) {
                 $new_order = $this->orders->get_order_by_number($next_order_number);
                 if ($new_order) {
@@ -417,7 +409,7 @@ class Estimates extends CI_Controller
         }
     }
 
-    function get_products_ajax()
+    public function get_products_ajax()
     {
         $errors = [];
         if (is_null($this->input->get('search'))) {
@@ -438,7 +430,7 @@ class Estimates extends CI_Controller
         }
     }
 
-    function get_customers_ajax()
+    public function get_customers_ajax()
     {
         $errors = [];
         if (is_null($this->input->get('start')) || trim($this->input->get('start')) == '') {
@@ -468,7 +460,7 @@ class Estimates extends CI_Controller
         }
     }
 
-    function get_pdf($id)
+    public function get_pdf($id)
     {
         $estimate = $this->estimates->get_estimate_by_id($id);
         if (!$estimate) {
@@ -485,7 +477,7 @@ class Estimates extends CI_Controller
         $data['customer'] = $customer;
         $data['estimate'] = $estimate;
         $data['lines'] = $lines;
-        $html = $this->load->view('layouts/pdf', $data, true);
+        $html = $this->load->view('layouts/pdf_layout', $data, true);
         $dompdf = new Dompdf();
         $html = preg_replace('/>\s+</', "><", $html);
         $dompdf->loadHtml($html);
@@ -494,24 +486,17 @@ class Estimates extends CI_Controller
         $dompdf->stream('presupuesto-' . strtolower($estimate_number) . '.pdf', array("Attachment" => false));
     }
 
-
-
-    function generate_pdf_report()
+    public function generate_pdf_report()
     {
         $spanish_months = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
-
         $month = $this->input->get('month');
         $year = $this->input->get('year');
-
-
-        if  ( !$month || !$year  || intval($month) > 12 ) {
+        if (!$month || !$year || intval($month) > 12) {
             show_404();
         }
-
-        $spanish_month =  $spanish_months[intval($month) - 1];
-
-
+        $spanish_month = $spanish_months[intval($month) - 1];
         $estimates = $this->estimates->get_estimates_for_report($month, $year);
+        $sum_of_discount = $this->estimates->get_sum_of_discount($month, $year);
         $sum_of_subtotal = $this->estimates->get_sum_of_subtotal($month, $year);
         $sum_of_tax = $this->estimates->get_sum_of_tax($month, $year);
         $sum_of_total = $this->estimates->get_sum_of_total($month, $year);
@@ -524,26 +509,16 @@ class Estimates extends CI_Controller
         $data['month'] = $spanish_month;
         $data['year'] = $year;
         $data['sum_of_subtotal'] = $sum_of_subtotal;
+        $data['sum_of_discount'] = $sum_of_discount;
         $data['sum_of_tax'] = $sum_of_tax;
         $data['sum_of_total'] = $sum_of_total;
-        $html = $this->load->view('layouts/pdf', $data, true);
+        $html = $this->load->view('layouts/pdf_layout', $data, true);
         $dompdf = new Dompdf();
         $html = preg_replace('/>\s+</', "><", $html);
         $dompdf->loadHtml($html);
         $dompdf->setPaper('letter', 'portrait');
         $dompdf->render();
-        $dompdf->stream('reporte_presupuestos_' . strtolower($spanish_month) .  '_' . $year . '.pdf', array("Attachment" => false));
-    }
-
-    public function view_estimate($id)
-    {
-        $product = $this->estimates->get_estimate_by_id($id);
-        if (!$product) {
-            show_404();
-        }
-        $data['page'] = 'view_estimate';
-        $data['title'] = 'Editar producto #' . $id;
-        $this->load->view('layouts/dashboard_layout', $data);
+        $dompdf->stream('reporte_presupuestos_' . strtolower($spanish_month) . '_' . $year . '.pdf', array("Attachment" => false));
     }
 }
 

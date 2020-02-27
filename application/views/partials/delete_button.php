@@ -5,7 +5,6 @@ $csrf_name = isset($csrf_name) ? $csrf_name : NULL;
 $csrf_hash = isset($csrf_hash) ? $csrf_hash : NULL;
 $is_disabled = isset($is_disabled) && $is_disabled ? 'disabled' : '';
 ?>
-
 <form class="d-inline" method="POST" action="<?php echo $url ?>">
 	<input type="hidden" name="id" value="<?php echo $id ?>">
 	<input type="hidden" name="<?php echo $csrf_name ?>" value="<?php echo $csrf_hash ?>">

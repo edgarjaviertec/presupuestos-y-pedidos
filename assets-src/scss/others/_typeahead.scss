@@ -19,75 +19,70 @@ $tt-link-hover-bg: $global-hover-bg;
 $tt-link-active-color: white;
 $tt-link-active-bg: $primary;
 $tt-hint-color: #adb5bd;
-
 span.twitter-typeahead {
   .tt-hint {
-	color: $tt-hint-color;
+    color: $tt-hint-color;
   }
 
   .tt-menu {
-	position: absolute;
-	top: 100%;
-	left: 0;
-	z-index: $zindex-tt;
-	display: none;
-	float: left;
-	min-width: $tt-min-width;
-	padding-top: $tt-padding-top;
-	padding-bottom: $tt-padding-bottom;
-	margin: $tt-spacer 0 0;
-	font-size: $tt-font-size;
-	color: $tt-color;
-	text-align: left;
-	list-style: none;
-	background-color: $tt-bg;
-	background-clip: padding-box;
-	border: $tt-border-width solid $tt-border-color;
-	border-radius: $tt-border-radius;
-	box-shadow: $tt-box-shadow;
-	overflow: hidden;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: $zindex-tt;
+    display: none;
+    float: left;
+    min-width: $tt-min-width;
+    padding-top: $tt-padding-top;
+    padding-bottom: $tt-padding-bottom;
+    margin: $tt-spacer 0 0;
+    font-size: $tt-font-size;
+    color: $tt-color;
+    text-align: left;
+    list-style: none;
+    background-color: $tt-bg;
+    background-clip: padding-box;
+    border: $tt-border-width solid $tt-border-color;
+    border-radius: $tt-border-radius;
+    box-shadow: $tt-box-shadow;
+    overflow: hidden;
 
-	.tt-dataset {
-	  display: flex;
-	  flex-wrap: wrap;
-	  width: 100%;
+    .tt-dataset {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
 
-	  .tt-suggestion {
-		cursor: pointer;
-		display: flex;
-		align-items: center;
-		width: 100%;
-		padding: $tt-item-padding-y $tt-item-padding-x;
-		color: $tt-link-color;
-		text-align: inherit;
-		white-space: nowrap;
-		background-color: transparent;
-		border: 0;
+      .tt-suggestion {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding: $tt-item-padding-y $tt-item-padding-x;
+        color: $tt-link-color;
+        text-align: inherit;
+        white-space: nowrap;
+        background-color: transparent;
+        border: 0;
 
+        &:hover,
+        &:focus {
+          color: $tt-link-hover-color;
+          background: $tt-link-hover-bg;
+        }
 
-		&:hover,
-		&:focus {
-		  color: $tt-link-hover-color;
-		  background: $tt-link-hover-bg;
-		}
+        &.tt-cursor {
+          color: $tt-link-active-color;
+          background: $tt-link-active-bg;
 
-		&.tt-cursor {
-		  color: $tt-link-active-color;
-		  background: $tt-link-active-bg;
+          .tt-item-icon {
+            color: $tt-link-active-color;
+          }
+        }
 
-		  .tt-item-icon {
-			color: $tt-link-active-color;
-		  }
-		}
-
-		.tt-item-icon {
-		  margin-right: 0.5rem;
-		  color: $tt-item-icon-color;
-		}
-	  }
-
-
-	}
+        .tt-item-icon {
+          margin-right: 0.5rem;
+          color: $tt-item-icon-color;
+        }
+      }
+    }
   }
 }
-

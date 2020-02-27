@@ -3,7 +3,6 @@
 $gray: #E6E7E8;
 $red: #D81B60;
 $border-color: black;
-
 @page {
   size: auto;
   margin: 0.5cm;
@@ -17,9 +16,9 @@ table {
   width: 100%;
 
   th, td {
-	border: 1pt solid $border-color;
-	padding: 0;
-	vertical-align: top;
+    border: 1pt solid $border-color;
+    padding: 0;
+    vertical-align: top;
   }
 }
 
@@ -32,16 +31,16 @@ table {
   text-align: center;
 
   h3 {
-	font-size: 12pt;
-	padding: 0;
-	margin: 0;
+    font-size: 12pt;
+    padding: 0;
+    margin: 0;
   }
 
   p {
-	padding: 0;
-	margin: 0;
-	font-size: 9pt;
-	font-style: italic;
+    padding: 0;
+    margin: 0;
+    font-size: 9pt;
+    font-style: italic;
   }
 }
 
@@ -54,13 +53,13 @@ table {
   width: 4cm;
 
   span {
-	&:first-child {
-	  font-weight: bold;
-	}
+    &:first-child {
+      font-weight: bold;
+    }
 
-	padding: 0;
-	display: block;
-	text-align: center;
+    padding: 0;
+    display: block;
+    text-align: center;
   }
 }
 
@@ -79,29 +78,29 @@ table {
   width: 4cm;
 
   th, td {
-	border: 0;
+    border: 0;
   }
 
   .number {
-	tr {
-	  td {
-		color: $red;
-	  }
-	}
+    tr {
+      td {
+        color: $red;
+      }
+    }
   }
 
   .number, .date {
-	th, td {
-	  border: 1pt solid $border-color;
-	  height: 0.71cm;
-	  vertical-align: middle;
-	  text-align: center;
-	}
+    th, td {
+      border: 1pt solid $border-color;
+      height: 0.71cm;
+      vertical-align: middle;
+      text-align: center;
+    }
 
-	th {
-	  text-transform: uppercase;
-	  background: $gray;
-	}
+    th {
+      text-transform: uppercase;
+      background: $gray;
+    }
   }
 }
 
@@ -110,114 +109,101 @@ table {
   margin-bottom: 0.3cm;
 
   th, td {
-	border: 1pt solid $border-color;
-	//height: 0.71cm;
-	vertical-align: middle;
-	overflow: hidden;
+    border: 1pt solid $border-color;
+    vertical-align: middle;
+    overflow: hidden;
   }
 
   th {
-	text-transform: uppercase;
-	width: 2.6cm;
-	padding: 0.2cm;
-	background: $gray;
+    text-transform: uppercase;
+    width: 2.6cm;
+    padding: 0.2cm;
+    background: $gray;
 
-	span {
-	  display: block;
-	}
+    span {
+      display: block;
+    }
   }
 
   td {
-	padding: 0.2cm;
+    padding: 0.2cm;
 
-	span {
-	  display: block;
-	}
+    span {
+      display: block;
+    }
   }
 }
 
 .lines {
   tr {
+    th, td {
+      border: 1pt solid $border-color;
+      overflow: hidden;
+    }
 
+    th {
+      text-transform: uppercase;
+      padding: 0 0.2cm;
+      text-align: center;
+      vertical-align: middle;
+      height: 0.71cm;
+      background: $gray;
 
-	th, td {
-	  border: 1pt solid $border-color;
-	  overflow: hidden;
-	}
+      span {
+        display: block;
+      }
+    }
 
-	th {
-	  text-transform: uppercase;
-	  padding: 0 0.2cm;
-	  text-align: center;
-	  vertical-align: middle;
-	  height: 0.71cm;
-	  background: $gray;
+    td {
+      padding: 0.2cm;
+      vertical-align: top;
 
-	  span {
-		display: block;
-	  }
-	}
-
-	td {
-	  padding: 0.2cm;
-	  vertical-align: top;
-	  span {
-		display: block;
-	  }
-	}
-
-
+      span {
+        display: block;
+      }
+    }
   }
 
-
   .qty {
-	width: 2.6cm;
+    width: 2.6cm;
   }
 
   .item {
-	width: 11.09cm;
+    width: 11.09cm;
 
-	.name {
-	  font-weight: bold;
-	  margin-bottom: 0.2cm;
-	}
+    .name {
+      font-weight: bold;
+      margin-bottom: 0.2cm;
+    }
   }
 
-  .unit-price{
-	width: 2.6cm;
-	text-align: center;
+  .unit-price {
+    width: 2.6cm;
+    text-align: center;
   }
 
-  .total{
-	text-align: right;
+  .total {
+    text-align: right;
   }
 
+  .notes {
+    padding: 0;
 
+    .notes-label {
+      font-weight: bold;
+    }
 
-
-  .notes{
-	padding: 0;
-
-	.notes-label{
-	  font-weight: bold;
-	}
-	.notes-label,
-	.notes-text{
-	  margin: 0.2cm;
-	}
-
+    .notes-label,
+    .notes-text {
+      margin: 0.2cm;
+    }
   }
 
-
-  .summary-label{
-	text-align: right;
+  .summary-label {
+    text-align: right;
   }
 
-  .summary-text{
-	text-align: right;
+  .summary-text {
+    text-align: right;
   }
-
-
-
-
 }

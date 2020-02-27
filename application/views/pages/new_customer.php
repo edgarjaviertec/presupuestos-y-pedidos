@@ -23,14 +23,13 @@ $csrf = array(
                 </ul>
             </div>
         <?php endif; ?>
-
         <h1 class="mb-2 h3">Nuevo cliente</h1>
-
-        <p class="mb-2 font-weight-bold">Los campos marcados con <i class="fas fa-asterisk text-danger"></i> son obligatorios</p>
-
+        <p class="mb-2 font-weight-bold">Los campos marcados con <i class="fas fa-asterisk text-danger"></i> son
+            obligatorios</p>
         <div class="card bg-white shadow">
             <div class="card-body p-3">
-                <form id="customerForm" method="post" action="<?php echo base_url('admin/customers/new_customer_validation') ?>">
+                <form id="customerForm" method="post"
+                      action="<?php echo base_url('admin/customers/new_customer_validation') ?>">
                     <input type="hidden" name="<?= $csrf['name']; ?>" value="<?= $csrf['hash']; ?>"/>
                     <div class="row">
                         <div class="col-12 col-md-6">

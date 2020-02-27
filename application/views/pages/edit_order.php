@@ -3,13 +3,11 @@ $order = (isset($order)) ? $order : NULL;
 $lines = (isset($lines)) ? $lines : NULL;
 $customer = (isset($customer)) ? $customer : NULL;
 $payments_made = (isset($payments_made)) ? $payments_made : NULL;
-
+$total_paid = (isset($total_paid)) ? $total_paid : NULL;
 $current_date_ymd = date('Y-m-d');
 $current_date_dmy = date('d/m/Y');
-
 $date_ymd = date('Y-m-d', strtotime($order->fecha_pedido));
 $date_dmy = date('d/m/Y', strtotime($order->fecha_pedido));
-
 
 $due_date_dmy = date('d/m/Y', strtotime($order->fecha_vencimiento));
 $due_date_ymd = date('Y-m-d', strtotime($order->fecha_vencimiento));
@@ -52,17 +50,13 @@ foreach ($full_address_array as $key => $val) {
         $full_address .= $val;
     }
 }
-
 $flash_message = $this->session->flashdata('flash_message');
 $flash_msg_data_attr = '';
 if (isset($flash_message["type"]) && isset($flash_message["title"])) {
     $flash_msg_data_attr = 'data-flash-msg-type="' . $flash_message["type"] . '"';
     $flash_msg_data_attr .= ' data-flash-msg-title="' . $flash_message["title"] . '"';
 }
-
-
 ?>
-
 <div class="row justify-content-center">
     <div class="col-12">
         <?php if (!empty($errors)): ?>
@@ -77,22 +71,16 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                 </ul>
             </div>
         <?php endif; ?>
-
-
-
         <h1 class="mb-2 h3">Editar pedido</h1>
         <p class="mb-2 font-weight-bold">Los campos marcados con <i class="fas fa-asterisk text-danger"></i> son
             obligatorios</p>
-
-
-
         <div class="document-container mb-5">
             <form id="documentForm"
                   method="post"
                   action="<?php echo base_url('admin/orders/edit_order_validation') ?>"
                 <?php echo $flash_msg_data_attr ?> >
                 <input type="hidden" class="csrf" name="<?= $csrf['name']; ?>" value="<?= $csrf['hash']; ?>"/>
-                <input type="hidden" name="id" value="<?php echo isset($order->id) ? $order->id : '' ?>">
+                <input type="hidden" name="id" value="<?php echo isset($order->id) ? $order->id : '' ?>" id="orderId">
                 <div class="meta-data">
                     <div class="logo">
                         <img src="/assets/img/logo.jpg" alt="">
@@ -205,10 +193,7 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                         </div>
                     </div>
                     <div class="table-body">
-
                         <?php foreach ($lines as $line): ?>
-
-
                             <div class="table-row">
                                 <button class="remove-item-btn" tabindex="-1">
                                     <i class="fas fa-times-circle"></i>
@@ -225,7 +210,7 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                                            tabindex="-1"
                                            value="<?php echo $line->cantidad ?>"
                                            autocomplete="off"
-                                           >
+                                    >
                                 </div>
                                 <div class="item-info">
                                     <input type="hidden" class="product-id">
@@ -243,7 +228,7 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                                               placeholder='48 lápices de colores "Arcoíris" para dibujo'
                                               tabindex="-1"
                                               autocomplete="off"
-                                              ><?php echo $line->descripcion ?></textarea>
+                                    ><?php echo $line->descripcion ?></textarea>
                                 </div>
                                 <div class="unit-price">
                                     <label class="font-weight-bold mb-1">
@@ -267,11 +252,7 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                                            value="<?php echo floatval($line->total) ?>">
                                 </div>
                             </div>
-
-
                         <?php endforeach; ?>
-
-
                     </div>
                 </div>
                 <div class="add-item">
@@ -331,7 +312,6 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
 
                                            autocomplete="off"
                                            tabindex="-1">
-
                                 </div>
                             </div>
                             <div class="amount">
@@ -356,8 +336,6 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                                     <i class="icon fas fa-check"></i>
                                 </button>
                                 <span>IVA (16%)</span>
-
-
                             </div>
                             <div class="amount">
                                 <input type="hidden"
@@ -381,17 +359,15 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                                 </span>
                             </div>
                         </div>
-
                         <div class="summary-item">
                             <div class="label"><span>Saldo</span></div>
                             <div class="amount">
-                                <input type="hidden" id="totalPaid" value="0">
+                                <input type="hidden" id="totalPaid" value="<?php echo $total_paid ?>">
                                 <input type="hidden" id="amountDue" name="amount_due"
                                        value="<?php echo floatval($order->saldo) ?>">
                                 <span class="formatted-number text-truncate"><?php echo "$" . number_format($order->saldo, 2); ?></span>
                             </div>
                         </div>
-
                     </div>
                     <div class="notes">
 						<textarea name="notes"
@@ -399,6 +375,126 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                                   placeholder="Ingrese notas o detalles de transferencia bancaria"
                                   tabindex="-1"
                         ><?php echo $order->notas ?></textarea>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <h4 class="mb-3 d-flex align-items-center">
+                        <span>Pagos</span>
+                        <button type="button" id="addNewPayment" class="ml-3 btn btn-success" data-toggle="modal"
+                                data-target="#newPaymentModal" <?php echo ($order->status === 'paid') ? 'disabled' : '' ?> >
+                            <i class="fas fa-plus"></i>
+                            <span class="ml-1 d-none d-sm-inline-block">Agregar pago</span>
+                        </button>
+                    </h4>
+                    <div class="payments-container <?php echo (count($payments_made) > 0) ? '' : 'd-none' ?>"
+                         id="paymentsContainer">
+                        <?php foreach ($payments_made as $index => $payment): ?>
+                            <div class="payment">
+                                <input name="payments[<?php echo $index ?>][amount]"
+                                       type="hidden"
+                                       class="payment-amount"
+                                       value="<?php echo $payment->monto ?>">
+                                <div class="amount"><?php echo "$" . number_format($payment->monto, 2); ?></div>
+                                <input name="payments[<?php echo $index ?>][type]"
+                                       type="hidden" class="payment-type"
+                                       value="<?php echo $payment->tipo ?>">
+                                <div class="type">
+                                    <?php if ($payment->tipo == "cash"): ?>
+                                        <span>Efectivo</span>
+                                    <?php elseif ($payment->tipo == "check"): ?>
+                                        <span>Cheque</span>
+                                    <?php elseif ($payment->tipo == "bank_deposit"): ?>
+                                        <span>Deposito bancario</span>
+                                    <?php elseif ($payment->tipo == "bank_transfer"): ?>
+                                        <span>Transferencia bancaria</span>
+                                    <?php elseif ($payment->tipo == "credit_card"): ?>
+                                        <span>Tarjeta de crédito</span>
+                                    <?php elseif ($payment->tipo == "debit_card"): ?>
+                                        <span>Tarjeta de débito</span>
+                                    <?php elseif ($payment->tipo == "other"): ?>
+                                        <span>Otro</span>
+                                    <?php endif; ?>
+                                </div>
+                                <input name="payments[<?php echo $index ?>][date]"
+                                       type="hidden"
+                                       class="payment-date"
+                                       value="<?php echo $payment->fecha_pago ?>">
+                                <div class="date"><?php echo date('d/m/Y', strtotime($payment->fecha_pago)) ?></div>
+                                <?php if (!empty($payment->notas)): ?>
+                                    <input name="payments[<?php echo $index ?>][notes]"
+                                           type="hidden"
+                                           class="payment-notes"
+                                           value="<?php echo $payment->notas ?>">
+                                    <div class="notes"><?php echo $payment->notas ?></div>
+                                <?php endif; ?>
+                                <div class="actions">
+                                    <div class="actions">
+                                        <button type="button" class="btn btn-secondary remove-payment-btn">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="payments-container py-3 <?php echo (count($payments_made) > 0) ? 'd-none' : '' ?>"
+                         id="noPayments">
+                        <div class="d-flex flex-column align-items-center">
+                            <i class="far fa-money-bill-alt no-content-icon fa-4x text-muted mb-1"></i>
+                            <h3 class="h5 mb-0 text-muted">Sin pagos registrados</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="newPaymentModal" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div id="newPaymentForm">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Nuevo pago</h5>
+                                    <button type="button" class="close" data-dismiss="modal">
+                                        <span>&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label>Cantidad</label>
+                                        <input type="tel" class="form-control amount" autocomplete="off"
+                                               placeholder="Ej. 350.33">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Método de pago</label>
+                                        <select class="custom-select payment-method">
+                                            <option value="cash" selected>Efectivo</option>
+                                            <option value="check">Cheque</option>
+                                            <option value="bank_deposit">Deposito bancario</option>
+                                            <option value="bank_transfer">Transferencia bancaria</option>
+                                            <option value="credit_card">Tarjeta de crédito</option>
+                                            <option value="debit_card">Tarjeta de débito</option>
+                                            <option value="other">Otro</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Fecha</label>
+                                        <input type="text" class="form-control date-picker"
+                                               value="<?php echo $current_date_dmy ?>"
+                                               readonly>
+                                        <input type="hidden" class="date"
+                                               value="<?php echo $current_date_ymd ?>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Notas</label>
+                                        <textarea class="form-control notes"
+                                                  placeholder="Ingrese notas o detalles del pago"
+                                                  autocomplete="off"></textarea>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Regresar
+                                    </button>
+                                    <button type="button" class="submit-btn btn btn-success">Agregar</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="action-buttons">
@@ -410,83 +506,8 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                 </div>
             </form>
         </div>
-
-        <div class="alert alert-info shadow d-none" id="userHasChanged">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <h5 class="alert-heading">El cliente ha cambiado, por lo tanto, no se pueden agregar pagos</h5>
-            <p class="mb-0">Para poder agregar pagos a este pedido debe guardar los cambios y luego entrar de nuevo a
-                editar este pedido.</p>
-
-        </div>
-
-        <div class="mb-3">
-            <h4 class="mb-0 d-flex align-items-center">
-                <span>Pagos</span>
-                <button type="button" id="addNewPayment" class="ml-3 btn btn-success" data-toggle="modal"
-                        data-target="#newPaymentModal" <?php echo ($order->status === 'paid') ? 'disabled' : '' ?> >
-                    <i class="fas fa-plus"></i>
-                    <span class="ml-1 d-none d-sm-inline-block">Nuevo pago</span>
-                </button>
-            </h4>
-        </div>
-
-        <div class="payments-container <?php echo (count($payments_made) > 0) ? '' : 'd-none' ?>"
-             id="paymentsContainer">
-            <?php foreach ($payments_made as $payment): ?>
-                <div class="payment">
-                    <div class="amount"><?php echo "$" . number_format($payment->monto, 2); ?></div>
-                    <div class="type">
-                        <?php if ($payment->tipo == "cash"): ?>
-                            <span>Efectivo</span>
-                        <?php elseif ($payment->tipo == "check"): ?>
-                            <span>Cheque</span>
-                        <?php elseif ($payment->tipo == "bank_deposit"): ?>
-                            <span>Deposito bancario</span>
-                        <?php elseif ($payment->tipo == "bank_transfer"): ?>
-                            <span>Transferencia bancaria</span>
-                        <?php elseif ($payment->tipo == "credit_card"): ?>
-                            <span>Tarjeta de crédito</span>
-                        <?php elseif ($payment->tipo == "debit_card"): ?>
-                            <span>Tarjeta de débito</span>
-                        <?php elseif ($payment->tipo == "other"): ?>
-                            <span>Otro</span>
-                        <?php endif; ?>
-                    </div>
-                    <div class="date"><?php echo date('d/m/Y', strtotime($payment->fecha_pago)) ?></div>
-                    <?php if (!empty($payment->notas)): ?>
-                        <div class="notes"><?php echo $payment->notas ?></div>
-                    <?php endif; ?>
-                    <div class="actions">
-                        <form class="d-inline" method="post"
-                              action="<?php echo base_url('admin/orders/delete_payment_ajax') ?>">
-                            <input type="hidden" class="csrf" name="<?= $csrf['name']; ?>"
-                                   value="<?= $csrf['hash']; ?>"/>
-                            <input type="hidden" name="id" value="<?php echo $payment->id ?>">
-                            <input type="hidden" name="order_id" value="<?php echo $payment->pedido_id ?>">
-                            <input type="hidden" name="customer_id" value="<?php echo $payment->cliente_id ?>">
-                            <button class="btn btn-secondary delete_btn">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-
-
-        </div>
-        <div class="payments-container py-3 <?php echo (count($payments_made) > 0) ? 'd-none' : '' ?>" id="noPayments">
-            <div class="d-flex flex-column align-items-center">
-                <i class="far fa-money-bill-alt no-content-icon fa-5x text-muted mb-3"></i>
-                <h3 class="h5 mb-0 text-muted">Aún no hay pagos registrados</h3>
-            </div>
-        </div>
     </div>
 </div>
-
-
-
 <script type="text/html" id="itemTemplate">
     <div class="table-row">
         <button class="remove-item-btn" tabindex="-1">
@@ -512,7 +533,7 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                 <i class="fas fa-asterisk text-danger"></i>
                 <span>Nombre del producto</span>
             </label>
-            <input type="text" class="item-name form-control"  placeholder="Ej. Lápices de Colores">
+            <input type="text" class="item-name form-control" placeholder="Ej. Lápices de Colores">
             <label class="font-weight-bold  mt-1 mt-md-2 mb-1">Descripción del producto</label>
             <textarea class="item-description form-control mt-0"
                       rows="1"
@@ -542,76 +563,14 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
         </div>
     </div>
 </script>
-
-<div class="modal fade" id="newPaymentModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-scrollable">
-
-
-        <div class="modal-content">
-            <form id="newPaymentForm" action="<?php echo base_url('admin/orders/new_payment_ajax') ?>" method="post">
-                <input type="hidden" class="csrf" name="<?= $csrf['name']; ?>" value="<?= $csrf['hash']; ?>"/>
-                <input type="hidden" name="customer_id" value="<?php echo $order->cliente_id ?>">
-                <input type="hidden" name="order_id" value="<?php echo isset($order->id) ? $order->id : '' ?>">
-                <div class="modal-header">
-                    <h5 class="modal-title">Nuevo pago</h5>
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span>&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>Cantidad</label>
-                        <input type="tel" class="form-control" name="amount" autocomplete="off"
-                               placeholder="Ej. 350.33">
-                    </div>
-                    <div class="form-group">
-                        <label>Método de pago</label>
-                        <select class="custom-select" name="payment_method">
-                            <option value="cash" selected>Efectivo</option>
-                            <option value="check">Cheque</option>
-                            <option value="bank_deposit">Deposito bancario</option>
-                            <option value="bank_transfer">Transferencia bancaria</option>
-                            <option value="credit_card">Tarjeta de crédito</option>
-                            <option value="debit_card">Tarjeta de débito</option>
-                            <option value="other">Otro</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Fecha</label>
-                        <input type="text" class="form-control date-picker" value="<?php echo $current_date_dmy ?>"
-                               readonly>
-                        <input type="hidden" name="date" value="<?php echo $current_date_ymd ?>">
-                    </div>
-                    <div class="form-group">
-                        <label>Notas</label>
-                        <textarea class="form-control"
-                                  name="notes"
-                                  placeholder="Ingrese notas o detalles del pago"
-                                  autocomplete="off"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Regresar</button>
-                    <button type="submit" class="submit-btn btn btn-success">
-                        <span class="is-not-loading">Agregar pago</span>
-                        <div class="loading d-none">
-                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            <span>Loading...</span>
-                        </div>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-
 <script type="text/x-handlebars-template" id="paymentTpl">
     {{#each payments_made}}
     <div class="payment">
-        <div class="amount">{{currencyFormat monto}}</div>
+        <input name="payments[{{@index}}][amount]" type="hidden" class="payment-amount" value="{{amount}}">
+        <div class="amount">{{currencyFormat amount}}</div>
+        <input name="payments[{{@index}}][type]" type="hidden" class="payment-type" value="{{type}}">
         <div class="type">
-            {{#switch tipo}}
+            {{#switch type}}
             {{#case "cash"}}
             <span>Efectivo</span>
             {{/case}}
@@ -635,20 +594,16 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
             {{/case}}
             {{/switch}}
         </div>
-        <div class="date">{{dmyDate fecha_pago}}</div>
-        {{#if notas}}
-        <div class="notes">{{notas}}</div>
+        <input name="payments[{{@index}}][date]" type="hidden" class="payment-date" value="{{date}}">
+        <div class="date">{{dmyDate date}}</div>
+        {{#if notes}}
+        <input name="payments[{{@index}}][notes]" type="hidden" class="payment-notes" value="{{notes}}">
+        <div class="notes">{{notes}}</div>
         {{/if}}
         <div class="actions">
-            <form class="d-inline" method="post" action="<?php echo base_url('admin/orders/delete_payment_ajax') ?>">
-                <input type="hidden" class="csrf" name="{{../csrfName}}" value="{{../csrfHash}}"/>
-                <input type="hidden" name="id" value="{{id}}">
-                <input type="hidden" name="order_id" value="{{pedido_id}}">
-                <input type="hidden" name="customer_id" value="{{cliente_id}}">
-                <button class="btn btn-secondary delete_btn">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </form>
+            <button type="button" class="btn btn-secondary remove-payment-btn">
+                <i class="fas fa-trash"></i>
+            </button>
         </div>
     </div>
     {{/each}}

@@ -124,39 +124,10 @@ $(document).ready(function () {
     // Botón para quitar los datos del cliente seleccionado
     $('#removeCustomerBtn').click(function (e) {
         e.preventDefault();
-
-
-        if( $('#paymentsContainer .payment').length > 0 ){
-            swal.fire(
-                {
-                    customClass: {
-                        container: 'modal-with-icon',
-                    },
-                    type: "error",
-                    title: 'Este pedido contiene pagos',
-                    text: 'Si por alguna razón quiere cambiar el cliente, primero debe eliminar los pagos realizados  para poder cambiar el cliente.'
-                }
-            );
-
-            return false;
-        }
-
-
         $('#addCustomerBtn').removeClass('d-none');
         $('#customerInfo').addClass('d-none');
         $('#customerId').val('');
-
-        if ($('#addNewPayment').length) {
-            $('#addNewPayment').attr('disabled', true);
-        }
-
-        if ($('#userHasChanged').length) {
-            $('#userHasChanged').removeClass('d-none');
-        }        if ($('.payments-container').length) {
-            $('#userHasChanged').removeClass('d-none');
-        }
     });
-
     // Botón que abre un modal para crear un nuevo cliente
     $('body').on('click', '#addNewCustomerBtn', function (e) {
         e.preventDefault();
@@ -205,7 +176,6 @@ $(document).ready(function () {
         addNameAttribute();
         addValidationRules();
     }
-
 
     // Botón que abre un modal para crear un nuevo producto
     $('body').on('click', '.tt-menu .tt-dataset .tt-footer .add-new-btn', function (e) {
@@ -282,7 +252,27 @@ $(document).ready(function () {
             } else {
                 $(element).removeClass("is-invalid");
             }
+        },
+
+        submitHandler: function (form) {
+            var $amountDue = $('#amountDue');
+            var amountDue = (!isEmpty($amountDue.val())) ? parseFloat($amountDue.val()) : 0;
+            if (amountDue >= 0) {
+                form.submit();
+            } else {
+                swal.fire(
+                    {
+                        customClass: {
+                            container: 'modal-with-icon',
+                        },
+                        type: "error",
+                        title: 'El total no puede ser menor que el monto pagado',
+                    }
+                );
+            }
+            return false;
         }
+
     });
     // Método personalizado para validar si una cantidad es menor o igual que 100
     jQuery.validator.addMethod("lessThanOrEqualToSubtotal", function (value, element) {
@@ -326,7 +316,6 @@ $(document).ready(function () {
     });
     // Permite cambiar el alto del campo notas mientras se escribe
     autosize($('.notes textarea'));
-
     // Activa o desactiva el checkbox para incluir o no impuestos
     $('#taxCheckbox').click(function () {
         if ($(this).hasClass('checked')) {
@@ -340,7 +329,6 @@ $(document).ready(function () {
             updateSummary();
         }
     });
-
     // Agregar atributos name a los campos de cantidad, nombre, descripción y precio unitario
     renderItems();
     //Si existe un mensaje flash entonces se muestra con el sweetalert
@@ -357,292 +345,7 @@ $(document).ready(function () {
             timer: 2000
         });
     }
-
-
-    //cosas de l modal
-
-
-
-
-    Handlebars.registerHelper("dmyDate", function(  ymdDate  ) {
-        return ymdDate.split("-").reverse().join("/");
-    });
-
-    Handlebars.registerHelper("switch", function(value, options) {
-        this._switch_value_ = value;
-        var html = options.fn(this); // Process the body of the switch block
-        delete this._switch_value_;
-        return html;
-    });
-
-    Handlebars.registerHelper("case", function(value, options) {
-        if (value == this._switch_value_) {
-            return options.fn(this);
-        }
-    });
-
-    Handlebars.registerHelper("currencyFormat", function(  amount  ) {
-        var number = amount;
-        //number = number.toFixed(2);
-        number = parseFloat(number);
-        var locale = 'en-US';
-        var options = {
-            style: 'currency',
-            currency: 'USD'
-        };
-        return number.toLocaleString(locale, options);
-    });
-
-
-
-    $('#newPaymentForm input[name="amount"]').off();
-    $('#newPaymentForm input[name="amount"]').inputFilter(function (value) {
-        return positiveDecimalRegex.test(value) && (value === "" || parseFloat(value) <= 1000000);
-    });
-    new Pikaday({
-        field: $('#newPaymentForm input.date-picker')[0],
-        firstDay: 1,
-        position: 'bottom center',
-        format: 'D/M/YYYY',
-        toString(date, format) {
-            return dmyFormat(date);
-        },
-        parse(dateString, format) {
-            return parseDmyDate(dateString);
-        },
-        onSelect(date) {
-            $('#newPaymentForm input[name="date"]').val(ymdFormat(dmyFormat(date)));
-        },
-        i18n: pikadaySpanishLanguage
-    });
-    jQuery.validator.addMethod("lessThanOrEqualToAmountDue", function (value, element) {
-        var $amountDue = $('#amountDue');
-        var amountDue = (!isEmpty($amountDue.val())) ? parseFloat($amountDue.val()) : 0;
-        var currentVal = (!isEmpty(value)) ? parseFloat(value) : 0;
-        if (currentVal <= amountDue) {
-            return true;
-        } else {
-            return false;
-        }
-    }, "El descuento debe ser menor o igual que el saldo");
-    $("#newPaymentForm").validate({
-        ignore: "",
-        rules: {
-            customer_id: 'required',
-            order_id: 'required',
-            amount: {
-                greaterThanZero: true,
-                lessThanOrEqualToAmountDue: true,
-                required: true,
-            },
-            payment_method: 'required',
-            payment_date: 'required'
-        },
-        messages: {
-            customer_id: {
-                required: "Campo requerido",
-            },
-            order_id: {
-                required: "Campo requerido",
-            },
-            amount: {
-                required: "Campo requerido",
-            },
-            payment_method: {
-                required: "Campo requerido",
-            },
-            payment_date: {
-                required: "Campo requerido",
-            }
-        },
-        errorElement: "div",
-        errorPlacement: function (error, element) {
-            error.addClass("invalid-feedback");
-            if (element.prop("type") === "checkbox") {
-                error.insertAfter(element.next("label"));
-            } else {
-                error.insertAfter(element);
-            }
-        },
-        highlight: function (element) {
-            $(element).addClass("is-invalid");
-        },
-        unhighlight: function (element) {
-            $(element).removeClass("is-invalid");
-        },
-        submitHandler: function (form) {
-            $('#newPaymentForm .submit-btn').attr('disabled', true);
-            $('#newPaymentForm .is-not-loading').addClass('d-none');
-            $('#newPaymentForm .loading').removeClass('d-none');
-            $.ajax({
-                url: form.action,
-                type: form.method,
-                data: $(form).serialize(),
-            }).promise().then(function (res) {
-                $('#newPaymentForm .submit-btn').attr('disabled', false);
-                $('#newPaymentForm .is-not-loading').removeClass('d-none');
-                $('#newPaymentForm .loading').addClass('d-none');
-                var csrfName = res.csrfName;
-                var csrfHash = res.csrfHash;
-                $('.csrf').attr('name', csrfName);
-                $('.csrf').val(csrfHash);
-                var totalPaid = res.total_paid;
-                $('#totalPaid').val(totalPaid);
-                updateSummary();
-                if(res.payments_made.length > 0 ){
-                    var source = $('#paymentTpl').html();
-                    var template = Handlebars.compile(source);
-                    var html = template(res);
-                    var output = $('#paymentsContainer');
-                    output.html(html);
-                    $('#noPayments').addClass('d-none');
-                    $('#paymentsContainer').removeClass('d-none');
-                }else{
-                    $('#noPayments').removeClass('d-none');
-                    $('#paymentsContainer').addClass('d-none');
-                }
-                $('#newPaymentModal').modal('hide');
-                Swal.fire({
-                    customClass: {
-                        container: 'flash-message flash-success',
-                    },
-                    position: 'top-end',
-                    toast: true,
-                    type: 'success',
-                    title: 'El pago se agregó con éxito',
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            }).catch(function (error) {
-                swal(
-                    {
-                        type: "error",
-                        title: 'Error ' + error.status,
-                        text: error.statusText
-                    },
-                    function () {
-                        location.reload();
-                    }
-                );
-            });
-        }
-    });
-    $('#newPaymentModal').on('show.bs.modal', function (e) {
-        $('#newPaymentModal input').each(function (index) {
-            $(this).removeClass('is-invalid');
-        });
-        $('#newPaymentModal .invalid-feedback').remove();
-        var $amountDue = $('#amountDue');
-        var amountDue = (!isEmpty($amountDue.val())) ? parseFloat($amountDue.val()) : '';
-        $('#newPaymentForm input[name="amount"]').val(amountDue);
-        $('#newPaymentForm select[name="payment_method"]').val('cash');
-        $('#newPaymentForm input.date-picker').val(dmyFormat( new Date() )  );
-        $('#newPaymentForm textarea[name="notes"]').val('');
-    });
-
-    $('body').on('click', '#paymentsContainer .delete_btn', function (e) {
-        e.preventDefault();
-        var form = $(this).closest("form");
-        Swal.fire({
-            customClass: {
-                container: 'confirmation-modal',
-            },
-            title: 'Eliminar',
-            text: "¿Estas seguro de querer eliminar este pago?",
-            showCancelButton: true,
-            confirmButtonText: 'Aceptar',
-            cancelButtonText: 'Regresar',
-            reverseButtons: true,
-            focusCancel: true
-        }).then((result) => {
-            if (result.value) {
-                $.ajax({
-                    url: form.attr('action'),
-                    type: form.attr('method'),
-                    data: $(form).serialize(),
-                }).promise().then(function (res) {
-
-                    console.log(res);
-                    var csrfName = res.csrfName;
-                    var csrfHash = res.csrfHash;
-                    $('body').find('.csrf').attr('name', csrfName);
-                    $('body').find('.csrf').val(csrfHash);
-                    var totalPaid = res.total_paid;
-                    $('#totalPaid').val(totalPaid);
-                    updateSummary();
-                    if(res.payments_made.length > 0 ){
-                        var source = $('#paymentTpl').html();
-                        var template = Handlebars.compile(source);
-                        var html = template(res);
-                        var output = $('#paymentsContainer');
-                        output.html(html);
-                        $('#noPayments').addClass('d-none');
-                        $('#paymentsContainer').removeClass('d-none');
-                    }else{
-                        var output = $('#paymentsContainer');
-                        output.html('');
-                        $('#noPayments').removeClass('d-none');
-                        $('#paymentsContainer').addClass('d-none');
-                    }
-                    Swal.fire({
-                        customClass: {
-                            container: 'flash-message flash-success',
-                        },
-                        position: 'top-end',
-                        toast: true,
-                        type: 'success',
-                        title: 'El pago se eliminó con éxito',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-
-
-                }).catch(function (error) {
-                    swal(
-                        {
-                            type: "error",
-                            title: 'Error ' + error.status,
-                            text: error.statusText
-                        },
-                        function () {
-                            location.reload();
-                        }
-                    );
-                });
-
-
-
-
-            }
-        })
-    });
-
-
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function getAmountDue(id) {
     return $.ajax({
@@ -653,7 +356,6 @@ function getAmountDue(id) {
         },
     }).promise();
 }
-
 
 function getTotalPaid(order_id, customer_id) {
     return $.ajax({
@@ -728,12 +430,10 @@ function addNameAttribute() {
         $(this).removeAttr('name');
         $(this).attr('name', 'items[' + index + '][name]');
     });
-
     $('#itemsTable').find('input.product-id').each(function (index) {
         $(this).removeAttr('name');
         $(this).attr('name', 'items[' + index + '][product_id]');
     });
-
     $('#itemsTable').find('input.item-unit-price').each(function (index) {
         $(this).removeAttr('name');
         $(this).attr('name', 'items[' + index + '][unit_price]');
@@ -742,7 +442,6 @@ function addNameAttribute() {
         $(this).removeAttr('name');
         $(this).attr('name', 'items[' + index + '][description]');
     });
-
     $('#itemsTable').find('input.total-line-input').each(function (index) {
         $(this).removeAttr('name');
         $(this).attr('name', 'items[' + index + '][total]');
@@ -1042,3 +741,31 @@ function formatNumber(number) {
     return number.toLocaleString(locale, options);
 }
 
+function getPaymentsMade() {
+    var totalPaid = 0;
+    var $orderId = $('#orderId');
+    var $customerId = $('#customerId');
+    var orderId = (!isEmpty($orderId.val())) ? $orderId.val() : 0;
+    var customerId = (!isEmpty($customerId.val())) ? $customerId.val() : 0;
+    var paymentsMade = [];
+    $("#paymentsContainer .payment").each(function (index) {
+        var $date = $(this).find('.payment-date');
+        var $type = $(this).find('.payment-type');
+        var $notes = $(this).find('.payment-notes');
+        var $amount = $(this).find('.payment-amount');
+        var date = (!isEmpty($date.val())) ? $date.val() : '';
+        var type1 = (!isEmpty($type.val())) ? $type.val() : '';
+        var notes = (!isEmpty($notes.val())) ? $notes.val() : '';
+        var amount = (!isEmpty($amount.val())) ? $amount.val() : 0;
+        totalPaid = parseFloat(totalPaid) + parseFloat(amount);
+        paymentsMade.push({
+            "date": date,
+            "type": type1,
+            "notes": notes,
+            "amount": amount,
+            "order_id": orderId,
+            "customer_id": customerId
+        });
+    });
+    return paymentsMade
+}

@@ -3,22 +3,26 @@
   height: 100vh;
 
   .main {
-	width: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-	.login {
-	  width: 100%;
-	  padding: 0 1rem;
-	  @media (min-width: 576px) {
-		padding: 0;
-		width: 400px;
-	  }
-	}
-
+    .login {
+      width: 100%;
+      padding: 0 1rem;
+      @media (min-width: 576px) {
+        padding: 0;
+        width: 400px;
+      }
+    }
   }
 
+  .logo {
+    transform: rotate(-15deg);
+  }
+
+  .form-control {
+    background-color: $main-input-bg;
+  }
 }
-
-

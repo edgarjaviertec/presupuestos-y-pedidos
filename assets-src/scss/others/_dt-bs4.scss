@@ -6,9 +6,9 @@ table.dataTable {
   border-collapse: collapse !important;
   border-spacing: 0;
 
-	th{
-      background-color: rgba(48,70,90,0.1);
-	}
+  th {
+    background-color: rgba(48, 70, 90, 0.1);
+  }
 
   td, th {
     -webkit-box-sizing: content-box;
@@ -26,7 +26,6 @@ table.dataTable {
     }
   }
 }
-
 
 div.dataTables_wrapper div {
   &.dataTables_length {
@@ -60,7 +59,6 @@ div.dataTables_wrapper div {
 
   &.dataTables_info {
     padding-top: 0.85em;
-
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

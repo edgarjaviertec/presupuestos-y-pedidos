@@ -69,13 +69,10 @@ $current_year = intval(date("Y"));
                             <option value="6" <?php echo(intval(date("m")) == 6 ? 'selected' : '') ?>>Junio</option>
                             <option value="7" <?php echo(intval(date("m")) == 7 ? 'selected' : '') ?>>Julio</option>
                             <option value="8" <?php echo(intval(date("m")) == 8 ? 'selected' : '') ?>>Agosto</option>
-                            <option value="9" <?php echo(intval(date("m")) == 9 ? 'selected' : '') ?>>Septiembre
-                            </option>
+                            <option value="9" <?php echo(intval(date("m")) == 9 ? 'selected' : '') ?>>Septiembre</option>
                             <option value="10" <?php echo(intval(date("m")) == 10 ? 'selected' : '') ?>>Octubre</option>
-                            <option value="11" <?php echo(intval(date("m")) == 11 ? 'selected' : '') ?>>Noviembre
-                            </option>
-                            <option value="12" <?php echo(intval(date("m")) == 12 ? 'selected' : '') ?>>Diciembre
-                            </option>
+                            <option value="11" <?php echo(intval(date("m")) == 11 ? 'selected' : '') ?>>Noviembre</option>
+                            <option value="12" <?php echo(intval(date("m")) == 12 ? 'selected' : '') ?>>Diciembre</option>
                         </select>
                     </div>
                     <div class="form-group">

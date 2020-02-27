@@ -115,12 +115,10 @@ if (isset($old['notes'])) {
             </div>
         <?php endif; ?>
         <h1 class="mb-2 h3">Editar cliente #<?php echo isset($customer['id']) ? $customer['id'] : '' ?></h1>
-        <p class="mb-2 font-weight-bold">Los campos marcados con <i class="fas fa-asterisk text-danger"></i> son
-            obligatorios</p>
+        <p class="mb-2 font-weight-bold">Los campos marcados con <i class="fas fa-asterisk text-danger"></i> son obligatorios</p>
         <div class="card bg-white shadow">
             <div class="card-body p-3">
-                <form id="customerForm" method="post"
-                      action="<?php echo base_url('admin/customers/edit_customer_validation') ?>">
+                <form id="customerForm" method="post" action="<?php echo base_url('admin/customers/edit_customer_validation') ?>">
                     <input type="hidden" name="<?= $csrf['name']; ?>" value="<?= $csrf['hash']; ?>"/>
                     <input type="hidden" name="id" value="<?php echo isset($customer['id']) ? $customer['id'] : '' ?>">
                     <div class="row">
@@ -248,8 +246,7 @@ if (isset($old['notes'])) {
                                         type="text"
                                         class="select2 form-control"
                                         name="country">
-                                    <option
-                                            value="Afganistán"<?php echo $country === 'Afganistán' ? 'selected' : '' ?>>
+                                    <option value="Afganistán"<?php echo $country === 'Afganistán' ? 'selected' : '' ?>>
                                         Afganistán
                                     </option>
                                     <option value="Albania"<?php echo $country === 'Albania' ? 'selected' : '' ?>>
@@ -264,12 +261,10 @@ if (isset($old['notes'])) {
                                     <option value="Angola"<?php echo $country === 'Angola' ? 'selected' : '' ?>>
                                         Angola
                                     </option>
-                                    <option
-                                            value="Antigua y Barbuda"<?php echo $country === 'Antigua y Barbuda' ? 'selected' : '' ?>>
+                                    <option value="Antigua y Barbuda"<?php echo $country === 'Antigua y Barbuda' ? 'selected' : '' ?>>
                                         Antigua y Barbuda
                                     </option>
-                                    <option
-                                            value="Arabia Saudita"<?php echo $country === 'Arabia Saudita' ? 'selected' : '' ?>>
+                                    <option value="Arabia Saudita"<?php echo $country === 'Arabia Saudita' ? 'selected' : '' ?>>
                                         Arabia Saudita
                                     </option>
                                     <option value="Argelia"<?php echo $country === 'Argelia' ? 'selected' : '' ?>>
@@ -287,8 +282,7 @@ if (isset($old['notes'])) {
                                     <option value="Austria"<?php echo $country === 'Austria' ? 'selected' : '' ?>>
                                         Austria
                                     </option>
-                                    <option
-                                            value="Azerbaiyán"<?php echo $country === 'Azerbaiyán' ? 'selected' : '' ?>>
+                                    <option value="Azerbaiyán"<?php echo $country === 'Azerbaiyán' ? 'selected' : '' ?>>
                                         Azerbaiyán
                                     </option>
                                     <option value="Bahamas"<?php echo $country === 'Bahamas' ? 'selected' : '' ?>>
@@ -312,8 +306,7 @@ if (isset($old['notes'])) {
                                     <option value="Benín"<?php echo $country === 'Benín' ? 'selected' : '' ?>>
                                         Benín
                                     </option>
-                                    <option
-                                            value="Bielorrusia"<?php echo $country === 'Bielorrusia' ? 'selected' : '' ?>>
+                                    <option value="Bielorrusia"<?php echo $country === 'Bielorrusia' ? 'selected' : '' ?>>
                                         Bielorrusia
                                     </option>
                                     <option value="Birmania"<?php echo $country === 'Birmania' ? 'selected' : '' ?>>
@@ -322,8 +315,7 @@ if (isset($old['notes'])) {
                                     <option value="Bolivia"<?php echo $country === 'Bolivia' ? 'selected' : '' ?>>
                                         Bolivia
                                     </option>
-                                    <option
-                                            value="Bosnia y Herzegovina"<?php echo $country === 'Bosnia y Herzegovina' ? 'selected' : '' ?>>
+                                    <option value="Bosnia y Herzegovina"<?php echo $country === 'Bosnia y Herzegovina' ? 'selected' : '' ?>>
                                         Bosnia y Herzegovina
                                     </option>
                                     <option value="Botsuana"<?php echo $country === 'Botsuana' ? 'selected' : '' ?>>
@@ -338,8 +330,7 @@ if (isset($old['notes'])) {
                                     <option value="Bulgaria"<?php echo $country === 'Bulgaria' ? 'selected' : '' ?>>
                                         Bulgaria
                                     </option>
-                                    <option
-                                            value="Burkina Faso"<?php echo $country === 'Burkina Faso' ? 'selected' : '' ?>>
+                                    <option value="Burkina Faso"<?php echo $country === 'Burkina Faso' ? 'selected' : '' ?>>
                                         Burkina Faso
                                     </option>
                                     <option value="Burundi"<?php echo $country === 'Burundi' ? 'selected' : '' ?>>
@@ -348,8 +339,7 @@ if (isset($old['notes'])) {
                                     <option value="Bután"<?php echo $country === 'Bután' ? 'selected' : '' ?>>
                                         Bután
                                     </option>
-                                    <option
-                                            value="Cabo Verde"<?php echo $country === 'Cabo Verde' ? 'selected' : '' ?>>
+                                    <option value="Cabo Verde"<?php echo $country === 'Cabo Verde' ? 'selected' : '' ?>>
                                         Cabo Verde
                                     </option>
                                     <option value="Camboya"<?php echo $country === 'Camboya' ? 'selected' : '' ?>>
@@ -376,8 +366,7 @@ if (isset($old['notes'])) {
                                     <option value="Chipre"<?php echo $country === 'Chipre' ? 'selected' : '' ?>>
                                         Chipre
                                     </option>
-                                    <option
-                                            value="Ciudad del Vaticano"<?php echo $country === 'Ciudad del Vaticano' ? 'selected' : '' ?>>
+                                    <option value="Ciudad del Vaticano"<?php echo $country === 'Ciudad del Vaticano' ? 'selected' : '' ?>>
                                         Ciudad del Vaticano
                                     </option>
                                     <option value="Colombia"<?php echo $country === 'Colombia' ? 'selected' : '' ?>>
@@ -386,20 +375,16 @@ if (isset($old['notes'])) {
                                     <option value="Comoras"<?php echo $country === 'Comoras' ? 'selected' : '' ?>>
                                         Comoras
                                     </option>
-                                    <option
-                                            value="Corea del Norte"<?php echo $country === 'Corea del Norte' ? 'selected' : '' ?>>
+                                    <option value="Corea del Norte"<?php echo $country === 'Corea del Norte' ? 'selected' : '' ?>>
                                         Corea del Norte
                                     </option>
-                                    <option
-                                            value="Corea del Sur"<?php echo $country === 'Corea del Sur' ? 'selected' : '' ?>>
+                                    <option value="Corea del Sur"<?php echo $country === 'Corea del Sur' ? 'selected' : '' ?>>
                                         Corea del Sur
                                     </option>
-                                    <option
-                                            value="Costa de Marfil"<?php echo $country === 'Costa de Marfil' ? 'selected' : '' ?>>
+                                    <option value="Costa de Marfil"<?php echo $country === 'Costa de Marfil' ? 'selected' : '' ?>>
                                         Costa de Marfil
                                     </option>
-                                    <option
-                                            value="Costa Rica"<?php echo $country === 'Costa Rica' ? 'selected' : '' ?>>
+                                    <option value="Costa Rica"<?php echo $country === 'Costa Rica' ? 'selected' : '' ?>>
                                         Costa Rica
                                     </option>
                                     <option value="Croacia"<?php echo $country === 'Croacia' ? 'selected' : '' ?>>
@@ -420,19 +405,16 @@ if (isset($old['notes'])) {
                                     <option value="Egipto"<?php echo $country === 'Egipto' ? 'selected' : '' ?>>
                                         Egipto
                                     </option>
-                                    <option
-                                            value="El Salvador"<?php echo $country === 'El Salvador' ? 'selected' : '' ?>>
+                                    <option value="El Salvador"<?php echo $country === 'El Salvador' ? 'selected' : '' ?>>
                                         El Salvador
                                     </option>
-                                    <option
-                                            value="Emiratos Árabes Unidos"<?php echo $country === 'Emiratos Árabes Unidos' ? 'selected' : '' ?>>
+                                    <option value="Emiratos Árabes Unidos"<?php echo $country === 'Emiratos Árabes Unidos' ? 'selected' : '' ?>>
                                         Emiratos Árabes Unidos
                                     </option>
                                     <option value="Eritrea"<?php echo $country === 'Eritrea' ? 'selected' : '' ?>>
                                         Eritrea
                                     </option>
-                                    <option
-                                            value="Eslovaquia"<?php echo $country === 'Eslovaquia' ? 'selected' : '' ?>>
+                                    <option value="Eslovaquia"<?php echo $country === 'Eslovaquia' ? 'selected' : '' ?>>
                                         Eslovaquia
                                     </option>
                                     <option value="Eslovenia"<?php echo $country === 'Eslovenia' ? 'selected' : '' ?>>
@@ -441,8 +423,7 @@ if (isset($old['notes'])) {
                                     <option value="España"<?php echo $country === 'España' ? 'selected' : '' ?>>
                                         España
                                     </option>
-                                    <option
-                                            value="Estados Unidos"<?php echo $country === 'Estados Unidos' ? 'selected' : '' ?>>
+                                    <option value="Estados Unidos"<?php echo $country === 'Estados Unidos' ? 'selected' : '' ?>>
                                         Estados Unidos
                                     </option>
                                     <option value="Estonia"<?php echo $country === 'Estonia' ? 'selected' : '' ?>>
@@ -490,12 +471,10 @@ if (isset($old['notes'])) {
                                     <option value="Guinea"<?php echo $country === 'Guinea' ? 'selected' : '' ?>>
                                         Guinea
                                     </option>
-                                    <option
-                                            value="Guinea ecuatorial"<?php echo $country === 'Guinea ecuatorial' ? 'selected' : '' ?>>
+                                    <option value="Guinea ecuatorial"<?php echo $country === 'Guinea ecuatorial' ? 'selected' : '' ?>>
                                         Guinea ecuatorial
                                     </option>
-                                    <option
-                                            value="Guinea-Bisáu"<?php echo $country === 'Guinea-Bisáu' ? 'selected' : '' ?>>
+                                    <option value="Guinea-Bisáu"<?php echo $country === 'Guinea-Bisáu' ? 'selected' : '' ?>>
                                         Guinea-Bisáu
                                     </option>
                                     <option value="Haití"<?php echo $country === 'Haití' ? 'selected' : '' ?>>Haití
@@ -524,12 +503,10 @@ if (isset($old['notes'])) {
                                     <option value="Islandia"<?php echo $country === 'Islandia' ? 'selected' : '' ?>>
                                         Islandia
                                     </option>
-                                    <option
-                                            value="Islas Marshall"<?php echo $country === 'Islas Marshall' ? 'selected' : '' ?>>
+                                    <option value="Islas Marshall"<?php echo $country === 'Islas Marshall' ? 'selected' : '' ?>>
                                         Islas Marshall
                                     </option>
-                                    <option
-                                            value="Islas Salomón"<?php echo $country === 'Islas Salomón' ? 'selected' : '' ?>>
+                                    <option value="Islas Salomón"<?php echo $country === 'Islas Salomón' ? 'selected' : '' ?>>
                                         Islas Salomón
                                     </option>
                                     <option value="Israel"<?php echo $country === 'Israel' ? 'selected' : '' ?>>
@@ -546,15 +523,13 @@ if (isset($old['notes'])) {
                                     <option value="Jordania"<?php echo $country === 'Jordania' ? 'selected' : '' ?>>
                                         Jordania
                                     </option>
-                                    <option
-                                            value="Kazajistán"<?php echo $country === 'Kazajistán' ? 'selected' : '' ?>>
+                                    <option value="Kazajistán"<?php echo $country === 'Kazajistán' ? 'selected' : '' ?>>
                                         Kazajistán
                                     </option>
                                     <option value="Kenia"<?php echo $country === 'Kenia' ? 'selected' : '' ?>>
                                         Kenia
                                     </option>
-                                    <option
-                                            value="Kirguistán"<?php echo $country === 'Kirguistán' ? 'selected' : '' ?>>
+                                    <option value="Kirguistán"<?php echo $country === 'Kirguistán' ? 'selected' : '' ?>>
                                         Kirguistán
                                     </option>
                                     <option value="Kiribati"<?php echo $country === 'Kiribati' ? 'selected' : '' ?>>
@@ -580,23 +555,19 @@ if (isset($old['notes'])) {
                                     <option value="Libia"<?php echo $country === 'Libia' ? 'selected' : '' ?>>
                                         Libia
                                     </option>
-                                    <option
-                                            value="Liechtenstein"<?php echo $country === 'Liechtenstein' ? 'selected' : '' ?>>
+                                    <option value="Liechtenstein"<?php echo $country === 'Liechtenstein' ? 'selected' : '' ?>>
                                         Liechtenstein
                                     </option>
                                     <option value="Lituania"<?php echo $country === 'Lituania' ? 'selected' : '' ?>>
                                         Lituania
                                     </option>
-                                    <option
-                                            value="Luxemburgo"<?php echo $country === 'Luxemburgo' ? 'selected' : '' ?>>
+                                    <option value="Luxemburgo"<?php echo $country === 'Luxemburgo' ? 'selected' : '' ?>>
                                         Luxemburgo
                                     </option>
-                                    <option
-                                            value="Macedonia del Norte"<?php echo $country === 'Macedonia del Norte' ? 'selected' : '' ?>>
+                                    <option value="Macedonia del Norte"<?php echo $country === 'Macedonia del Norte' ? 'selected' : '' ?>>
                                         Macedonia del Norte
                                     </option>
-                                    <option
-                                            value="Madagascar"<?php echo $country === 'Madagascar' ? 'selected' : '' ?>>
+                                    <option value="Madagascar"<?php echo $country === 'Madagascar' ? 'selected' : '' ?>>
                                         Madagascar
                                     </option>
                                     <option value="Malasia"<?php echo $country === 'Malasia' ? 'selected' : '' ?>>
@@ -620,15 +591,13 @@ if (isset($old['notes'])) {
                                     <option value="Mauricio"<?php echo $country === 'Mauricio' ? 'selected' : '' ?>>
                                         Mauricio
                                     </option>
-                                    <option
-                                            value="Mauritania"<?php echo $country === 'Mauritania' ? 'selected' : '' ?>>
+                                    <option value="Mauritania"<?php echo $country === 'Mauritania' ? 'selected' : '' ?>>
                                         Mauritania
                                     </option>
                                     <option value="México"<?php echo $country === 'México' ? 'selected' : '' ?>>
                                         México
                                     </option>
-                                    <option
-                                            value="Micronesia"<?php echo $country === 'Micronesia' ? 'selected' : '' ?>>
+                                    <option value="Micronesia"<?php echo $country === 'Micronesia' ? 'selected' : '' ?>>
                                         Micronesia
                                     </option>
                                     <option value="Moldavia"<?php echo $country === 'Moldavia' ? 'selected' : '' ?>>
@@ -640,12 +609,10 @@ if (isset($old['notes'])) {
                                     <option value="Mongolia"<?php echo $country === 'Mongolia' ? 'selected' : '' ?>>
                                         Mongolia
                                     </option>
-                                    <option
-                                            value="Montenegro"<?php echo $country === 'Montenegro' ? 'selected' : '' ?>>
+                                    <option value="Montenegro"<?php echo $country === 'Montenegro' ? 'selected' : '' ?>>
                                         Montenegro
                                     </option>
-                                    <option
-                                            value="Mozambique"<?php echo $country === 'Mozambique' ? 'selected' : '' ?>>
+                                    <option value="Mozambique"<?php echo $country === 'Mozambique' ? 'selected' : '' ?>>
                                         Mozambique
                                     </option>
                                     <option value="Namibia"<?php echo $country === 'Namibia' ? 'selected' : '' ?>>
@@ -669,15 +636,13 @@ if (isset($old['notes'])) {
                                     <option value="Noruega"<?php echo $country === 'Noruega' ? 'selected' : '' ?>>
                                         Noruega
                                     </option>
-                                    <option
-                                            value="Nueva Zelanda"<?php echo $country === 'Nueva Zelanda' ? 'selected' : '' ?>>
+                                    <option value="Nueva Zelanda"<?php echo $country === 'Nueva Zelanda' ? 'selected' : '' ?>>
                                         Nueva Zelanda
                                     </option>
                                     <option value="Omán"<?php echo $country === 'Omán' ? 'selected' : '' ?>>
                                         Omán
                                     </option>
-                                    <option
-                                            value="Países Bajos"<?php echo $country === 'Países Bajos' ? 'selected' : '' ?>>
+                                    <option value="Países Bajos"<?php echo $country === 'Países Bajos' ? 'selected' : '' ?>>
                                         Países Bajos
                                     </option>
                                     <option value="Pakistán"<?php echo $country === 'Pakistán' ? 'selected' : '' ?>>
@@ -689,8 +654,7 @@ if (isset($old['notes'])) {
                                     <option value="Panamá"<?php echo $country === 'Panamá' ? 'selected' : '' ?>>
                                         Panamá
                                     </option>
-                                    <option
-                                            value="Papúa Nueva Guinea"<?php echo $country === 'Papúa Nueva Guinea' ? 'selected' : '' ?>>
+                                    <option value="Papúa Nueva Guinea"<?php echo $country === 'Papúa Nueva Guinea' ? 'selected' : '' ?>>
                                         Papúa Nueva Guinea
                                     </option>
                                     <option value="Paraguay"<?php echo $country === 'Paraguay' ? 'selected' : '' ?>>
@@ -704,32 +668,25 @@ if (isset($old['notes'])) {
                                     <option value="Portugal"<?php echo $country === 'Portugal' ? 'selected' : '' ?>>
                                         Portugal
                                     </option>
-                                    <option
-                                            value="Reino Unido"<?php echo $country === 'Reino Unido' ? 'selected' : '' ?>>
+                                    <option value="Reino Unido"<?php echo $country === 'Reino Unido' ? 'selected' : '' ?>>
                                         Reino Unido
                                     </option>
-                                    <option
-                                            value="República Centroafricana"<?php echo $country === 'República Centroafricana' ? 'selected' : '' ?>>
+                                    <option value="República Centroafricana"<?php echo $country === 'República Centroafricana' ? 'selected' : '' ?>>
                                         República Centroafricana
                                     </option>
-                                    <option
-                                            value="República Checa"<?php echo $country === 'República Checa' ? 'selected' : '' ?>>
+                                    <option value="República Checa"<?php echo $country === 'República Checa' ? 'selected' : '' ?>>
                                         República Checa
                                     </option>
-                                    <option
-                                            value="República del Congo"<?php echo $country === 'República del Congo' ? 'selected' : '' ?>>
+                                    <option value="República del Congo"<?php echo $country === 'República del Congo' ? 'selected' : '' ?>>
                                         República del Congo
                                     </option>
-                                    <option
-                                            value="República Democrática del Congo"<?php echo $country === 'República Democrática del Congo' ? 'selected' : '' ?>>
+                                    <option value="República Democrática del Congo"<?php echo $country === 'República Democrática del Congo' ? 'selected' : '' ?>>
                                         República Democrática del Congo
                                     </option>
-                                    <option
-                                            value="República Dominicana"<?php echo $country === 'República Dominicana' ? 'selected' : '' ?>>
+                                    <option value="República Dominicana"<?php echo $country === 'República Dominicana' ? 'selected' : '' ?>>
                                         República Dominicana
                                     </option>
-                                    <option
-                                            value="República Sudafricana"<?php echo $country === 'República Sudafricana' ? 'selected' : '' ?>>
+                                    <option value="República Sudafricana"<?php echo $country === 'República Sudafricana' ? 'selected' : '' ?>>
                                         República Sudafricana
                                     </option>
                                     <option value="Ruanda"<?php echo $country === 'Ruanda' ? 'selected' : '' ?>>
@@ -744,24 +701,20 @@ if (isset($old['notes'])) {
                                     <option value="Samoa"<?php echo $country === 'Samoa' ? 'selected' : '' ?>>
                                         Samoa
                                     </option>
-                                    <option
-                                            value="San Cristóbal y Nieves"<?php echo $country === 'San Cristóbal y Nieves' ? 'selected' : '' ?>>
+                                    <option value="San Cristóbal y Nieves"<?php echo $country === 'San Cristóbal y Nieves' ? 'selected' : '' ?>>
                                         San Cristóbal y Nieves
                                     </option>
                                     <option
                                             value="San Marino"<?php echo $country === 'San Marino' ? 'selected' : '' ?>>
                                         San Marino
                                     </option>
-                                    <option
-                                            value="San Vicente y las Granadinas"<?php echo $country === 'San Vicente y las Granadinas' ? 'selected' : '' ?>>
+                                    <option value="San Vicente y las Granadinas"<?php echo $country === 'San Vicente y las Granadinas' ? 'selected' : '' ?>>
                                         San Vicente y las Granadinas
                                     </option>
-                                    <option
-                                            value="Santa Lucía"<?php echo $country === 'Santa Lucía' ? 'selected' : '' ?>>
+                                    <option value="Santa Lucía"<?php echo $country === 'Santa Lucía' ? 'selected' : '' ?>>
                                         Santa Lucía
                                     </option>
-                                    <option
-                                            value="Santo Tomé y Príncipe"<?php echo $country === 'Santo Tomé y Príncipe' ? 'selected' : '' ?>>
+                                    <option value="Santo Tomé y Príncipe"<?php echo $country === 'Santo Tomé y Príncipe' ? 'selected' : '' ?>>
                                         Santo Tomé y Príncipe
                                     </option>
                                     <option value="Senegal"<?php echo $country === 'Senegal' ? 'selected' : '' ?>>
@@ -770,12 +723,10 @@ if (isset($old['notes'])) {
                                     <option value="Serbia"<?php echo $country === 'Serbia' ? 'selected' : '' ?>>
                                         Serbia
                                     </option>
-                                    <option
-                                            value="Seychelles"<?php echo $country === 'Seychelles' ? 'selected' : '' ?>>
+                                    <option value="Seychelles"<?php echo $country === 'Seychelles' ? 'selected' : '' ?>>
                                         Seychelles
                                     </option>
-                                    <option
-                                            value="Sierra Leona"<?php echo $country === 'Sierra Leona' ? 'selected' : '' ?>>
+                                    <option value="Sierra Leona"<?php echo $country === 'Sierra Leona' ? 'selected' : '' ?>>
                                         Sierra Leona
                                     </option>
                                     <option value="Singapur"<?php echo $country === 'Singapur' ? 'selected' : '' ?>>
@@ -789,15 +740,13 @@ if (isset($old['notes'])) {
                                     <option value="Sri Lanka"<?php echo $country === 'Sri Lanka' ? 'selected' : '' ?>>
                                         Sri Lanka
                                     </option>
-                                    <option
-                                            value="Suazilandia"<?php echo $country === 'Suazilandia' ? 'selected' : '' ?>>
+                                    <option value="Suazilandia"<?php echo $country === 'Suazilandia' ? 'selected' : '' ?>>
                                         Suazilandia
                                     </option>
                                     <option value="Sudán"<?php echo $country === 'Sudán' ? 'selected' : '' ?>>
                                         Sudán
                                     </option>
-                                    <option
-                                            value="Sudán del Sur"<?php echo $country === 'Sudán del Sur' ? 'selected' : '' ?>>
+                                    <option value="Sudán del Sur"<?php echo $country === 'Sudán del Sur' ? 'selected' : '' ?>>
                                         Sudán del Sur
                                     </option>
                                     <option value="Suecia"<?php echo $country === 'Suecia' ? 'selected' : '' ?>>
@@ -814,12 +763,10 @@ if (isset($old['notes'])) {
                                     <option value="Tanzania"<?php echo $country === 'Tanzania' ? 'selected' : '' ?>>
                                         Tanzania
                                     </option>
-                                    <option
-                                            value="Tayikistán"<?php echo $country === 'Tayikistán' ? 'selected' : '' ?>>
+                                    <option value="Tayikistán"<?php echo $country === 'Tayikistán' ? 'selected' : '' ?>>
                                         Tayikistán
                                     </option>
-                                    <option
-                                            value="Timor Oriental"<?php echo $country === 'Timor Oriental' ? 'selected' : '' ?>>
+                                    <option value="Timor Oriental"<?php echo $country === 'Timor Oriental' ? 'selected' : '' ?>>
                                         Timor Oriental
                                     </option>
                                     <option value="Togo"<?php echo $country === 'Togo' ? 'selected' : '' ?>>
@@ -828,14 +775,12 @@ if (isset($old['notes'])) {
                                     <option value="Tonga"<?php echo $country === 'Tonga' ? 'selected' : '' ?>>
                                         Tonga
                                     </option>
-                                    <option
-                                            value="Trinidad y Tobago"<?php echo $country === 'Trinidad y Tobago' ? 'selected' : '' ?>>
+                                    <option value="Trinidad y Tobago"<?php echo $country === 'Trinidad y Tobago' ? 'selected' : '' ?>>
                                         Trinidad y Tobago
                                     </option>
                                     <option value="Túnez"<?php echo $country === 'Túnez' ? 'selected' : '' ?>>Túnez
                                     </option>
-                                    <option
-                                            value="Turkmenistán"<?php echo $country === 'Turkmenistán' ? 'selected' : '' ?>>
+                                    <option value="Turkmenistán"<?php echo $country === 'Turkmenistán' ? 'selected' : '' ?>>
                                         Turkmenistán
                                     </option>
                                     <option value="Turquía"<?php echo $country === 'Turquía' ? 'selected' : '' ?>>
@@ -853,8 +798,7 @@ if (isset($old['notes'])) {
                                     <option value="Uruguay"<?php echo $country === 'Uruguay' ? 'selected' : '' ?>>
                                         Uruguay
                                     </option>
-                                    <option
-                                            value="Uzbekistán"<?php echo $country === 'Uzbekistán' ? 'selected' : '' ?>>
+                                    <option value="Uzbekistán"<?php echo $country === 'Uzbekistán' ? 'selected' : '' ?>>
                                         Uzbekistán
                                     </option>
                                     <option value="Vanuatu"<?php echo $country === 'Vanuatu' ? 'selected' : '' ?>>

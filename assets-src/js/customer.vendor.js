@@ -6,4 +6,3 @@
 // @codekit-append  "../vendor/jquery-validation/jquery.validate.min.js";
 // @codekit-append  "../vendor/jquery-input-filter/jquery-input-filter.js";
 // @codekit-append  "./_super-fresco.js";
-

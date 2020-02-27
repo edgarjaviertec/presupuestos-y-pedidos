@@ -23,18 +23,16 @@ $csrf = array(
                 </ul>
             </div>
         <?php endif; ?>
-
         <h1 class="mb-2 h3">Nuevo producto</h1>
-        <p class="mb-2 font-weight-bold">Los campos marcados con <i class="fas fa-asterisk text-danger"></i> son obligatorios</p>
+        <p class="mb-2 font-weight-bold">Los campos marcados con <i class="fas fa-asterisk text-danger"></i> son
+            obligatorios</p>
         <div class="card bg-white shadow">
             <div class="card-body p-3">
                 <form id="productForm" method="post"
                       action="<?php echo base_url('admin/products/new_product_validation') ?>">
                     <input type="hidden" name="<?= $csrf['name']; ?>" value="<?= $csrf['hash']; ?>"/>
                     <div class="form-group">
-
                         <label class="font-weight-bold"><i class="fas fa-asterisk text-danger"></i>&nbsp;Nombre</label>
-
                         <input autocomplete="off"
                                type="text"
                                class="form-control"
@@ -44,7 +42,6 @@ $csrf = array(
                     </div>
                     <div class="form-group">
                         <label class="font-weight-bold"><i class="fas fa-asterisk text-danger"></i>&nbsp;Precio unitario</label>
-
                         <input id="unitPrice"
                                autocomplete="off"
                                type="text"
@@ -71,4 +68,3 @@ $csrf = array(
         </div>
     </div>
 </div>
-

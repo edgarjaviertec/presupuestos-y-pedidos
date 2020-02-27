@@ -57,7 +57,3 @@ $(document).ready(function () {
 	}
 	widthChange(mediaQuery);
 });
-
-
-
-

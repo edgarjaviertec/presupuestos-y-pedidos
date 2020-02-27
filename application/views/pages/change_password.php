@@ -37,8 +37,7 @@ if (isset($old['confirm_password'])) {
         <p class="mb-2 font-weight-bold">Los campos marcados con <i class="fas fa-asterisk text-danger"></i> son obligatorios</p>
         <div class="card bg-white shadow">
 			<div class="card-body p-3">
-				<form id="changePasswordForm" method="post"
-					  action="<?php echo base_url('admin/users/change_password_validation') ?>">
+				<form id="changePasswordForm" method="post" action="<?php echo base_url('admin/users/change_password_validation') ?>">
 					<input type="hidden" name="<?= $csrf['name']; ?>" value="<?= $csrf['hash']; ?>"/>
 					<input type="hidden" name="id" value="<?php echo isset($user['id']) ? $user['id'] : '' ?>">
 					<div class="form-group">

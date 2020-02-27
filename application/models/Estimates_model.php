@@ -23,10 +23,6 @@ class Estimates_model extends CI_Model
         return $query->row();
     }
 
-
-
-
-
     function get_sum_of_subtotal($month, $year)
     {
         $sql = "SELECT 
@@ -44,6 +40,25 @@ class Estimates_model extends CI_Model
         $res = $query->row();
         return $res->sum_of_subtotal;
     }
+
+    function get_sum_of_discount($month, $year)
+    {
+        $sql = "SELECT 
+                CASE WHEN SUM(p.cantidad_descontada) IS NULL
+                THEN 0
+                ELSE SUM(p.cantidad_descontada) 
+                END AS sum_of_discount
+                FROM presupuestos p
+                INNER JOIN clientes c
+                ON p.cliente_id = c.id
+                WHERE MONTH(p.fecha_presupuesto) = ?
+                AND YEAR(p.fecha_presupuesto) = ?
+                AND p.eliminado_en IS NULL";
+        $query = $this->db->query($sql, [$month, $year]);
+        $res = $query->row();
+        return $res->sum_of_discount;
+    }
+
     function get_sum_of_tax($month, $year)
     {
         $sql = "SELECT 
@@ -61,6 +76,7 @@ class Estimates_model extends CI_Model
         $res = $query->row();
         return $res->sum_of_tax;
     }
+
     function get_sum_of_total($month, $year)
     {
         $sql = "SELECT 
@@ -78,6 +94,7 @@ class Estimates_model extends CI_Model
         $res = $query->row();
         return $res->sum_of_total;
     }
+
     function get_estimates_for_report($month, $year)
     {
         $sql = "SELECT 
@@ -86,6 +103,7 @@ class Estimates_model extends CI_Model
                 CONCAT(c.nombre, ' ', c.apellidos) as cliente,
                 c.rfc,
                 p.sub_total,
+                p.cantidad_descontada,
                 p.impuesto,
                 p.total
                 FROM presupuestos p
@@ -97,9 +115,6 @@ class Estimates_model extends CI_Model
         $query = $this->db->query($sql, [$month, $year]);
         return $query->result();
     }
-
-
-
 
     function get_estimate_by_number($number)
     {
@@ -133,8 +148,6 @@ class Estimates_model extends CI_Model
 
     function update_estimate($estimate)
     {
-
-
         $data = array(
             'folio' => $estimate['number'],
             'fecha_presupuesto' => $estimate['date'],
@@ -154,13 +167,10 @@ class Estimates_model extends CI_Model
         );
         $items = $estimate['items'];
         $this->db->trans_start();
-
         $this->db->where('id', $estimate['id']);
         $this->db->update('presupuestos', $data);
-
         $this->db->where('presupuesto_id', $estimate['id']);
         $this->db->delete('presupuestos_productos');
-
         if (!empty($items)) {
             foreach ($items as $item) {
                 $itemData = array(
@@ -239,7 +249,6 @@ class Estimates_model extends CI_Model
         $this->db->update('presupuestos', $data);
         return $this->db->affected_rows();
     }
-
 }
 
 ?>

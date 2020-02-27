@@ -55,10 +55,5 @@ $(document).ready(function () {
             $dataTables.removeClass('nowrap');
         }
     }
-
     widthChange(mediaQuery);
 });
-
-
-
-

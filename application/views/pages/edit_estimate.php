@@ -45,17 +45,13 @@ foreach ($full_address_array as $key => $val) {
         $full_address .= $val;
     }
 }
-
 $flash_message = $this->session->flashdata('flash_message');
 $flash_msg_data_attr = '';
 if (isset($flash_message["type"]) && isset($flash_message["title"])) {
     $flash_msg_data_attr = 'data-flash-msg-type="' . $flash_message["type"] . '"';
     $flash_msg_data_attr .= ' data-flash-msg-title="' . $flash_message["title"] . '"';
 }
-
-
 ?>
-
 <div class="row justify-content-center">
     <div class="col-12">
         <?php if (!empty($errors)): ?>
@@ -70,13 +66,9 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                 </ul>
             </div>
         <?php endif; ?>
-
-
         <h1 class="mb-2 h3">Editar presupuesto</h1>
         <p class="mb-2 font-weight-bold">Los campos marcados con <i class="fas fa-asterisk text-danger"></i> son
             obligatorios</p>
-
-
         <div class="document-container">
             <form id="documentForm"
                   method="post"
@@ -196,11 +188,7 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                         </div>
                     </div>
                     <div class="table-body">
-
-
                         <?php foreach ($lines as $line): ?>
-
-
                             <div class="table-row">
                                 <button class="remove-item-btn" tabindex="-1">
                                     <i class="fas fa-times-circle"></i>
@@ -217,7 +205,7 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                                            tabindex="-1"
                                            value="<?php echo $line->cantidad ?>"
                                            autocomplete="off"
-                                           >
+                                    >
                                 </div>
                                 <div class="item-info">
                                     <input type="hidden" class="product-id">
@@ -235,7 +223,7 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                                               placeholder='48 lápices de colores "Arcoíris" para dibujo'
                                               tabindex="-1"
                                               autocomplete="off"
-                                              ><?php echo $line->descripcion ?></textarea>
+                                    ><?php echo $line->descripcion ?></textarea>
                                 </div>
                                 <div class="unit-price">
                                     <label class="font-weight-bold mb-1">
@@ -259,11 +247,7 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                                            value="<?php echo floatval($line->total) ?>">
                                 </div>
                             </div>
-
-
                         <?php endforeach; ?>
-
-
                     </div>
                 </div>
                 <div class="add-item">
@@ -323,7 +307,6 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
 
                                            autocomplete="off"
                                            tabindex="-1">
-
                                 </div>
                             </div>
                             <div class="amount">
@@ -348,8 +331,6 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                                     <i class="icon fas fa-check"></i>
                                 </button>
                                 <span>IVA (16%)</span>
-
-
                             </div>
                             <div class="amount">
                                 <input type="hidden"
@@ -416,7 +397,7 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                 <i class="fas fa-asterisk text-danger"></i>
                 <span>Nombre del producto</span>
             </label>
-            <input type="text" class="item-name form-control"  placeholder="Ej. Lápices de Colores">
+            <input type="text" class="item-name form-control" placeholder="Ej. Lápices de Colores">
             <label class="font-weight-bold  mt-1 mt-md-2 mb-1">Descripción del producto</label>
             <textarea class="item-description form-control mt-0"
                       rows="1"
@@ -424,7 +405,6 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                       tabindex="-1"
                       autocomplete="off"
             ></textarea>
-
         </div>
         <div class="unit-price">
             <label class="font-weight-bold mb-1">

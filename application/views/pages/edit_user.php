@@ -46,16 +46,8 @@ if (isset($old['role'])) {
                 </ul>
             </div>
         <?php endif; ?>
-
-
-
         <h1 class="mb-2 h3">Editar usuario #<?php echo isset($user['id']) ? $user['id'] : '' ?></h1>
         <p class="mb-2 font-weight-bold">Los campos marcados con <i class="fas fa-asterisk text-danger"></i> son obligatorios</p>
-
-
-
-
-
         <div class="card bg-white shadow">
 			<div class="card-body p-3">
 				<form id="userForm" method="post" action="<?php echo base_url('admin/users/edit_user_validation') ?>">

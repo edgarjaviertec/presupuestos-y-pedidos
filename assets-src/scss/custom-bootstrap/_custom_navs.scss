@@ -1,6 +1,4 @@
-
 .nav-pills {
-
 	&:not(.flex-column) {
 		.nav-item {
 			&:not(:last-child) {
@@ -9,7 +7,6 @@
 			}
 		}
 	}
-
 	&.flex-column {
 		.nav-item {
 			&:not(:last-child) {
@@ -17,34 +14,23 @@
 			}
 		}
 	}
-
-
 	.nav-link {
 		border: $global-border-width solid $body-bg;
-
 		&:hover {
 			border: $global-border-width solid lighten($global-border-color, 10%);
 		}
 	}
-
-
 	.nav-link.active {
 		color: $nav-pills-link-active-color;
 		background-color: $nav-pills-link-active-bg;
 		border: $global-border-width solid $nav-pills-link-active-bg;
 	}
-
-
 	.show > .nav-link:not(.active) {
 		color: $nav-tabs-link-active-color;
 		background-color: $nav-tabs-link-active-bg;
 		border: $global-border-width solid $global-border-color;
 	}
-
-
 }
-
-
 .nav-tabs {
 	.nav-item {
 		&:not(:last-child) {

@@ -2,11 +2,10 @@
 $flash_message = $this->session->flashdata('flash_message');
 $flash_msg_data_attr = '';
 if (isset($flash_message["type"]) && isset($flash_message["title"])) {
-	$flash_msg_data_attr = 'data-flash-msg-type="' . $flash_message["type"] . '"';
-	$flash_msg_data_attr .= ' data-flash-msg-title="' . $flash_message["title"] . '"';
+    $flash_msg_data_attr = 'data-flash-msg-type="' . $flash_message["type"] . '"';
+    $flash_msg_data_attr .= ' data-flash-msg-title="' . $flash_message["title"] . '"';
 }
 ?>
-
 <h1 class="page-heading h3 mb-3 ">
     <span>Usuarios</span>
     <a href="<?php echo base_url('admin/usuarios/nuevo') ?>"
@@ -15,25 +14,23 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
         <span class="ml-1 d-none d-sm-inline-block">Nuevo usuario</span>
     </a>
 </h1>
-
-
 <div class="card shadow">
-	<div class="card-body p-3">
-		<table class="table table-bordered dt-responsive" id="dataTables" <?php echo $flash_msg_data_attr ?> style="width:100%">
-			<thead>
-			<tr>
-				<th>Id</th>
-				<th>Nombre de usuario</th>
-				<th>Correo electrónico</th>
-				<th>Rol</th>
-				<th class="no-sort">Acciones</th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr>
-				<td>loading...</td>
-			</tr>
-			</tbody>
-		</table style="width:100%">
-	</div>
+    <div class="card-body p-3">
+        <table class="table table-bordered dt-responsive" id="dataTables" <?php echo $flash_msg_data_attr ?> style="width:100%">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre de usuario</th>
+                <th>Correo electrónico</th>
+                <th>Rol</th>
+                <th class="no-sort">Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>loading...</td>
+            </tr>
+            </tbody>
+        </table style="width: 100%">
+    </div>
 </div>

@@ -24,13 +24,9 @@ $csrf = array(
                 </ul>
             </div>
         <?php endif; ?>
-
-
         <h1 class="mb-2 h3">Nuevo pedido</h1>
         <p class="mb-2 font-weight-bold">Los campos marcados con <i class="fas fa-asterisk text-danger"></i> son
             obligatorios</p>
-
-
         <div class="document-container">
             <form id="documentForm" method="post"
                   action="<?php echo base_url('admin/orders/new_order_validation') ?>">
@@ -194,22 +190,17 @@ $csrf = array(
                         </div>
                         <div class="summary-item">
                             <div class="label">
-
                                 <input type="hidden" id="includeTax" name="include_tax" value="1">
                                 <button type="button" id="taxCheckbox" class="tax-checkbox checked">
                                     <i class="icon fas fa-check"></i>
                                 </button>
                                 <span>IVA (16%)</span>
-
-
                             </div>
                             <div class="amount">
                                 <input type="hidden" id="tax" name="tax">
                                 <span class="formatted-number text-truncate">$0.00</span>
                             </div>
                         </div>
-
-
                         <div class="summary-item">
                             <div class="label"><span>Total</span></div>
                             <div class="amount">
@@ -217,8 +208,6 @@ $csrf = array(
                                 <span class="formatted-number text-truncate">$0.00</span>
                             </div>
                         </div>
-
-
                         <div class="summary-item">
                             <div class="label"><span>Saldo</span></div>
                             <div class="amount">
@@ -227,9 +216,6 @@ $csrf = array(
                                 <span class="formatted-number text-truncate">$0.00</span>
                             </div>
                         </div>
-
-
-
                     </div>
                     <div class="notes">
 						<textarea name="notes"
@@ -237,6 +223,76 @@ $csrf = array(
                                   placeholder="Ingrese notas o detalles de transferencia bancaria"
                                   tabindex="-1"
                         ></textarea>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <h4 class="mb-3 d-flex align-items-center">
+                        <span>Anticipos</span>
+                        <button type="button" id="addNewPayment" class="ml-3 btn btn-success" data-toggle="modal"
+                                data-target="#newPaymentModal" disabled>
+                            <i class="fas fa-plus"></i>
+                            <span class="ml-1 d-none d-sm-inline-block">Agregar anticipo</span>
+                        </button>
+                    </h4>
+                    <div class="payments-container d-none" id="paymentsContainer"></div>
+                    <div class="payments-container py-3"
+                         id="noPayments">
+                        <div class="d-flex flex-column align-items-center">
+                            <i class="far fa-money-bill-alt no-content-icon fa-4x text-muted mb-1"></i>
+                            <h3 class="h5 mb-0 text-muted">Sin anticipos registrados</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="newPaymentModal" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div id="newPaymentForm">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Nuevo pago</h5>
+                                    <button type="button" class="close" data-dismiss="modal">
+                                        <span>&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label>Cantidad</label>
+                                        <input type="tel" class="form-control amount" autocomplete="off"
+                                               placeholder="Ej. 350.33">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Método de pago</label>
+                                        <select class="custom-select payment-method">
+                                            <option value="cash" selected>Efectivo</option>
+                                            <option value="check">Cheque</option>
+                                            <option value="bank_deposit">Deposito bancario</option>
+                                            <option value="bank_transfer">Transferencia bancaria</option>
+                                            <option value="credit_card">Tarjeta de crédito</option>
+                                            <option value="debit_card">Tarjeta de débito</option>
+                                            <option value="other">Otro</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Fecha</label>
+                                        <input type="text" class="form-control date-picker"
+                                               value="<?php echo $current_date_dmy ?>"
+                                               readonly>
+                                        <input type="hidden" class="date"
+                                               value="<?php echo $current_date_ymd ?>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Notas</label>
+                                        <textarea class="form-control notes"
+                                                  placeholder="Ingrese notas o detalles del pago"
+                                                  autocomplete="off"></textarea>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Regresar
+                                    </button>
+                                    <button type="button" class="submit-btn btn btn-success">Agregar</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="action-buttons">
@@ -247,8 +303,6 @@ $csrf = array(
         </div>
     </div>
 </div>
-
-
 <script type="text/html" id="itemTemplate">
     <div class="table-row">
         <button class="remove-item-btn" tabindex="-1">
@@ -274,7 +328,7 @@ $csrf = array(
                 <i class="fas fa-asterisk text-danger"></i>
                 <span>Nombre del producto</span>
             </label>
-            <input type="text" class="item-name form-control"  placeholder="Ej. Lápices de Colores">
+            <input type="text" class="item-name form-control" placeholder="Ej. Lápices de Colores">
             <label class="font-weight-bold  mt-1 mt-md-2 mb-1">Descripción del producto</label>
             <textarea class="item-description form-control mt-0"
                       rows="1"
@@ -282,7 +336,6 @@ $csrf = array(
                       tabindex="-1"
                       autocomplete="off"
             ></textarea>
-
         </div>
         <div class="unit-price">
             <label class="font-weight-bold mb-1">
@@ -303,4 +356,49 @@ $csrf = array(
             <input type="hidden" class="total-line-input">
         </div>
     </div>
+</script>
+<script type="text/x-handlebars-template" id="paymentTpl">
+    {{#each payments_made}}
+    <div class="payment">
+        <input name="payments[{{@index}}][amount]" type="hidden" class="payment-amount" value="{{amount}}">
+        <div class="amount">{{currencyFormat amount}}</div>
+        <input name="payments[{{@index}}][type]" type="hidden" class="payment-type" value="{{type}}">
+        <div class="type">
+            {{#switch type}}
+            {{#case "cash"}}
+            <span>Efectivo</span>
+            {{/case}}
+            {{#case "check"}}
+            <span>Cheque</span>
+            {{/case}}
+            {{#case "bank_deposit"}}
+            <span>Deposito bancario</span>
+            {{/case}}
+            {{#case "bank_transfer"}}
+            <span>Transferencia bancaria</span>
+            {{/case}}
+            {{#case "credit_card"}}
+            <span>Tarjeta de crédito</span>
+            {{/case}}
+            {{#case "debit_card"}}
+            <span>Tarjeta de débito</span>
+            {{/case}}
+            {{#case "other"}}
+            <span>Otro</span>
+            {{/case}}
+            {{/switch}}
+        </div>
+        <input name="payments[{{@index}}][date]" type="hidden" class="payment-date" value="{{date}}">
+        <div class="date">{{dmyDate date}}</div>
+        {{#if notes}}
+        <input name="payments[{{@index}}][notes]" type="hidden" class="payment-notes" value="{{notes}}">
+        <div class="notes">{{notes}}</div>
+        {{/if}}
+        <div class="actions">
+            <button type="button" class="btn btn-secondary remove-payment-btn">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    </div>
+    {{/each}}
 </script>

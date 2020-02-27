@@ -251,7 +251,7 @@ $csrf = array(
                    tabindex="-1"
                    value="1"
                    autocomplete="off"
-                   >
+            >
         </div>
         <div class="item-info">
             <input type="hidden" class="product-id">
@@ -259,14 +259,14 @@ $csrf = array(
                 <i class="fas fa-asterisk text-danger"></i>
                 <span>Nombre del producto</span>
             </label>
-            <input type="text" class="item-name form-control"  placeholder="Ej. Lápices de Colores">
+            <input type="text" class="item-name form-control" placeholder="Ej. Lápices de Colores">
             <label class="font-weight-bold  mt-1 mt-md-2 mb-1">Descripción del producto</label>
             <textarea class="item-description form-control mt-0"
                       rows="1"
                       placeholder='48 lápices de colores "Arcoíris" para dibujo'
                       tabindex="-1"
                       autocomplete="off"
-                      ></textarea>
+            ></textarea>
 
         </div>
         <div class="unit-price">
@@ -279,8 +279,7 @@ $csrf = array(
                    class="form-control item-unit-price"
                    placeholder="Ej. 249.33"
                    tabindex="-1"
-                   autocomplete="off"
-                   >
+                   autocomplete="off">
         </div>
         <div class="total-line">
             <span class="equal-sign">=</span>
