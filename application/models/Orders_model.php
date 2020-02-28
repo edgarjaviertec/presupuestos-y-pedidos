@@ -198,7 +198,7 @@ class Orders_model extends CI_Model
             'creado_en' => get_timestamp(),
         );
         $items = $order['items'];
-        $payments = $order['payments'];
+        $payments = (!empty($order['payments'])) ? $order['payments'] : [];
         $this->db->trans_start();
         // Se eliminan todos los pagos del pedido
         $this->db->where('pedido_id', $order['id']);
@@ -269,7 +269,7 @@ class Orders_model extends CI_Model
             'creado_en' => get_timestamp(),
         );
         $items = $order['items'];
-        $payments = $order['payments'];
+        $payments = (!empty($order['payments'])) ? $order['payments'] : [];
         if ($order['amount_due'] == $order['total']) {
             $data['status'] = 'unpaid';
         } elseif ($order['amount_due'] > 0) {
@@ -280,9 +280,6 @@ class Orders_model extends CI_Model
         $this->db->trans_start();
         $this->db->insert('pedidos', $data);
         $insert_id = $this->db->insert_id();
-        // se eliminan todos los pagos del pedido
-        $this->db->where('pedido_id', $order['id']);
-        $this->db->delete('pagos');
         // Se insertan todos los productos del pedido
         if (!empty($items)) {
             foreach ($items as $item) {
@@ -298,7 +295,6 @@ class Orders_model extends CI_Model
                 $this->db->insert('pedidos_productos', $itemData);
             }
         }
-
         // se insertan todos los pagos
         if (!empty($payments)) {
             foreach ($payments as $payment) {

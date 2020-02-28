@@ -74,7 +74,7 @@ class Products extends CI_Controller
             redirect('admin/productos/nuevo');
         } else {
             $affected_rows = $this->products->create_product($this->input->post());
-            if (count($affected_rows) > 0) {
+            if ($affected_rows > 0) {
                 $this->session->set_flashdata('flash_message', [
                     'type' => 'success',
                     'title' => 'El producto se creó con éxito',
@@ -169,7 +169,7 @@ class Products extends CI_Controller
             redirect('admin/productos/' . $this->input->post('id'));
         } else {
             $affected_rows = $this->products->update_product($this->input->post());
-            if (count($affected_rows) > 0) {
+            if ($affected_rows > 0) {
                 $this->session->set_flashdata('flash_message', [
                     'type' => 'success',
                     'title' => 'Los datos se actualizaron correctamente',

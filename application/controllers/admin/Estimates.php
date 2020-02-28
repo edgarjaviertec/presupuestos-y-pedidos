@@ -281,6 +281,7 @@ class Estimates extends CI_Controller
                 'amount_due' => $estimate->total,
                 'customer_id' => $estimate->cliente_id,
                 'items' => $estimate_items,
+                'payments' => [],
             ];
             $trans = $this->orders->create_order($estimate_data);
             if ($trans) {

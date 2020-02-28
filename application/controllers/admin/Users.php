@@ -76,7 +76,7 @@ class Users extends CI_Controller
             redirect('admin/usuarios/nuevo');
         } else {
             $affected_rows = $this->users->create_user($this->input->post());
-            if (count($affected_rows) > 0) {
+            if ($affected_rows > 0) {
                 $this->session->set_flashdata('flash_message', [
                     'type' => 'success',
                     'title' => 'El usuario se creó con éxito',
@@ -138,7 +138,7 @@ class Users extends CI_Controller
             redirect('admin/usuarios/cambiar_contrasena/' . $this->input->post('id'));
         } else {
             $affected_rows = $this->users->update_password($this->input->post());
-            if (count($affected_rows) > 0) {
+            if ($affected_rows > 0) {
                 $this->session->set_flashdata('flash_message', [
                     'type' => 'success',
                     'title' => 'La contraseña se cambió con éxito',
@@ -188,7 +188,7 @@ class Users extends CI_Controller
         } else {
             $logged_in_user = $this->session->userdata('logged_in_user');
             $affected_rows = $this->users->update_user($this->input->post());
-            if (count($affected_rows) > 0) {
+            if ($affected_rows > 0) {
                 // Si el usuario que se quiere editar es el mismo que esta conectado entonces actualizamos los datos de la sesión actual
                 if (isset($logged_in_user['id']) && $logged_in_user['id'] === $this->input->post('id')) {
                     $this->session->set_userdata('logged_in_user', [

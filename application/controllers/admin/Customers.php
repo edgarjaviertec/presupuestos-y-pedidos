@@ -80,7 +80,7 @@ class Customers extends CI_Controller
             redirect('admin/clientes/nuevo');
         } else {
             $affected_rows = $this->customers->create_customer($this->input->post());
-            if (count($affected_rows) > 0) {
+            if ($affected_rows > 0) {
                 $this->session->set_flashdata('flash_message', [
                     'type' => 'success',
                     'title' => 'El cliente se creó con éxito',
@@ -179,7 +179,7 @@ class Customers extends CI_Controller
         } else {
             $affected_rows = $this->customers->update_customer($this->input->post());
 
-            if (count($affected_rows) > 0) {
+            if ($affected_rows > 0) {
                 $this->session->set_flashdata('flash_message', [
                     'type' => 'success',
                     'title' => 'Los datos se actualizaron correctamente',
