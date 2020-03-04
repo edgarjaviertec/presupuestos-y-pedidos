@@ -1,12 +1,11 @@
 <?php
-$title = (isset($title)) ? $title : NULL;
 $sum_of_subtotal = (isset($sum_of_subtotal)) ? $sum_of_subtotal : NULL;
 $sum_of_discount = (isset($sum_of_discount)) ? $sum_of_discount : NULL;
 $sum_of_tax = (isset($sum_of_tax)) ? $sum_of_tax : NULL;
 $sum_of_total = (isset($sum_of_total)) ? $sum_of_total : NULL;
 $month = (isset($month)) ? $month : NULL;
 $year = (isset($year)) ? $year : NULL;
-$estimates = (isset($estimates)) ? $estimates : NULL;
+$orders = (isset($orders)) ? $orders : NULL;
 function fechaCastellano($fecha)
 {
     $fecha = substr($fecha, 0, 10);
@@ -22,7 +21,6 @@ function fechaCastellano($fecha)
     $nombreMes = str_replace($meses_EN, $meses_ES, $mes);
     return $nombredia . " " . $numeroDia . " de " . $nombreMes . " de " . $anio;
 }
-
 $fecha_ES = fechaCastellano(date("Ymd"));
 ?>
 <div class="header">
@@ -30,32 +28,30 @@ $fecha_ES = fechaCastellano(date("Ymd"));
     <p><strong>Fecha del reporte:</strong> <?php echo $fecha_ES ?></p>
 </div>
 <table class="table">
-    <?php if (count($estimates) == 0): ?>
+    <?php if (count($orders) == 0): ?>
         <div class="empty">
             No hay registros en este mes o este año
         </div>
     <?php endif; ?>
-    <?php if (count($estimates) > 0): ?>
+    <?php if (count($orders) > 0): ?>
         <tr>
-            <th class="bordered">Folio</th>
-            <th class="bordered">Fecha</th>
             <th class="bordered">Cliente</th>
             <th class="bordered">Teléfono</th>
             <th class="bordered">RFC</th>
+            <th class="bordered">Pedidos</th>
             <th class="bordered">Total</th>
         </tr>
-        <?php foreach ($estimates as $estimate): ?>
+        <?php foreach ($orders as $order): ?>
             <tr>
-                <td class="bordered"><?php echo $estimate->folio ?></td>
-                <td class="bordered"><?php echo date('d/m/Y', strtotime($estimate->fecha_presupuesto)); ?></td>
-                <td class="bordered"><?php echo $estimate->nombre_razon_social ?></td>
-                <td class="bordered"><?php echo $estimate->telefono ?></td>
-                <td class="bordered"><?php echo $estimate->rfc ?></td>
-                <td class="bordered"><?php echo text_truncate("$" . number_format($estimate->total, 2), 13) ?></td>
+                <td class="bordered"><?php echo $order->nombre_razon_social ?></td>
+                <td class="bordered"><?php echo $order->telefono ?></td>
+                <td class="bordered"><?php echo $order->rfc ?></td>
+                <td class="bordered"><?php echo $order->pedidos ?></td>
+                <td class="bordered"><?php echo text_truncate("$" . number_format($order->total, 2), 13) ?></td>
             </tr>
         <?php endforeach; ?>
         <tr>
-            <th class="totals" colspan="5">Suma</th>
+            <th class="totals" colspan="4">Suma</th>
             <td class="bordered"><?php echo text_truncate("$" . number_format($sum_of_total, 2), 13) ?></td>
         </tr>
     <?php endif; ?>

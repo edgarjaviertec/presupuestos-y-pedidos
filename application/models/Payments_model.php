@@ -14,8 +14,7 @@ class Payments_model extends CI_Model
         $sql = "SELECT *
 		FROM pagos
 		WHERE pedido_id = ?
-		AND cliente_id = ?
-		AND eliminado_en IS NULL";
+		AND cliente_id = ?";
         $query = $this->db->query($sql, [$order['id'], $order['customer_id']]);
         return $query->result();
     }
@@ -29,8 +28,7 @@ class Payments_model extends CI_Model
                 END AS total_pagado
                 FROM pagos
                 WHERE pedido_id = ?
-                AND cliente_id = ? 
-                AND eliminado_en IS NULL";
+                AND cliente_id = ?";
         $query = $this->db->query($sql, [$order['id'], $order['customer_id']]);
         $res = $query->row();
         $total_paid = $res->total_pagado;

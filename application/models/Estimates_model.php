@@ -23,61 +23,7 @@ class Estimates_model extends CI_Model
         return $query->row();
     }
 
-    function get_sum_of_subtotal($month, $year)
-    {
-        $sql = "SELECT 
-                CASE WHEN SUM(p.sub_total) IS NULL
-                THEN 0
-                ELSE SUM(p.sub_total) 
-                END AS sum_of_subtotal
-                FROM presupuestos p
-                INNER JOIN clientes c
-                ON p.cliente_id = c.id
-                WHERE MONTH(p.fecha_presupuesto) = ?
-                AND YEAR(p.fecha_presupuesto) = ?
-                AND p.eliminado_en IS NULL";
-        $query = $this->db->query($sql, [$month, $year]);
-        $res = $query->row();
-        return $res->sum_of_subtotal;
-    }
-
-    function get_sum_of_discount($month, $year)
-    {
-        $sql = "SELECT 
-                CASE WHEN SUM(p.cantidad_descontada) IS NULL
-                THEN 0
-                ELSE SUM(p.cantidad_descontada) 
-                END AS sum_of_discount
-                FROM presupuestos p
-                INNER JOIN clientes c
-                ON p.cliente_id = c.id
-                WHERE MONTH(p.fecha_presupuesto) = ?
-                AND YEAR(p.fecha_presupuesto) = ?
-                AND p.eliminado_en IS NULL";
-        $query = $this->db->query($sql, [$month, $year]);
-        $res = $query->row();
-        return $res->sum_of_discount;
-    }
-
-    function get_sum_of_tax($month, $year)
-    {
-        $sql = "SELECT 
-                CASE WHEN SUM(p.impuesto) IS NULL
-                THEN 0
-                ELSE SUM(p.impuesto) 
-                END AS sum_of_tax
-                FROM presupuestos p
-                INNER JOIN clientes c
-                ON p.cliente_id = c.id
-                WHERE MONTH(p.fecha_presupuesto) = ?
-                AND YEAR(p.fecha_presupuesto) = ?
-                AND p.eliminado_en IS NULL";
-        $query = $this->db->query($sql, [$month, $year]);
-        $res = $query->row();
-        return $res->sum_of_tax;
-    }
-
-    function get_sum_of_total($month, $year)
+    function get_monthly_sum($month, $year)
     {
         $sql = "SELECT 
                 CASE WHEN SUM(p.total) IS NULL
@@ -95,13 +41,31 @@ class Estimates_model extends CI_Model
         return $res->sum_of_total;
     }
 
-    function get_estimates_for_report($month, $year)
+    function get_annual_sum($year)
+    {
+        $sql = "SELECT 
+                CASE WHEN SUM(p.total) IS NULL
+                THEN 0
+                ELSE SUM(p.total) 
+                END AS sum_of_total
+                FROM presupuestos p
+                INNER JOIN clientes c
+                ON p.cliente_id = c.id
+                WHERE YEAR(p.fecha_presupuesto) = ?
+                AND p.eliminado_en IS NULL";
+        $query = $this->db->query($sql, $year);
+        $res = $query->row();
+        return $res->sum_of_total;
+    }
+
+    function get_monthly_report($month, $year)
     {
         $sql = "SELECT 
                 p.folio,
                 p.fecha_presupuesto,
-                CONCAT(c.nombre, ' ', c.apellidos) as cliente,
+                c.nombre_razon_social,
                 c.rfc,
+                c.telefono,
                 p.sub_total,
                 p.cantidad_descontada,
                 p.impuesto,
@@ -116,6 +80,66 @@ class Estimates_model extends CI_Model
         return $query->result();
     }
 
+    function get_monthly_report_by_customers($month, $year)
+    {
+        $sql = "SELECT
+                c.id,
+                c.nombre_razon_social,
+                c.telefono,
+                c.rfc,
+                COUNT(*) as presupuestos, 
+                SUM(total) as total
+                FROM presupuestos p
+                INNER JOIN clientes c
+                ON p.cliente_id = c.id
+                WHERE MONTH(p.fecha_presupuesto) = ?
+                AND YEAR(p.fecha_presupuesto) = ?
+                AND p.eliminado_en IS NULL
+                GROUP BY c.id, c. telefono, c.rfc, c.nombre_razon_social";
+        $query = $this->db->query($sql, [$month, $year]);
+        return $query->result();
+    }
+
+    function get_annual_report($year)
+    {
+        $sql = "SELECT 
+                p.folio,
+                p.fecha_presupuesto,
+                c.nombre_razon_social,
+                c.rfc,
+                c.telefono,
+                p.sub_total,
+                p.cantidad_descontada,
+                p.impuesto,
+                p.total
+                FROM presupuestos p
+                INNER JOIN clientes c
+                ON p.cliente_id = c.id
+                WHERE YEAR(p.fecha_presupuesto) = ?
+                AND p.eliminado_en IS NULL";
+        $query = $this->db->query($sql, $year);
+        return $query->result();
+    }
+
+    function get_annual_report_by_customers($year)
+    {
+        $sql = "SELECT
+        c.id,
+        c.nombre_razon_social,
+        c.telefono,
+        c.rfc,
+        COUNT(*) as presupuestos, 
+        SUM(total) as total
+        FROM presupuestos p
+        INNER JOIN clientes c
+        ON p.cliente_id = c.id
+        WHERE YEAR(p.fecha_presupuesto) = ?
+        AND p.eliminado_en IS NULL
+        GROUP BY c.id, c. telefono, c.rfc, c.nombre_razon_social";
+        $query = $this->db->query($sql, $year);
+        return $query->result();
+    }
+
     function get_estimate_by_number($number)
     {
         $sql = "SELECT * FROM presupuestos WHERE folio = ? AND eliminado_en IS NULL";
@@ -125,7 +149,7 @@ class Estimates_model extends CI_Model
 
     function get_lines_by_id($id)
     {
-        $sql = "SELECT * FROM presupuestos_productos WHERE presupuesto_id = ? AND eliminado_en IS NULL";
+        $sql = "SELECT * FROM presupuestos_productos WHERE presupuesto_id = ?";
         $query = $this->db->query($sql, $id);
         return $query->result();
     }

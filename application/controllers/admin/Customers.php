@@ -63,8 +63,6 @@ class Customers extends CI_Controller
         ];
         $this->form_validation->set_rules('rfc', 'RFC', 'trim|max_length[255]', $common_error_messages);
         $this->form_validation->set_rules('name', 'Nombre', 'trim|required|max_length[255]', $common_error_messages);
-        $this->form_validation->set_rules('last_name', 'Apellidos', 'trim|required|max_length[255]', $common_error_messages);
-        $this->form_validation->set_rules('company', 'Empresa', 'trim|max_length[255]', $common_error_messages);
         $this->form_validation->set_rules('email', 'Correo electrónico', 'trim|max_length[255]|valid_email', $common_error_messages);
         $this->form_validation->set_rules('phone', 'Teléfono', 'trim|required|max_length[255]', $common_error_messages);
         $this->form_validation->set_rules('mobile_phone', 'Teléfono celular', 'trim|max_length[255]', $common_error_messages);
@@ -73,7 +71,6 @@ class Customers extends CI_Controller
         $this->form_validation->set_rules('state', 'Estado', 'trim|max_length[255]', $common_error_messages);
         $this->form_validation->set_rules('country', 'País', 'trim|max_length[255]', $common_error_messages);
         $this->form_validation->set_rules('postal_code', 'Código postal', 'trim|integer|max_length[255]', $common_error_messages);
-        $this->form_validation->set_rules('notes', 'Notas', 'trim|max_length[255]', $common_error_messages);
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('errors', $this->form_validation->error_array());
             $this->session->set_flashdata('old', $this->input->post());
@@ -111,7 +108,7 @@ class Customers extends CI_Controller
     public function get_customers_ajax()
     {
         $datatables = new Datatables(new CodeigniterAdapter);
-        $datatables->query("SELECT id, CONCAT(nombre, ' ', apellidos) as nombre_completo, empresa, rfc FROM clientes WHERE eliminado_en IS NULL");
+        $datatables->query("SELECT id, nombre_razon_social, telefono, rfc FROM clientes WHERE eliminado_en IS NULL");
         $datatables->edit('id', function ($data) {
             return '<strong>' . $data['id'] . '</strong>';
         });
@@ -161,8 +158,6 @@ class Customers extends CI_Controller
         ];
         $this->form_validation->set_rules('rfc', 'RFC', 'trim|max_length[255]', $common_error_messages);
         $this->form_validation->set_rules('name', 'Nombre', 'trim|required|max_length[255]', $common_error_messages);
-        $this->form_validation->set_rules('last_name', 'Apellidos', 'trim|required|max_length[255]', $common_error_messages);
-        $this->form_validation->set_rules('company', 'Empresa', 'trim|max_length[255]', $common_error_messages);
         $this->form_validation->set_rules('email', 'Correo electrónico', 'trim|max_length[255]|valid_email', $common_error_messages);
         $this->form_validation->set_rules('phone', 'Teléfono', 'trim|required|max_length[255]', $common_error_messages);
         $this->form_validation->set_rules('mobile_phone', 'Teléfono celular', 'trim|max_length[255]', $common_error_messages);
@@ -171,7 +166,6 @@ class Customers extends CI_Controller
         $this->form_validation->set_rules('state', 'Estado', 'trim|max_length[255]', $common_error_messages);
         $this->form_validation->set_rules('country', 'País', 'trim|max_length[255]', $common_error_messages);
         $this->form_validation->set_rules('postal_code', 'Código postal', 'trim|integer|max_length[255]', $common_error_messages);
-        $this->form_validation->set_rules('notes', 'Notas', 'trim|max_length[255]', $common_error_messages);
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('errors', $this->form_validation->error_array());
             $this->session->set_flashdata('old', $this->input->post());

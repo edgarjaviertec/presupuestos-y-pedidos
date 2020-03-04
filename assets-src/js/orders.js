@@ -59,6 +59,9 @@ $(document).ready(function () {
         var month = new Date().getMonth() + 1;
         year = parseInt(year);
         month = parseInt(month);
+        $('#customRadio1').removeAttr('checked');
+        $('#customRadio2').removeAttr('checked');
+        $('#customRadio1').prop('checked', true);
         $('#generateReportModal select[name="month"]').val(month);
         $('#generateReportModal select[name="year"]').val(year);
     })
@@ -72,7 +75,6 @@ $(document).ready(function () {
     var $dataTables = $('#dataTables');
     var mediaQuery = window.matchMedia('(min-width: 576px)');
     mediaQuery.addListener(widthChange);
-
     function widthChange(mediaQuery) {
         if (mediaQuery.matches) {
             $dataTables.addClass('nowrap');
@@ -80,6 +82,5 @@ $(document).ready(function () {
             $dataTables.removeClass('nowrap');
         }
     }
-
     widthChange(mediaQuery);
 });

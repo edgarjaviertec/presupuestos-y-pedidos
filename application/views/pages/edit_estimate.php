@@ -12,7 +12,7 @@ $csrf = array(
     'name' => $this->security->get_csrf_token_name(),
     'hash' => $this->security->get_csrf_hash()
 );
-$full_name = $customer->nombre . ' ' . $customer->apellidos;
+$full_name = $customer->nombre_razon_social;
 $phone = $customer->telefono;
 $mobilePhone = $customer->telefono_celular;
 $phone = ($phone == '' && $mobilePhone != '') ? $mobilePhone : $phone;
@@ -204,8 +204,7 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                                            placeholder="Ej. 1"
                                            tabindex="-1"
                                            value="<?php echo $line->cantidad ?>"
-                                           autocomplete="off"
-                                    >
+                                           autocomplete="off">
                                 </div>
                                 <div class="item-info">
                                     <input type="hidden" class="product-id">
@@ -222,8 +221,7 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                                               rows="1"
                                               placeholder='48 lápices de colores "Arcoíris" para dibujo'
                                               tabindex="-1"
-                                              autocomplete="off"
-                                    ><?php echo $line->descripcion ?></textarea>
+                                              autocomplete="off"><?php echo $line->descripcion ?></textarea>
                                 </div>
                                 <div class="unit-price">
                                     <label class="font-weight-bold mb-1">
@@ -236,7 +234,6 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                                            placeholder="Ej. 249.33"
                                            tabindex="-1"
                                            autocomplete="off"
-
                                            value="<?php echo $line->precio_unitario ?>">
                                 </div>
                                 <div class="total-line">
@@ -304,7 +301,6 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                                            placeholder="Ej. 10"
                                            value="<?php echo ($estimate->tipo_descuento == 'percentage') ? intval($estimate->descuento) : floatval($estimate->descuento) ?>"
                                            maxlength="10"
-
                                            autocomplete="off"
                                            tabindex="-1">
                                 </div>
@@ -358,9 +354,8 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                     <div class="notes">
 						<textarea name="notes"
                                   class="form-control"
-                                  placeholder="Ingrese notas o detalles de transferencia bancaria"
-                                  tabindex="-1"
-                        ><?php echo $estimate->notas ?></textarea>
+                                  placeholder="Ingrese sus notas"
+                                  tabindex="-1"><?php echo $estimate->notas ?></textarea>
                     </div>
                 </div>
                 <div class="action-buttons">
@@ -388,8 +383,7 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                    placeholder="Ej. 1"
                    tabindex="-1"
                    value="1"
-                   autocomplete="off"
-            >
+                   autocomplete="off">
         </div>
         <div class="item-info">
             <input type="hidden" class="product-id">
@@ -403,8 +397,7 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                       rows="1"
                       placeholder='48 lápices de colores "Arcoíris" para dibujo'
                       tabindex="-1"
-                      autocomplete="off"
-            ></textarea>
+                      autocomplete="off"></textarea>
         </div>
         <div class="unit-price">
             <label class="font-weight-bold mb-1">
@@ -416,8 +409,7 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                    class="form-control item-unit-price"
                    placeholder="Ej. 249.33"
                    tabindex="-1"
-                   autocomplete="off"
-            >
+                   autocomplete="off">
         </div>
         <div class="total-line">
             <span class="equal-sign">=</span>

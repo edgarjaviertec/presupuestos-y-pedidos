@@ -178,7 +178,6 @@ $csrf = array(
                                            placeholder="Ej. 10"
                                            value="0"
                                            maxlength="10"
-
                                            autocomplete="off"
                                            tabindex="-1">
                                 </div>
@@ -220,9 +219,8 @@ $csrf = array(
                     <div class="notes">
 						<textarea name="notes"
                                   class="form-control"
-                                  placeholder="Ingrese notas o detalles de transferencia bancaria"
-                                  tabindex="-1"
-                        ></textarea>
+                                  placeholder="Ingrese sus notas"
+                                  tabindex="-1"></textarea>
                     </div>
                 </div>
                 <div class="mb-4">
@@ -319,8 +317,7 @@ $csrf = array(
                    placeholder="Ej. 1"
                    tabindex="-1"
                    value="1"
-                   autocomplete="off"
-            >
+                   autocomplete="off">
         </div>
         <div class="item-info">
             <input type="hidden" class="product-id">
@@ -334,8 +331,7 @@ $csrf = array(
                       rows="1"
                       placeholder='48 lápices de colores "Arcoíris" para dibujo'
                       tabindex="-1"
-                      autocomplete="off"
-            ></textarea>
+                      autocomplete="off"></textarea>
         </div>
         <div class="unit-price">
             <label class="font-weight-bold mb-1">
@@ -347,8 +343,7 @@ $csrf = array(
                    class="form-control item-unit-price"
                    placeholder="Ej. 249.33"
                    tabindex="-1"
-                   autocomplete="off"
-            >
+                   autocomplete="off">
         </div>
         <div class="total-line">
             <span class="equal-sign">=</span>

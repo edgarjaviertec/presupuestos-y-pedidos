@@ -22,7 +22,7 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
             <tr>
                 <th>Id</th>
                 <th>Nombre completo</th>
-                <th>Empresa</th>
+                <th>Teléfono</th>
                 <th>RFC</th>
                 <th class="no-sort">Acciones</th>
             </tr>

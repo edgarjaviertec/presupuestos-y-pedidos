@@ -18,18 +18,18 @@ class Customers_model extends CI_Model
         $query = $this->db->query($sql);
         $records_total = $query->num_rows();
         $sql = "SELECT * FROM clientes
-				WHERE nombre LIKE ? AND eliminado_en IS NULL
-				OR apellidos LIKE ? AND eliminado_en IS NULL";
-        $query = $this->db->query($sql, [$search, $search]);
+				WHERE nombre_razon_social LIKE ? 
+				AND eliminado_en IS NULL";
+        $query = $this->db->query($sql, [$search]);
         $records_filtered = $query->num_rows();
         $sql = "SELECT * FROM clientes
-				WHERE nombre LIKE ? AND eliminado_en IS NULL
-				OR apellidos LIKE ? AND eliminado_en IS NULL
+				WHERE nombre_razon_social LIKE ?
+				AND eliminado_en IS NULL
 				LIMIT ?, ?";
-        $query = $this->db->query($sql, [$search, $search, $start, $length]);
+        $query = $this->db->query($sql, [$search, $start, $length]);
         $data = $query->result();
         foreach ($data as $row) {
-            $row->text = $row->nombre . ' ' . $row->apellidos;
+            $row->text = $row->nombre_razon_social;
         }
         $res = (object)[
             'recordsTotal' => $records_total,
@@ -57,9 +57,7 @@ class Customers_model extends CI_Model
     {
         $data = array(
             'rfc' => $customer['rfc'],
-            'nombre' => $customer['name'],
-            'apellidos' => $customer['last_name'],
-            'empresa' => $customer['company'],
+            'nombre_razon_social' => $customer['name'],
             'correo_electronico' => $customer['email'],
             'telefono' => $customer['phone'],
             'telefono_celular' => $customer['mobile_phone'],
@@ -68,7 +66,6 @@ class Customers_model extends CI_Model
             'estado' => $customer['state'],
             'pais' => $customer['country'],
             'codigo_postal' => $customer['postal_code'],
-            'notas' => $customer['notes'],
             'creado_en' => get_timestamp(),
         );
         $this->db->insert('clientes', $data);
@@ -79,9 +76,7 @@ class Customers_model extends CI_Model
     {
         $data = array(
             'rfc' => $customer['rfc'],
-            'nombre' => $customer['name'],
-            'apellidos' => $customer['last_name'],
-            'empresa' => $customer['company'],
+            'nombre_razon_social' => $customer['name'],
             'correo_electronico' => $customer['email'],
             'telefono' => $customer['phone'],
             'telefono_celular' => $customer['mobile_phone'],
@@ -90,7 +85,6 @@ class Customers_model extends CI_Model
             'estado' => $customer['state'],
             'pais' => $customer['country'],
             'codigo_postal' => $customer['postal_code'],
-            'notas' => $customer['notes'],
             'actualizado_en' => get_timestamp(),
         );
         $this->db->where('id', $customer['id']);

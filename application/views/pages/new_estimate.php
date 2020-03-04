@@ -24,12 +24,9 @@ $csrf = array(
                 </ul>
             </div>
         <?php endif; ?>
-
         <h1 class="mb-2 h3">Nuevo presupuesto</h1>
         <p class="mb-2 font-weight-bold">Los campos marcados con <i class="fas fa-asterisk text-danger"></i> son
             obligatorios</p>
-
-
         <div class="document-container">
             <form id="documentForm" method="post"
                   action="<?php echo base_url('admin/estimates/new_estimate_validation') ?>">
@@ -125,7 +122,6 @@ $csrf = array(
                         </div>
                     </div>
                 </div>
-
                 <div class="items-table" id="itemsTable">
                     <div class="table-head">
                         <div class="table-row">
@@ -138,7 +134,6 @@ $csrf = array(
                     </div>
                     <div class="table-body"></div>
                 </div>
-
                 <div class="add-item">
                     <button id="addItemBtn" class="add-item-btn">
                         <i class="fas fa-asterisk text-danger"></i>
@@ -183,7 +178,6 @@ $csrf = array(
                                            placeholder="Ej. 10"
                                            value="0"
                                            maxlength="10"
-
                                            autocomplete="off"
                                            tabindex="-1">
                                 </div>
@@ -195,14 +189,11 @@ $csrf = array(
                         </div>
                         <div class="summary-item">
                             <div class="label">
-
                                 <input type="hidden" id="includeTax" name="include_tax" value="1">
                                 <button type="button" id="taxCheckbox" class="tax-checkbox checked">
                                     <i class="icon fas fa-check"></i>
                                 </button>
                                 <span>IVA (16%)</span>
-
-
                             </div>
                             <div class="amount">
                                 <input type="hidden" id="tax" name="tax">
@@ -220,9 +211,8 @@ $csrf = array(
                     <div class="notes">
 						<textarea name="notes"
                                   class="form-control"
-                                  placeholder="Ingrese notas o detalles de transferencia bancaria"
-                                  tabindex="-1"
-                        ></textarea>
+                                  placeholder="Ingrese sus notas"
+                                  tabindex="-1"></textarea>
                     </div>
                 </div>
                 <div class="action-buttons">
@@ -250,8 +240,7 @@ $csrf = array(
                    placeholder="Ej. 1"
                    tabindex="-1"
                    value="1"
-                   autocomplete="off"
-            >
+                   autocomplete="off">
         </div>
         <div class="item-info">
             <input type="hidden" class="product-id">
@@ -265,9 +254,7 @@ $csrf = array(
                       rows="1"
                       placeholder='48 lápices de colores "Arcoíris" para dibujo'
                       tabindex="-1"
-                      autocomplete="off"
-            ></textarea>
-
+                      autocomplete="off"></textarea>
         </div>
         <div class="unit-price">
             <label class="font-weight-bold mb-1">

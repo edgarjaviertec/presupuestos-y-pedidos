@@ -17,8 +17,8 @@ if (isset($old['rfc'])) {
 }
 if (isset($old['name'])) {
     $name = $old['name'];
-} else if (isset($customer['nombre'])) {
-    $name = $customer['nombre'];
+} else if (isset($customer['nombre_razon_social'])) {
+    $name = $customer['nombre_razon_social'];
 } else {
     $name = '';
 }
@@ -115,46 +115,25 @@ if (isset($old['notes'])) {
             </div>
         <?php endif; ?>
         <h1 class="mb-2 h3">Editar cliente #<?php echo isset($customer['id']) ? $customer['id'] : '' ?></h1>
-        <p class="mb-2 font-weight-bold">Los campos marcados con <i class="fas fa-asterisk text-danger"></i> son obligatorios</p>
+        <p class="mb-2 font-weight-bold">Los campos marcados con <i class="fas fa-asterisk text-danger"></i> son
+            obligatorios</p>
         <div class="card bg-white shadow">
             <div class="card-body p-3">
-                <form id="customerForm" method="post" action="<?php echo base_url('admin/customers/edit_customer_validation') ?>">
+                <form id="customerForm" method="post"
+                      action="<?php echo base_url('admin/customers/edit_customer_validation') ?>">
                     <input type="hidden" name="<?= $csrf['name']; ?>" value="<?= $csrf['hash']; ?>"/>
                     <input type="hidden" name="id" value="<?php echo isset($customer['id']) ? $customer['id'] : '' ?>">
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <div class="form-group">
-                                <label class="font-weight-bold"><i class="fas fa-asterisk text-danger"></i>&nbsp;Nombre</label>
+                                <label class="font-weight-bold"><i class="fas fa-asterisk text-danger"></i>&nbsp;Nombre
+                                    del cliente o razón social</label>
                                 <input autocomplete="off"
                                        type="text"
                                        class="form-control"
                                        name="name"
                                        value="<?php echo $name ?>"
                                        placeholder="Ej. Juan">
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label class="font-weight-bold"><i class="fas fa-asterisk text-danger"></i>&nbsp;Apellidos</label>
-                                <input autocomplete="off"
-                                       type="text"
-                                       class="form-control"
-                                       name="last_name"
-                                       value="<?php echo $last_name ?>"
-                                       placeholder="Ej. Hernández">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label>Empresa</label>
-                                <input autocomplete="off"
-                                       type="text"
-                                       class="form-control"
-                                       name="company"
-                                       value="<?php echo $company ?>"
-                                       placeholder='Ej. Papeleria "El Lapicito"'>
                             </div>
                         </div>
                         <div class="col-12 col-md-6">
@@ -837,15 +816,6 @@ if (isset($old['notes'])) {
                                        placeholder="Ej. 77500">
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Notas</label>
-                        <textarea autocomplete="off"
-                                  type="text"
-                                  class="form-control"
-                                  name="notes"
-                                  rows="3"
-                                  placeholder="Ej. Prefiere que le hablen por teléfono celular"><?php echo $notes ?></textarea>
                     </div>
                     <div class="action-buttons">
                         <a href="<?php echo base_url('admin/clientes') ?>" class="btn btn-lg btn-secondary cancel-btn">Regresar</a>

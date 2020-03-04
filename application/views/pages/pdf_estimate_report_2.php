@@ -1,5 +1,4 @@
 <?php
-$title = (isset($title)) ? $title : NULL;
 $sum_of_subtotal = (isset($sum_of_subtotal)) ? $sum_of_subtotal : NULL;
 $sum_of_discount = (isset($sum_of_discount)) ? $sum_of_discount : NULL;
 $sum_of_tax = (isset($sum_of_tax)) ? $sum_of_tax : NULL;
@@ -37,25 +36,23 @@ $fecha_ES = fechaCastellano(date("Ymd"));
     <?php endif; ?>
     <?php if (count($estimates) > 0): ?>
         <tr>
-            <th class="bordered">Folio</th>
-            <th class="bordered">Fecha</th>
             <th class="bordered">Cliente</th>
             <th class="bordered">Teléfono</th>
             <th class="bordered">RFC</th>
+            <th class="bordered">Presupuestos</th>
             <th class="bordered">Total</th>
         </tr>
         <?php foreach ($estimates as $estimate): ?>
             <tr>
-                <td class="bordered"><?php echo $estimate->folio ?></td>
-                <td class="bordered"><?php echo date('d/m/Y', strtotime($estimate->fecha_presupuesto)); ?></td>
                 <td class="bordered"><?php echo $estimate->nombre_razon_social ?></td>
                 <td class="bordered"><?php echo $estimate->telefono ?></td>
                 <td class="bordered"><?php echo $estimate->rfc ?></td>
+                <td class="bordered"><?php echo $estimate->presupuestos ?></td>
                 <td class="bordered"><?php echo text_truncate("$" . number_format($estimate->total, 2), 13) ?></td>
             </tr>
         <?php endforeach; ?>
         <tr>
-            <th class="totals" colspan="5">Suma</th>
+            <th class="totals" colspan="4">Suma</th>
             <td class="bordered"><?php echo text_truncate("$" . number_format($sum_of_total, 2), 13) ?></td>
         </tr>
     <?php endif; ?>

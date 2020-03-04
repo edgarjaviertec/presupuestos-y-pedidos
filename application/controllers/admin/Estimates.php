@@ -303,7 +303,7 @@ class Estimates extends CI_Controller
         $sql = "SELECT
 				p.id,
 				p.folio,
-				CONCAT(c.nombre, ' ', c.apellidos ) as cliente,
+				c.nombre_razon_social as cliente,
 				p.status,
 				p.fecha_presupuesto,
 				p.total
@@ -490,28 +490,43 @@ class Estimates extends CI_Controller
     public function generate_pdf_report()
     {
         $spanish_months = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
+        $report_type = $this->input->get('report_type');
         $month = $this->input->get('month');
         $year = $this->input->get('year');
-        if (!$month || !$year || intval($month) > 12) {
+        if (!$report_type || !$month || !$year || intval($month) > 12) {
             show_404();
         }
-        $spanish_month = $spanish_months[intval($month) - 1];
-        $estimates = $this->estimates->get_estimates_for_report($month, $year);
-        $sum_of_discount = $this->estimates->get_sum_of_discount($month, $year);
-        $sum_of_subtotal = $this->estimates->get_sum_of_subtotal($month, $year);
-        $sum_of_tax = $this->estimates->get_sum_of_tax($month, $year);
-        $sum_of_total = $this->estimates->get_sum_of_total($month, $year);
-        $data['page'] = 'pdf_estimate_report';
-        $data['title'] = 'Presupuestos de ' . $spanish_month . ' del ' . $year;
+        if (!is_numeric($month) && $month !== 'all') {
+            show_404();
+        }
+        $spanish_month = ($month == 'all') ? 'anual' : $spanish_months[intval($month) - 1];
+        $title = ($month == 'all') ? 'Presupuestos del ' . $year : 'Presupuestos de ' . $spanish_month . ' del ' . $year;
+        if ($month == 'all') {
+            if ($report_type == 'estimates') {
+                $estimates = $this->estimates->get_annual_report($year);
+                $data['page'] = 'pdf_estimate_report';
+            } else {
+                $estimates = $this->estimates->get_annual_report_by_customers($year);
+                $data['page'] = 'pdf_estimate_report_2';
+            }
+            $sum_of_total = $this->estimates->get_annual_sum($year);
+        } else {
+            if ($report_type == 'estimates') {
+                $estimates = $this->estimates->get_monthly_report($month, $year);
+                $data['page'] = 'pdf_estimate_report';
+            } else {
+                $estimates = $this->estimates->get_monthly_report_by_customers($month, $year);
+                $data['page'] = 'pdf_estimate_report_2';
+            }
+            $sum_of_total = $this->estimates->get_monthly_sum($month, $year);
+        }
+        $data['title'] = $title;
         $data['css_files'] = [
             base_url('assets/css/report-to-print.min.css'),
         ];
         $data['estimates'] = $estimates;
         $data['month'] = $spanish_month;
         $data['year'] = $year;
-        $data['sum_of_subtotal'] = $sum_of_subtotal;
-        $data['sum_of_discount'] = $sum_of_discount;
-        $data['sum_of_tax'] = $sum_of_tax;
         $data['sum_of_total'] = $sum_of_total;
         $html = $this->load->view('layouts/pdf_layout', $data, true);
         $dompdf = new Dompdf();

@@ -12,7 +12,7 @@ $csrf = array(
 	'name' => $this->security->get_csrf_token_name(),
 	'hash' => $this->security->get_csrf_hash()
 );
-$full_name = $customer->nombre . ' ' . $customer->apellidos;
+$full_name = $customer->nombre_razon_social;
 $phone = $customer->telefono;
 $mobilePhone = $customer->telefono_celular;
 $phone = ($phone == '' && $mobilePhone != '') ? $mobilePhone : $phone;

@@ -1,9 +1,9 @@
 <?php
+$title = (isset($title)) ? $title : NULL;
 $sum_of_subtotal = (isset($sum_of_subtotal)) ? $sum_of_subtotal : NULL;
 $sum_of_discount = (isset($sum_of_discount)) ? $sum_of_discount : NULL;
 $sum_of_tax = (isset($sum_of_tax)) ? $sum_of_tax : NULL;
 $sum_of_total = (isset($sum_of_total)) ? $sum_of_total : NULL;
-$sum_of_amount_due = (isset($sum_of_amount_due)) ? $sum_of_amount_due : NULL;
 $month = (isset($month)) ? $month : NULL;
 $year = (isset($year)) ? $year : NULL;
 $orders = (isset($orders)) ? $orders : NULL;
@@ -26,7 +26,7 @@ function fechaCastellano($fecha)
 $fecha_ES = fechaCastellano(date("Ymd"));
 ?>
 <div class="header">
-    <h1>PEDIDOS DE <?php echo strtoupper($month) ?> DEL <?php echo $year ?></h1>
+    <h1><?php echo strtoupper($title) ?></h1>
     <p><strong>Fecha del reporte:</strong> <?php echo $fecha_ES ?></p>
 </div>
 <table class="table">
@@ -40,34 +40,37 @@ $fecha_ES = fechaCastellano(date("Ymd"));
             <th class="bordered">Folio</th>
             <th class="bordered">Fecha</th>
             <th class="bordered">Cliente</th>
+            <th class="bordered">Teléfono</th>
             <th class="bordered">RFC</th>
-            <th class="bordered">Subtotal</th>
-            <th class="bordered">Descuento</th>
-            <th class="bordered">IVA</th>
+            <th class="bordered">Estado</th>
             <th class="bordered">Total</th>
-            <th class="bordered">Saldo</th>
         </tr>
         <?php foreach ($orders as $order): ?>
             <tr>
                 <td class="bordered"><?php echo $order->folio ?></td>
-                <td class="bordered"><?php echo $order->fecha_pedido ?></td>
-                <td class="bordered"><?php echo $order->cliente ?></td>
+                <td class="bordered"><?php echo date('d/m/Y', strtotime($order->fecha_pedido)); ?></td>
+                <td class="bordered"><?php echo $order->nombre_razon_social ?></td>
+                <td class="bordered"><?php echo $order->telefono ?></td>
                 <td class="bordered"><?php echo $order->rfc ?></td>
-                <td class="bordered"><?php echo text_truncate("$" . number_format($order->sub_total, 2), 13) ?></td>
-                <td class="bordered"><?php echo text_truncate("-$" . number_format($order->cantidad_descontada, 2), 13) ?></td>
-                <td class="bordered"><?php echo text_truncate("$" . number_format($order->impuesto, 2), 13) ?></td>
+                <?php
+                switch ($order->status) {
+                    case 'paid':
+                        $status_text = 'Pagado';
+                        break;
+                    case 'partially_paid':
+                        $status_text = 'Parcialmente pagado';
+                        break;
+                    default:
+                        $status_text = 'No pagado';
+                }
+                ?>
+                <td class="bordered"><?php echo $status_text ?></td>
                 <td class="bordered"><?php echo text_truncate("$" . number_format($order->total, 2), 13) ?></td>
-                <td class="bordered"><?php echo text_truncate("$" . number_format($order->saldo, 2), 13) ?></td>
             </tr>
         <?php endforeach; ?>
         <tr>
-            <td colspan="3"></td>
-            <th class="totals">Totales</th>
-            <td class="bordered"><?php echo text_truncate("$" . number_format($sum_of_subtotal, 2), 13) ?></td>
-            <td class="bordered"><?php echo text_truncate("-$" . number_format($sum_of_discount, 2), 13) ?></td>
-            <td class="bordered"><?php echo text_truncate("$" . number_format($sum_of_tax, 2), 13) ?></td>
+            <th class="totals" colspan="6">Suma</th>
             <td class="bordered"><?php echo text_truncate("$" . number_format($sum_of_total, 2), 13) ?></td>
-            <td class="bordered"><?php echo text_truncate("$" . number_format($sum_of_amount_due, 2), 13) ?></td>
         </tr>
     <?php endif; ?>
 </table>

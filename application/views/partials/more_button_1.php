@@ -4,7 +4,7 @@ $csrf_name = isset($csrf_name) ? $csrf_name : NULL;
 $csrf_hash = isset($csrf_hash) ? $csrf_hash : NULL;
 ?>
 <div class="dropdown d-inline-block">
-    <button class="ml-2 btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+    <button class="ml-2 btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" title="Más opciones">
         <i class="fas fa-ellipsis-h"></i>
     </button>
     <div class="dropdown-menu dropdown-menu-right">

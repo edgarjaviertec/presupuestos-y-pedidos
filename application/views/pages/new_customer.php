@@ -34,37 +34,14 @@ $csrf = array(
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <div class="form-group">
-                                <label class="font-weight-bold"><i class="fas fa-asterisk text-danger"></i>&nbsp;Nombre</label>
+                                <label class="font-weight-bold"><i class="fas fa-asterisk text-danger"></i>&nbsp;Nombre
+                                    del cliente o razón social</label>
                                 <input autocomplete="off"
                                        type="text"
                                        class="form-control"
                                        name="name"
                                        value="<?php echo $old['name'] ?>"
                                        placeholder="Ej. Juan">
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label class="font-weight-bold"><i class="fas fa-asterisk text-danger"></i>&nbsp;Apellidos</label>
-                                <input autocomplete="off"
-                                       type="text"
-                                       class="form-control"
-                                       name="last_name"
-                                       value="<?php echo $old['last_name'] ?>"
-                                       placeholder="Ej. Hernández">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label>Empresa</label>
-                                <input autocomplete="off"
-                                       type="text"
-                                       class="form-control"
-                                       name="company"
-                                       value="<?php echo $old['company'] ?>"
-                                       placeholder='Ej. Papeleria "El Lapicito"'>
                             </div>
                         </div>
                         <div class="col-12 col-md-6">
@@ -367,15 +344,6 @@ $csrf = array(
                                        placeholder="Ej. 77500">
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Notas</label>
-                        <textarea autocomplete="off"
-                                  type="text"
-                                  class="form-control"
-                                  name="notes"
-                                  rows="3"
-                                  placeholder="Ej. Prefiere que le hablen por teléfono celular"><?php echo $old['notes'] ?></textarea>
                     </div>
                     <div class="action-buttons">
                         <a href="<?php echo base_url('admin/clientes') ?>"

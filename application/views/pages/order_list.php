@@ -12,7 +12,7 @@ $current_year = intval(date("Y"));
     <div>
         <button type="button" class="btn btn-lg btn-secondary  align-items-center" data-toggle="modal" data-target="#generateReportModal">
             <i class="fas fa-table"></i>
-            <span class="ml-1 d-none d-md-inline-block">Reporte mensual</span>
+            <span class="ml-1 d-none d-md-inline-block">Generar reporte</span>
         </button>
         <a href="<?php echo base_url('admin/pedidos/nuevo') ?>"
            class="ml-2 btn btn-lg btn-success  align-items-center">
@@ -55,6 +55,17 @@ $current_year = intval(date("Y"));
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
+                        <label>Tipo de reporte</label>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="customRadio1" name="report_type" class="custom-control-input" checked value="orders">
+                            <label class="custom-control-label" for="customRadio1">Lista de pedidos</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="customRadio2" name="report_type" class="custom-control-input" value="orders_by_customers">
+                            <label class="custom-control-label" for="customRadio2">Lista de pedidos por cliente</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label>Mes</label>
                         <select class="custom-select" name="month">
                             <option value="1" <?php echo(intval(date("m")) == 1 ? 'selected' : '') ?>>Enero</option>
@@ -69,13 +80,14 @@ $current_year = intval(date("Y"));
                             <option value="10" <?php echo(intval(date("m")) == 10 ? 'selected' : '') ?>>Octubre</option>
                             <option value="11" <?php echo(intval(date("m")) == 11 ? 'selected' : '') ?>>Noviembre</option>
                             <option value="12" <?php echo(intval(date("m")) == 12 ? 'selected' : '') ?>>Diciembre</option>
+                            <option value="all">Todos los meses</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label>Año</label>
                         <select class="custom-select" name="year">
                             <?php for ($i = $current_year; $i > $current_year - 5; $i--): ?>
-                                <option value="<?php echo $i ?>" <?php echo ($current_year == $i ? 'selected' : '') ?>  ><?php echo $i ?></option>
+                                <option value="<?php echo $i ?>" <?php echo($current_year == $i ? 'selected' : '') ?> ><?php echo $i ?></option>
                             <?php endfor; ?>
                         </select>
                     </div>

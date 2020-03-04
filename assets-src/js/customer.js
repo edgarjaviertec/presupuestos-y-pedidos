@@ -24,7 +24,6 @@ $(document).ready(function () {
         },
         rules: {
             name: "required",
-            last_name: "required",
             email: {
                 email: true
             },
@@ -32,7 +31,6 @@ $(document).ready(function () {
         },
         messages: {
             name: "Campo requerido",
-            last_name: "Campo requerido",
             email: "Correo electrónico inválido",
             phone: "Campo requerido"
         },
