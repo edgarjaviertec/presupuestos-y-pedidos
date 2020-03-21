@@ -37,7 +37,7 @@ $csrf = array(
                                type="text"
                                class="form-control"
                                name="name"
-                               value="<?php echo $old['name'] ?>"
+                               value="<?php echo isset($old['name']) ? $old['name'] : '' ?>"
                                placeholder="Ej. Lápices de Colores">
                     </div>
                     <div class="form-group">
@@ -47,7 +47,7 @@ $csrf = array(
                                type="text"
                                class="money form-control"
                                name="unit_price"
-                               value="<?php echo $old['unit_price'] ?>"
+                               value="<?php echo isset($old['unit_price']) ? $old['unit_price'] : '' ?>"
                                placeholder="Ej. 249.33">
                     </div>
                     <div class="form-group">
@@ -57,7 +57,7 @@ $csrf = array(
                                   class="form-control"
                                   name="description"
                                   rows="5"
-                                  placeholder='48 lápices de colores "Arcoíris" para dibujo'><?php echo $old['description'] ?></textarea>
+                                  placeholder='48 lápices de colores "Arcoíris" para dibujo'><?php echo isset($old['description']) ? $old['description'] : '' ?></textarea>
                     </div>
                     <div class="action-buttons">
                         <a href="<?php echo base_url('admin/productos') ?>" class="btn btn-lg btn-secondary cancel-btn">Regresar</a>
