@@ -40,7 +40,7 @@ $csrf = array(
                                        type="text"
                                        class="form-control"
                                        name="name"
-                                       value="<?php echo $old['name'] ?>"
+                                       value="<?php echo isset($old['name']) ? $old['name'] : '' ?>"
                                        placeholder="Ej. Juan">
                             </div>
                         </div>
@@ -52,7 +52,7 @@ $csrf = array(
                                        type="text"
                                        class="text-uppercase form-control"
                                        name="rfc"
-                                       value="<?php echo $old['rfc'] ?>"
+                                       value="<?php echo isset($old['rfc']) ? $old['rfc'] : '' ?>"
                                        placeholder="Ej. XAXX010101000"
                                        maxlength="13">
                             </div>
@@ -67,7 +67,7 @@ $csrf = array(
                                        type="text"
                                        class="form-control"
                                        name="email"
-                                       value="<?php echo $old['email'] ?>"
+                                       value="<?php echo isset($old['email']) ? $old['email'] : '' ?>"
                                        placeholder="Ej. juanh@ejemploc.com">
                             </div>
                         </div>
@@ -78,7 +78,7 @@ $csrf = array(
                                        type="text"
                                        class="phone form-control"
                                        name="phone"
-                                       value="<?php echo $old['phone'] ?>"
+                                       value="<?php echo isset($old['phone']) ? $old['phone'] : '' ?>"
                                        placeholder="Ej. 998-123-4567">
                             </div>
                         </div>
@@ -89,7 +89,7 @@ $csrf = array(
                                        type="text"
                                        class="phone form-control"
                                        name="mobile_phone"
-                                       value="<?php echo $old['mobile_phone'] ?>"
+                                       value="<?php echo isset($old['mobile_phone']) ? $old['mobile_phone'] : '' ?>"
                                        placeholder="Ej. 998-123-4567">
                             </div>
                         </div>
@@ -101,7 +101,7 @@ $csrf = array(
                                   class="form-control"
                                   name="address"
                                   rows="3"
-                                  placeholder="Avenida Siempreviva 742"><?php echo $old['address'] ?></textarea>
+                                  placeholder="Avenida Siempreviva 742"><?php echo isset($old['address']) ? $old['address'] : '' ?></textarea>
                     </div>
                     <div class="row">
                         <div class="col-12 col-md-6 col-lg-3">
@@ -133,7 +133,8 @@ $csrf = array(
                                         type="text"
                                         class="select2 form-control"
                                         name="country"
-                                        value="<?php echo $old['country'] ?>">
+                                        value="<?php echo isset($old['country']) ? $old['country'] : '' ?>"
+                                >
                                     <option value="Afganistán">Afganistán</option>
                                     <option value="Albania">Albania</option>
                                     <option value="Alemania">Alemania</option>
