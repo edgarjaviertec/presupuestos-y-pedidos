@@ -45,12 +45,6 @@
 		"oAP": "/assets/application",
 		"oF": 0
 		},
-	"/assets": {
-		"ft": 65536,
-		"oA": 1,
-		"oAP": "/assets/assets",
-		"oF": 0
-		},
 	"/assets-src/img/logo.jpg": {
 		"ft": 16384,
 		"iS": 67719,
@@ -2283,7 +2277,7 @@
 	"displayValueWasSetByUser": 0,
 	"iconImageName": "brackets-azure",
 	"iconImageWasSetByUser": 0,
-	"lastBuiltDate": 605059388.79065895
+	"lastBuiltDate": 606506984.25125802
 	},
 "projectSettings": {
 	"abortBuildOnError": 1,

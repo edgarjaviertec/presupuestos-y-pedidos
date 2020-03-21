@@ -1,4 +1,5 @@
 var positiveDecimalRegex = /^\d*[.]?\d{0,2}$/;
+var unitPriceRegex = /^\d*[.]?\d{0,4}$/;
 var positiveIntegerRegex = /^\d*$/;
 var IVA = 16;
 $(document).ready(function () {
@@ -412,7 +413,7 @@ function addInputFilterToProductFields() {
     var $itemUnitPrice = $('input.item-unit-price');
     $itemUnitPrice.off();
     $itemUnitPrice.inputFilter(function (value) {
-        return positiveDecimalRegex.test(value) && (value === "" || parseFloat(value) <= 1000000);
+        return unitPriceRegex.test(value) && (value === "" || parseFloat(value) <= 1000000);
     });
     $itemQty.off();
     $itemQty.inputFilter(function (value) {
