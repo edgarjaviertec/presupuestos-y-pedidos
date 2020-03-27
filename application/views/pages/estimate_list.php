@@ -33,9 +33,9 @@ $current_year = intval(date("Y"));
             <tr>
                 <th>Folio</th>
                 <th>Cliente</th>
-                <th>Estado</th>
                 <th>Fecha</th>
                 <th>Total</th>
+                <th>Estado</th>
                 <th class="no-sort">Acciones</th>
             </tr>
             </thead>

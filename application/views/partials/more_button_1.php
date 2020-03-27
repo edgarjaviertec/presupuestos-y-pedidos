@@ -1,10 +1,11 @@
 <?php
 $id = isset($id) ? $id : NULL;
+$status = isset($status) ? $status : NULL;
 $csrf_name = isset($csrf_name) ? $csrf_name : NULL;
 $csrf_hash = isset($csrf_hash) ? $csrf_hash : NULL;
 ?>
 <div class="dropdown d-inline-block">
-    <button class="ml-2 btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" title="Más opciones">
+    <button class="ml-2 btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" title="Más opciones" <?php echo ($status==='cancelled') ? 'disabled': '' ?>>
         <i class="fas fa-ellipsis-h"></i>
     </button>
     <div class="dropdown-menu dropdown-menu-right">

@@ -112,68 +112,87 @@ table.dataTable thead {
     position: relative;
   }
 
-  .sorting {
-    &:before, &:after {
+  .sorting, .sorting_asc, .sorting_desc {
+    &:before {
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 900;
+      font-size: 1.6rem;
+      opacity: 0.2;
+      content: "\f0dc";
       position: absolute;
-      bottom: 0.9em;
-      display: block;
-      opacity: 0.3;
+      top: 50%;
+      right: 0.25rem;
+      transform: translate(-50%, -50%);
     }
   }
 
   .sorting_asc {
-    &:before, &:after {
-      position: absolute;
-      bottom: 0.9em;
-      display: block;
-      opacity: 0.3;
+    &:before {
+      content: "\f0de";
+      opacity: 0.85;
     }
   }
 
   .sorting_desc {
-    &:before, &:after {
-      position: absolute;
-      bottom: 0.9em;
-      display: block;
-      opacity: 0.3;
+    &:before {
+      content: "\f0dd";
+      opacity: 0.85;
     }
   }
 
-  .sorting_asc_disabled {
-    &:before, &:after {
-      position: absolute;
-      bottom: 0.9em;
-      display: block;
-      opacity: 0.3;
-    }
-  }
-
-  .sorting_desc_disabled {
-    &:before, &:after {
-      position: absolute;
-      bottom: 0.9em;
-      display: block;
-      opacity: 0.3;
-    }
-  }
-
-  .sorting:before, .sorting_asc:before, .sorting_desc:before, .sorting_asc_disabled:before, .sorting_desc_disabled:before {
-    right: 1em;
-    content: "\2191";
-  }
-
-  .sorting:after, .sorting_asc:after, .sorting_desc:after, .sorting_asc_disabled:after, .sorting_desc_disabled:after {
-    right: 0.5em;
-    content: "\2193";
-  }
-
-  .sorting_asc:before, .sorting_desc:after {
-    opacity: 1;
-  }
-
-  .sorting_asc_disabled:before, .sorting_desc_disabled:after {
-    opacity: 0;
-  }
+  //.sorting_asc {
+  //  &:before, &:after {
+  //    position: absolute;
+  //    bottom: 0.9em;
+  //    display: block;
+  //    opacity: 0.3;
+  //  }
+  //}
+  //
+  //.sorting_desc {
+  //  &:before, &:after {
+  //    position: absolute;
+  //    bottom: 0.9em;
+  //    display: block;
+  //    opacity: 0.3;
+  //  }
+  //}
+  //
+  //.sorting_asc_disabled {
+  //  &:before, &:after {
+  //    position: absolute;
+  //    bottom: 0.9em;
+  //    display: block;
+  //    opacity: 0.3;
+  //  }
+  //}
+  //
+  //.sorting_desc_disabled {
+  //  &:before, &:after {
+  //    position: absolute;
+  //    bottom: 0.9em;
+  //    display: block;
+  //    opacity: 0.3;
+  //  }
+  //}
+  //
+  //.sorting:before, .sorting_asc:before, .sorting_desc:before, .sorting_asc_disabled:before, .sorting_desc_disabled:before {
+  //  right: 1em;
+  //  content: "\2191";
+  //}
+  //
+  //.sorting:after, .sorting_asc:after, .sorting_desc:after, .sorting_asc_disabled:after, .sorting_desc_disabled:after {
+  //  right: 0.5em;
+  //  content: "\2193";
+  //}
+  //
+  //.sorting_asc:before, .sorting_desc:after {
+  //  opacity: 1;
+  //}
+  //
+  //.sorting_asc_disabled:before, .sorting_desc_disabled:after {
+  //  opacity: 0;
+  //}
 }
 
 div {

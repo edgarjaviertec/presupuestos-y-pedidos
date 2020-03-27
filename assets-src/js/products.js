@@ -34,8 +34,8 @@ $(document).ready(function () {
             title: 'Eliminar',
             text: "¿Estas seguro de querer eliminar este producto?",
             showCancelButton: true,
-            confirmButtonText: 'Aceptar',
-            cancelButtonText: 'Regresar',
+            confirmButtonText: 'Sí',
+            cancelButtonText: 'No',
             reverseButtons: true,
             focusCancel: true
         }).then((result) => {
@@ -48,6 +48,7 @@ $(document).ready(function () {
     var $dataTables = $('#dataTables');
     var mediaQuery = window.matchMedia('(min-width: 576px)');
     mediaQuery.addListener(widthChange);
+
     function widthChange(mediaQuery) {
         if (mediaQuery.matches) {
             $dataTables.addClass('nowrap');
@@ -55,5 +56,6 @@ $(document).ready(function () {
             $dataTables.removeClass('nowrap');
         }
     }
+
     widthChange(mediaQuery);
 });

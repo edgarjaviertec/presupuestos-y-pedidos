@@ -300,17 +300,20 @@ class Estimates extends CI_Controller
     public function get_estimates_ajax()
     {
         $datatables = new Datatables(new CodeigniterAdapter);
-        $sql = "SELECT
-				p.id,
-				p.folio,
-				c.nombre_razon_social as cliente,
-				p.status,
-				p.fecha_presupuesto,
-				p.total
-				FROM presupuestos p
-				INNER JOIN clientes c
-				ON p.cliente_id = c.id
-				WHERE p.eliminado_en IS NULL";
+        $sql = 'SELECT
+        p.id,
+        p.folio,
+        c.nombre_razon_social as cliente,
+        p.fecha_presupuesto,
+        p.total,
+        CASE WHEN p.eliminado_en IS NULL
+        THEN p.status
+        ELSE "cancelled"
+        END AS estado
+        FROM presupuestos p
+        INNER JOIN clientes c
+        ON p.cliente_id = c.id
+        ORDER BY p.folio DESC';
         $datatables->query($sql);
         $datatables->hide('id');
         $datatables->edit('folio', function ($data) {
@@ -320,22 +323,26 @@ class Estimates extends CI_Controller
             $date_dmy = date('d/m/Y', strtotime($data['fecha_presupuesto']));
             return $date_dmy;
         });
-        $datatables->edit('status', function ($data) {
-            $status = $data['status'];
+        $datatables->edit('estado', function ($data) {
+            $status = $data['estado'];
             switch ($status) {
+                case 'cancelled':
+                    $bg_color = 'danger';
+                    $status_text = 'cancelado';
+                    break;
                 case 'accepted':
-                    $color = 'success';
+                    $bg_color = 'success';
                     $status_text = 'aceptado';
                     break;
                 case 'rejected':
-                    $color = 'danger';
+                    $bg_color = 'warning';
                     $status_text = 'rechazado';
                     break;
                 default:
-                    $color = 'light';
+                    $bg_color = 'light';
                     $status_text = 'borrador';
             }
-            return '<span class="py-2 px-3 badge badge-pill badge-' . $color . '"><span class="font-weight-bold">' . strtoupper($status_text) . '</span></span>';
+            return '<span class="py-2 px-3 badge badge-pill badge-' . $bg_color . '">' . strtoupper($status_text) . '</span>';
         });
         $datatables->edit('total', function ($data) {
             return "$" . number_format($data['total'], 2);
@@ -345,16 +352,23 @@ class Estimates extends CI_Controller
                 'name' => $this->security->get_csrf_token_name(),
                 'hash' => $this->security->get_csrf_hash()
             );
+            $status = $data['estado'];
+
             $data['url'] = base_url('admin/presupuestos/pdf/') . $data['id'];
             $view_button = $this->load->view('partials/view_button', $data, true);
+
             $data['url'] = base_url('admin/presupuestos/') . $data['id'];
+            $data['status'] = $status;
             $edit_button = $this->load->view('partials/edit_button', $data, true);
+
             $data['url'] = base_url('admin/estimates/delete_estimate');
             $data['id'] = $data['id'];
+            $data['status'] = $status;
             $data['csrf_name'] = $csrf['name'];
             $data['csrf_hash'] = $csrf['hash'];
-            $delete_button = $this->load->view('partials/delete_button', $data, true);
+            $delete_button = $this->load->view('partials/cancel_button', $data, true);
             $data['id'] = $data['id'];
+            $data['status'] = $status;
             $data['csrf_name'] = $csrf['name'];
             $data['csrf_hash'] = $csrf['hash'];
             $more_button = $this->load->view('partials/more_button_1', $data, true);
@@ -373,7 +387,7 @@ class Estimates extends CI_Controller
             if ($affected_rows > 0) {
                 $this->session->set_flashdata('flash_message', [
                     'type' => 'success',
-                    'title' => 'El presupuesto se eliminó con éxito',
+                    'title' => 'El presupuesto se canceló con éxito',
                 ]);
                 $this->session->set_flashdata('old', $this->input->post());
                 redirect('admin/presupuestos');
@@ -463,7 +477,7 @@ class Estimates extends CI_Controller
 
     public function get_pdf($id)
     {
-        $estimate = $this->estimates->get_estimate_by_id($id);
+        $estimate = $this->estimates->get_any_estimate_by_id($id);
         if (!$estimate) {
             show_404();
         }

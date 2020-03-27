@@ -12,7 +12,7 @@ $(document).ready(function () {
             timer: 1500
         });
     }
-    $('#dataTables').dataTable({
+    var $table = $('#dataTables').DataTable({
         "serverSide": true,
         "responsive": true,
         "ajax": "/admin/orders/get_orders_ajax",
@@ -22,6 +22,7 @@ $(document).ready(function () {
                 "orderable": false,
             }
         ],
+        "order": [[0, "desc"]],
         "language": spanishLang
     });
     $('#dataTables').on('click', '.delete_btn', function (e) {
@@ -31,11 +32,11 @@ $(document).ready(function () {
             customClass: {
                 container: 'confirmation-modal',
             },
-            title: 'Eliminar',
-            text: "¿Estas seguro de querer eliminar este pedido?",
+            title: 'Cancelar',
+            html: '<strong>¿Estas seguro de querer cancelar este pedido?</strong><br> <small>Recuerde que no podrá revertir la cancelación más adelante.</small>',
             showCancelButton: true,
-            confirmButtonText: 'Aceptar',
-            cancelButtonText: 'Regresar',
+            confirmButtonText: 'Sí',
+            cancelButtonText: 'No',
             reverseButtons: true,
             focusCancel: true
         }).then((result) => {
@@ -75,6 +76,7 @@ $(document).ready(function () {
     var $dataTables = $('#dataTables');
     var mediaQuery = window.matchMedia('(min-width: 576px)');
     mediaQuery.addListener(widthChange);
+
     function widthChange(mediaQuery) {
         if (mediaQuery.matches) {
             $dataTables.addClass('nowrap');
@@ -82,5 +84,6 @@ $(document).ready(function () {
             $dataTables.removeClass('nowrap');
         }
     }
+
     widthChange(mediaQuery);
 });

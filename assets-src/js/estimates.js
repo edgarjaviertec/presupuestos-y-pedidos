@@ -22,6 +22,7 @@ $(document).ready(function () {
                 "orderable": false,
             }
         ],
+        "order": [[0, "desc"]],
         "language": spanishLang
     });
     $('#dataTables').on('click', '.delete_btn', function (e) {
@@ -31,13 +32,13 @@ $(document).ready(function () {
             customClass: {
                 container: 'confirmation-modal',
             },
-            title: 'Eliminar',
-            text: "¿Estas seguro de querer eliminar este presupuesto?",
+            title: 'Cancelar',
+            html: '<strong>¿Estas seguro de querer cancelar este presupuesto?</strong><br> <small>Recuerde que no podrá revertir la cancelación más adelante.</small>',
             showCancelButton: true,
-            confirmButtonText: 'Aceptar',
-            cancelButtonText: 'Regresar',
+            confirmButtonText: 'Sí',
+            cancelButtonText: 'No',
             reverseButtons: true,
-            focusCancel: true
+            focusCancel: true,
         }).then((result) => {
             if (result.value) {
                 form.submit();
@@ -80,6 +81,7 @@ $(document).ready(function () {
     var $dataTables = $('#dataTables');
     var mediaQuery = window.matchMedia('(min-width: 576px)');
     mediaQuery.addListener(widthChange);
+
     function widthChange(mediaQuery) {
         if (mediaQuery.matches) {
             $dataTables.addClass('nowrap');
@@ -87,5 +89,6 @@ $(document).ready(function () {
             $dataTables.removeClass('nowrap');
         }
     }
+
     widthChange(mediaQuery);
 });

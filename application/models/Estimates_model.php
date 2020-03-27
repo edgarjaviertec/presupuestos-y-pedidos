@@ -16,6 +16,14 @@ class Estimates_model extends CI_Model
         return $query->num_rows();
     }
 
+
+    function get_any_estimate_by_id($id)
+    {
+        $sql = "SELECT * FROM presupuestos WHERE id = ?";
+        $query = $this->db->query($sql, $id);
+        return $query->row();
+    }
+
     function get_estimate_by_id($id)
     {
         $sql = "SELECT * FROM presupuestos WHERE id = ? AND eliminado_en IS NULL";

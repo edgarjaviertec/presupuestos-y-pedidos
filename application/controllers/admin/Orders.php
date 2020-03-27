@@ -38,7 +38,7 @@ class Orders extends CI_Controller
             $data['title'] = 'Pedidos';
             $data['js_files'] = [
                 base_url('assets/js/orders.vendor.min.js'),
-                base_url('assets/js/orders.min.js')
+                base_url('assets/js/orders.min.js'),
             ];
             $this->load->view('layouts/dashboard_layout', $data);
         }
@@ -219,20 +219,27 @@ class Orders extends CI_Controller
     public function get_orders_ajax()
     {
         $datatables = new Datatables(new CodeigniterAdapter);
-        $sql = "SELECT
-				p.id,
-				p.folio,
-				c.nombre_razon_social as cliente,
-				p.status,
-				p.fecha_pedido,
-				p.total,
-				p.saldo
-				FROM pedidos p
-				INNER JOIN clientes c
-				ON p.cliente_id = c.id
-				WHERE p.eliminado_en IS NULL";
+        $sql = 'SELECT
+                p.id,
+                p.folio,
+                c.nombre_razon_social as cliente,
+                p.fecha_pedido,
+                p.total,
+                p.saldo,
+                CASE WHEN p.eliminado_en IS NULL
+                THEN p.status
+                ELSE "cancelled"
+                END AS estado
+                FROM pedidos p
+                INNER JOIN clientes c
+                ON p.cliente_id = c.id
+                ORDER BY p.folio DESC';
         $datatables->query($sql);
+
+
         $datatables->hide('id');
+
+
         $datatables->edit('folio', function ($data) {
             return '<strong>' . $data['folio'] . '</strong>';
         });
@@ -240,22 +247,26 @@ class Orders extends CI_Controller
             $date_dmy = date('d/m/Y', strtotime($data['fecha_pedido']));
             return $date_dmy;
         });
-        $datatables->edit('status', function ($data) {
-            $status = $data['status'];
+        $datatables->edit('estado', function ($data) {
+            $status = $data['estado'];
             switch ($status) {
+                case 'cancelled':
+                    $bg_color = 'danger';
+                    $status_text = 'cancelado';
+                    break;
                 case 'paid':
-                    $color = 'success';
+                    $bg_color = 'success';
                     $status_text = 'Pagado';
                     break;
                 case 'partially_paid':
-                    $color = 'warning';
+                    $bg_color = 'info';
                     $status_text = 'Parcialmente pagado';
                     break;
                 default:
-                    $color = 'danger';
+                    $bg_color = 'warning';
                     $status_text = 'No pagado';
             }
-            return '<span class="py-2 px-3 badge badge-pill badge-' . $color . '"><span class="font-weight-bold">' . strtoupper($status_text) . '</span></span>';
+            return '<span class="py-2 px-3 badge badge-pill badge-' . $bg_color . '"><span class="font-weight-bold">' . strtoupper($status_text) . '</span></span>';
         });
         $datatables->edit('total', function ($data) {
             return "$" . number_format($data['total'], 2);
@@ -268,21 +279,25 @@ class Orders extends CI_Controller
                 'name' => $this->security->get_csrf_token_name(),
                 'hash' => $this->security->get_csrf_hash()
             );
+            $status = $data['estado'];
             $data['url'] = base_url('admin/pedidos/pdf/') . $data['id'];
             $view_button = $this->load->view('partials/view_button', $data, true);
             $data['url'] = base_url('admin/pedidos/') . $data['id'];
+            $data['status'] = $status;
             $edit_button = $this->load->view('partials/edit_button', $data, true);
             $data['url'] = base_url('admin/orders/delete_order');
             $data['id'] = $data['id'];
             $data['csrf_name'] = $csrf['name'];
             $data['csrf_hash'] = $csrf['hash'];
-            $delete_button = $this->load->view('partials/delete_button', $data, true);
+            $data['status'] = $status;
+            $delete_button = $this->load->view('partials/cancel_button', $data, true);
             $data['id'] = $data['id'];
             $data['csrf_name'] = $csrf['name'];
             $data['csrf_hash'] = $csrf['hash'];
             $more_button = $this->load->view('partials/more_button_1', $data, true);
             return $view_button . $edit_button . $delete_button;
         });
+
         echo $datatables->generate();
     }
 
@@ -296,7 +311,7 @@ class Orders extends CI_Controller
             if ($affected_rows > 0) {
                 $this->session->set_flashdata('flash_message', [
                     'type' => 'success',
-                    'title' => 'El pedido se eliminó con éxito',
+                    'title' => 'El pedido se canceló con éxito',
                 ]);
                 $this->session->set_flashdata('old', $this->input->post());
                 redirect('admin/pedidos');
@@ -357,7 +372,7 @@ class Orders extends CI_Controller
 
     public function get_pdf($id)
     {
-        $order = $this->orders->get_order_by_id($id);
+        $order = $this->orders->get_any_order_by_id($id);
         if (!$order) {
             show_404();
         }

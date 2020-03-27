@@ -16,12 +16,24 @@ class Orders_model extends CI_Model
         return $query->num_rows();
     }
 
+
+
+    function get_any_order_by_id($id)
+    {
+        $sql = "SELECT * FROM pedidos WHERE id = ?";
+        $query = $this->db->query($sql, $id);
+        return $query->row();
+    }
+
     function get_order_by_id($id)
     {
         $sql = "SELECT * FROM pedidos WHERE id = ? AND eliminado_en IS NULL";
         $query = $this->db->query($sql, $id);
         return $query->row();
     }
+
+
+
 
     function get_order_by_number($number)
     {

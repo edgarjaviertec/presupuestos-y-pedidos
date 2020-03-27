@@ -46,6 +46,9 @@ foreach ($full_address_array as $key => $val) {
 	}
 }
 ?>
+<?php if( !empty($estimate->eliminado_en) ): ?>
+    <span class="cancelled-watermark">Cancelado</span>
+<?php endif; ?>
 <img class="logo" src="<?php echo $_SERVER["DOCUMENT_ROOT"] . '/assets/img/logo.jpg'; ?>">
 <div class="company-info">
 	<h3>MARÍA ELENA COCOM CHAY</h3>
