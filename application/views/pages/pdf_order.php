@@ -133,7 +133,7 @@ foreach ($full_address_array as $key => $val) {
 			</span>
 		</td>
 		<td class="unit-price">
-			<span><?php echo text_truncate(  "$" . number_format($line->precio_unitario, 2) , 13) ?></span>
+			<span><?php echo text_truncate(  "$" . number_format($line->precio_unitario, 4) , 13) ?></span>
 		</td>
 		<td class="total">
 			<span><?php echo text_truncate("$" . number_format($line->total, 2), 13) ?></span>
