@@ -1,9 +1,11 @@
 #Otros
-vendor
+/vendor/
 node_modules
 assets
 .DS_Store
 composer.lock
+uploads/*
+!uploads/.gitkeep
 
 #CodeIgniter
 application/cache/*
