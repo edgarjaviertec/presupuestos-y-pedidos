@@ -20,7 +20,8 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
             <thead>
             <tr>
                 <th>Id</th>
-                <th>Nombre de usuario</th>
+                <th class="no-sort">Avatar</th>
+                <th>Usuario</th>
                 <th>Correo electrónico</th>
                 <th>Rol</th>
                 <th class="no-sort">Acciones</th>
