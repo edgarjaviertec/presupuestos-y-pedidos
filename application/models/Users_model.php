@@ -74,6 +74,7 @@ class Users_model extends CI_Model
             'correo_electronico' => $user['email'],
             'clave' => password_hash($user['password'], PASSWORD_DEFAULT),
             'rol' => $user['role'],
+            'avatar' => $user['avatar'],
             'creado_en' => get_timestamp()
         );
         $this->db->insert('usuarios', $data);
@@ -97,6 +98,7 @@ class Users_model extends CI_Model
             'nombre_usuario' => $user['username'],
             'correo_electronico' => $user['email'],
             'rol' => $user['role'],
+			'avatar' => $user['avatar'],
             'actualizado_en' => get_timestamp(),
         );
         $this->db->where('id', $user['id']);

@@ -38,10 +38,9 @@
 		  justify-content: center;
 		  align-items: center;
 		  background: white;
-		  height: 2.5rem;
-		  width: 2.5rem;
+		  height: 3rem;
+		  width: 3rem;
 		  border-radius: 50%;
-		  border: 2px solid $primary;
 		  margin-left: 0.5rem;
 
 		  i {
@@ -54,8 +53,7 @@
 		  color: $gray-600;
 
 		  .avatar {
-			color: $gray-600;
-			border: 2px solid $gray-600;
+
 
 			i {
 			  color: $gray-600;

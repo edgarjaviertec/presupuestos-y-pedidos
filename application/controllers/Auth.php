@@ -52,7 +52,8 @@ class Auth extends CI_Controller
                     'id' => $user->id,
                     'username' => $user->nombre_usuario,
                     'email' => $user->correo_electronico,
-                    'role' => $user->rol
+                    'role' => $user->rol,
+                    'avatar' => $user->avatar
                 ]);
                 redirect('admin/clientes');
             } else {

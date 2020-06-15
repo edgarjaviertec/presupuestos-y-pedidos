@@ -149,6 +149,7 @@ const configuration = {
 
 				"./assets-src/js/vendor/jquery/jquery.min.js",
 				"./assets-src/js/vendor/bootstrap/bootstrap.bundle.min.js",
+				"./assets-src/js/vendor/croppie/croppie.min.js",
 				"./assets-src/js/vendor/cleave/cleave.min.js",
 				"./assets-src/js/vendor/jquery-validation/jquery.validate.min.js",
 				"./assets-src/js/vendor/jquery-input-filter/jquery-input-filter.js",
@@ -234,6 +235,7 @@ function dev_scss() {
 	return gulp
 		.src(configuration.paths.src.scss)
 		.pipe(sass().on('error', sass.logError))
+		.pipe(rename({suffix: '.min'}))
 		.pipe(gulp.dest(configuration.paths.dist.scss))
 }
 
