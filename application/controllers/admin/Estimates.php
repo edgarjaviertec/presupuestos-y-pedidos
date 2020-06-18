@@ -11,7 +11,8 @@ class Estimates extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Estimates_model', 'estimates');
+		$this->load->model('Setting_model', 'settings');
+		$this->load->model('Estimates_model', 'estimates');
         $this->load->model('Orders_model', 'orders');
         $this->load->model('Customers_model', 'customers');
         $this->load->model('Products_model', 'products');
@@ -46,8 +47,18 @@ class Estimates extends CI_Controller
 
     public function new_estimate()
     {
-        $next_estimate_number = $this->estimates->get_next_estimate_number(date("Y"));
-        $data['next_estimate_number'] = $next_estimate_number;
+		$company_logo = $this->settings->get_setting('logo_empresa');
+		$business_name = $this->settings->get_setting('razon_social');
+		$company_name = $this->settings->get_setting('nombre_empresa');
+		$company_address = $this->settings->get_setting('domicilio_fiscal');
+		$next_estimate_number = $this->estimates->get_next_estimate_number(date("Y"));
+		$data['company_settings'] = [
+			'company_logo' => $company_logo,
+			'business_name' => $business_name,
+			'company_name' => $company_name,
+			'company_address' => $company_address
+		];
+		$data['next_estimate_number'] = $next_estimate_number;
         $data['page'] = 'new_estimate';
         $data['title'] = 'Nuevo presupuesto';
         $data['js_files'] = [
@@ -114,13 +125,24 @@ class Estimates extends CI_Controller
 
     public function edit_estimate($id)
     {
-        $estimate = $this->estimates->get_estimate_by_id($id);
+
+		$company_logo = $this->settings->get_setting('logo_empresa');
+		$business_name = $this->settings->get_setting('razon_social');
+		$company_name = $this->settings->get_setting('nombre_empresa');
+		$company_address = $this->settings->get_setting('domicilio_fiscal');
+		$estimate = $this->estimates->get_estimate_by_id($id);
         if (!$estimate) {
             show_404();
         }
         $customer = $this->customers->get_customer_by_id($estimate->cliente_id);
         $lines = $this->estimates->get_lines_by_id($id);
-        $data['page'] = 'edit_estimate';
+		$data['company_settings'] = [
+			'company_logo' => $company_logo,
+			'business_name' => $business_name,
+			'company_name' => $company_name,
+			'company_address' => $company_address
+		];
+		$data['page'] = 'edit_estimate';
         $data['title'] = 'Editar presupuesto ' . $estimate->folio;
         $data['js_files'] = [
             base_url('assets/js/document.vendor.min.js'),
@@ -477,7 +499,22 @@ class Estimates extends CI_Controller
 
     public function get_pdf($id)
     {
-        $estimate = $this->estimates->get_any_estimate_by_id($id);
+
+		$company_logo = $this->settings->get_setting('logo_empresa');
+		$business_name = $this->settings->get_setting('razon_social');
+		$company_name = $this->settings->get_setting('nombre_empresa');
+		$company_address = $this->settings->get_setting('domicilio_fiscal');
+
+
+		$data['company_settings'] = [
+			'company_logo' => $company_logo,
+			'business_name' => $business_name,
+			'company_name' => $company_name,
+			'company_address' => $company_address
+		];
+
+
+		$estimate = $this->estimates->get_any_estimate_by_id($id);
         if (!$estimate) {
             show_404();
         }

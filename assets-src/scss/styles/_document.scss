@@ -50,16 +50,36 @@
 		color: $gray-800;
 		font-weight: bold;
 		text-transform: uppercase;
-		text-align: center;
 
-		p {
-		  padding: 0.75rem;
-		  margin: 0;
-		  display: flex;
-		  align-items: center;
-		  @media (min-width: 1200px) {
-			font-size: 1rem;
-			width: 350px;
+		.company-info-wrapper {
+		  width: 100%;
+
+		  .company-name, .business-name, .company-address {
+			display: block;
+			text-align: center;
+			@media (min-width: 1200px) {
+			  font-size: 1rem;
+			  width: 350px;
+			}
+		  }
+
+		  .company-name {
+			font-size: 1.25rem;
+		  }
+
+		  .company-name, .business-name {
+			font-weight: bold;
+			margin-bottom: 0.25rem;
+		  }
+
+		  .business-name {
+			font-style: italic;
+		  }
+
+		  .company-address {
+			padding: 0;
+			margin: 0;
+			font-weight: normal;
 		  }
 		}
 	  }
@@ -361,6 +381,7 @@
 			width: 2rem;
 			border-top-left-radius: $border-radius;
 			border-bottom-left-radius: $border-radius;
+			border: none;
 
 			&:hover {
 			  background: $gray-600;
@@ -559,7 +580,6 @@
 		  }
 
 		  .label {
-
 			display: flex;
 			flex-wrap: wrap;
 			align-items: center;
@@ -569,7 +589,6 @@
 			border-left: $global-border-width solid $global-border-color;
 			border-right: $global-border-width solid $global-border-color;
 			padding: 0.25rem;
-
 			@media (min-width: 768px) {
 			  padding: 0.5rem;
 			}
@@ -590,7 +609,6 @@
 				  }
 				}
 
-
 				.form-control {
 				  border-color: $danger;
 
@@ -598,8 +616,6 @@
 					box-shadow: 0 0 0 0.2rem rgba($danger, 0.25);
 				  }
 				}
-
-
 			  }
 
 			  .input-group-prepend {
@@ -628,7 +644,7 @@
 			}
 		  }
 
-		  .tax-checkbox{
+		  .tax-checkbox {
 			height: 1.5rem;
 			width: 1.5rem;
 			display: inline-flex;
@@ -643,32 +659,28 @@
 			padding: 0;
 			margin-right: 0.5rem;
 
-			.icon{
+			.icon {
 			  padding-top: 2px;
 			  padding-left: 1px;
-						}
-
-			&.checked{
-			  border-color:  $primary;
-			  background: $primary;
-
 			}
 
-			&:focus{
-			  border-color:  $primary;
+			&.checked {
+			  border-color: $primary;
+			  background: $primary;
+			}
+
+			&:focus {
+			  border-color: $primary;
 			  box-shadow: 0 0 0 0.2rem rgba($primary, 0.5);
 			}
 		  }
-
-
-
 		}
 	  }
 
 	  .notes {
 		width: 100%;
 		order: 2;
-		  margin-bottom: 1rem;
+		margin-bottom: 1rem;
 		@media (min-width: 992px) {
 		  padding-right: 1rem;
 		  order: 1;
@@ -680,51 +692,58 @@
 	  }
 	}
   }
-	.payments-container{
-		background: white;
-		border: $global-border-width solid $global-border-color;
-		border-radius: $border-radius;
-		box-shadow: $box-shadow;
-		overflow: hidden;
 
-		&.disabled{
-			opacity: 0.5;
-		}
+  .payments-container {
+	background: white;
+	border: $global-border-width solid $global-border-color;
+	border-radius: $border-radius;
+	box-shadow: $box-shadow;
+	overflow: hidden;
 
-		.payment{
-			padding:1rem;
-			@media (min-width: 576px) {
-				position: relative;
-			}
-			&:not(:last-child){
-				border-bottom:$global-border-width solid $global-border-color;
-			}
-			.amount{
-				font-size: 1.25rem;
-			}
-			.date{
-				font-size: 0.9rem;
-			}
-			.type{
-				font-size: 0.9rem;
-				font-weight: bold;
-			}
-			.notes{
-				margin-top: 0
-			}
-			.actions{
-				margin-top: 0.5rem;
-				@media (min-width: 576px) {
-					margin-top: 0;
-				}
-				@media (min-width: 576px) {
-					position: absolute;
-					top: 1rem;
-					right: 1rem;
-				}
-			}
-		}
+	&.disabled {
+	  opacity: 0.5;
 	}
+
+	.payment {
+	  padding: 1rem;
+	  @media (min-width: 576px) {
+		position: relative;
+	  }
+
+	  &:not(:last-child) {
+		border-bottom: $global-border-width solid $global-border-color;
+	  }
+
+	  .amount {
+		font-size: 1.25rem;
+	  }
+
+	  .date {
+		font-size: 0.9rem;
+	  }
+
+	  .type {
+		font-size: 0.9rem;
+		font-weight: bold;
+	  }
+
+	  .notes {
+		margin-top: 0
+	  }
+
+	  .actions {
+		margin-top: 0.5rem;
+		@media (min-width: 576px) {
+		  margin-top: 0;
+		}
+		@media (min-width: 576px) {
+		  position: absolute;
+		  top: 1rem;
+		  right: 1rem;
+		}
+	  }
+	}
+  }
 }
 
 .invalid-feedback {
@@ -753,7 +772,3 @@
 	text-decoration: none;
   }
 }
-
-
-
-

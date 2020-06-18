@@ -3,6 +3,7 @@
 $gray: #E6E7E8;
 $red: #D81B60;
 $border-color: black;
+
 @page {
   size: auto;
   margin: 0.5cm;
@@ -16,195 +17,205 @@ table {
   width: 100%;
 
   th, td {
-    border: 1pt solid $border-color;
-    padding: 0;
-    vertical-align: top;
-  }
-}
-
-.company-info {
-  display: block;
-  width: 6cm;
-  position: absolute;
-  top: 0.74cm;
-  left: 4.9cm;
-  text-align: center;
-
-  h3 {
-    font-size: 12pt;
-    padding: 0;
-    margin: 0;
-  }
-
-  p {
-    padding: 0;
-    margin: 0;
-    font-size: 9pt;
-    font-style: italic;
-  }
-}
-
-.due-date {
-  padding: 0;
-  font-size: 9pt;
-  position: absolute;
-  top: 1.44cm;
-  right: 4.8cm;
-  width: 4cm;
-
-  span {
-    &:first-child {
-      font-weight: bold;
-    }
-
-    padding: 0;
-    display: block;
-    text-align: center;
+	border: 1pt solid $border-color;
+	padding: 0;
+	vertical-align: top;
   }
 }
 
 .logo {
-  display: block;
+  vertical-align: middle;
   width: 4.5cm;
-  position: absolute;
-  top: 0;
-  left: 0;
+  border: 0;
+
+  img {
+	display: block;
+	width: 100%;
+	height: auto;
+  }
+}
+
+.company-info {
+  border: 0;
+  vertical-align: middle;
+  text-align: center;
+
+  h3 {
+	font-size: 12pt;
+	padding: 0;
+	margin: 0.1cm;
+  }
+
+  h4 {
+	font-size: 12pt;
+	padding: 0;
+	margin: 0.1cm;
+  }
+
+  p {
+	padding: 0;
+	margin: 0;
+	font-size: 9pt;
+	font-style: italic;
+  }
+}
+
+.due-date {
+  border: 0;
+  vertical-align: middle;
+  font-size: 9pt;
+  width: 4cm;
+  padding-left: 0.3cm;
+  padding-right: 0.3cm;
+
+  span {
+	&:first-child {
+	  font-weight: bold;
+	}
+
+	padding: 0;
+	display: block;
+	text-align: center;
+  }
 }
 
 .number-and-date {
-  position: absolute;
-  top: 0;
-  right: 0;
+  border: 0;
+  vertical-align: middle;
   width: 4cm;
 
-  th, td {
-    border: 0;
-  }
+  table {
+	width: 100%;
 
-  .number {
-    tr {
-      td {
-        color: $red;
-      }
-    }
-  }
+	th, td {
+	  border: 0;
+	}
 
-  .number, .date {
-    th, td {
-      border: 1pt solid $border-color;
-      height: 0.71cm;
-      vertical-align: middle;
-      text-align: center;
-    }
+	.number {
+	  tr {
+		td {
+		  color: $red;
+		}
+	  }
+	}
 
-    th {
-      text-transform: uppercase;
-      background: $gray;
-    }
+	.number, .date {
+	  th, td {
+		border: 1pt solid $border-color;
+		height: 0.71cm;
+		vertical-align: middle;
+		text-align: center;
+	  }
+
+	  th {
+		text-transform: uppercase;
+		background: $gray;
+	  }
+	}
   }
 }
 
 .customer-info {
-  margin-top: 3.3cm;
+  margin-top: 0.3cm;
   margin-bottom: 0.3cm;
 
   th, td {
-    border: 1pt solid $border-color;
-    vertical-align: middle;
-    overflow: hidden;
+	border: 1pt solid $border-color;
+	vertical-align: middle;
+	overflow: hidden;
   }
 
   th {
-    text-transform: uppercase;
-    width: 2.6cm;
-    padding: 0.2cm;
-    background: $gray;
+	text-transform: uppercase;
+	width: 2.6cm;
+	padding: 0.2cm;
+	background: $gray;
 
-    span {
-      display: block;
-    }
+	span {
+	  display: block;
+	}
   }
 
   td {
-    padding: 0.2cm;
+	padding: 0.2cm;
 
-    span {
-      display: block;
-    }
+	span {
+	  display: block;
+	}
   }
 }
 
 .lines {
   tr {
-    th, td {
-      border: 1pt solid $border-color;
-      overflow: hidden;
-    }
+	th, td {
+	  border: 1pt solid $border-color;
+	  overflow: hidden;
+	}
 
-    th {
-      text-transform: uppercase;
-      padding: 0 0.2cm;
-      text-align: center;
-      vertical-align: middle;
-      height: 0.71cm;
-      background: $gray;
+	th {
+	  text-transform: uppercase;
+	  padding: 0 0.2cm;
+	  text-align: center;
+	  vertical-align: middle;
+	  height: 0.71cm;
+	  background: $gray;
 
-      span {
-        display: block;
-      }
-    }
+	  span {
+		display: block;
+	  }
+	}
 
-    td {
-      padding: 0.2cm;
-      vertical-align: top;
+	td {
+	  padding: 0.2cm;
+	  vertical-align: top;
 
-      span {
-        display: block;
-      }
-    }
+	  span {
+		display: block;
+	  }
+	}
   }
 
   .qty {
-    width: 2.6cm;
+	width: 2.6cm;
   }
 
   .item {
-    width: 11.09cm;
+	width: 11.09cm;
 
-    .name {
-      font-weight: bold;
-      margin-bottom: 0.2cm;
-    }
+	.name {
+	  font-weight: bold;
+	  margin-bottom: 0.2cm;
+	}
   }
 
   .unit-price {
-    width: 2.6cm;
-    text-align: center;
+	width: 2.6cm;
+	text-align: center;
   }
 
   .total {
-    text-align: right;
+	text-align: right;
   }
 
   .notes {
-    padding: 0;
+	padding: 0;
 
-    .notes-label {
-      font-weight: bold;
-    }
+	.notes-label {
+	  font-weight: bold;
+	}
 
-    .notes-label,
-    .notes-text {
-      margin: 0.2cm;
-    }
+	.notes-label,
+	.notes-text {
+	  margin: 0.2cm;
+	}
   }
 
   .summary-label {
-    text-align: right;
+	text-align: right;
   }
 
   .summary-text {
-    text-align: right;
+	text-align: right;
   }
 }
 

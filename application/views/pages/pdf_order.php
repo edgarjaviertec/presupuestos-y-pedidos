@@ -1,4 +1,24 @@
 <?php
+if (!empty($company_settings['company_logo'])) {
+	$company_logo = "/uploads/{$company_settings['company_logo']}";
+} else {
+	$company_logo = "/assets/img/default-logo.png";
+}
+if (!empty($company_settings['business_name'])) {
+	$business_name = $company_settings['business_name'];
+} else {
+	$business_name = 'Empresa sin razón social';
+}
+if (!empty($company_settings['company_name'])) {
+	$company_name = $company_settings['company_name'];
+} else {
+	$company_name = 'Empresa sin nombre';
+}
+if (!empty($company_settings['company_address'])) {
+	$company_address = $company_settings['company_address'];
+} else {
+	$company_address = 'Empresa sin dirección conocida';
+}
 $order = (isset($order)) ? $order : NULL;
 $lines = (isset($lines)) ? $lines : NULL;
 $customer = (isset($customer)) ? $customer : NULL;
@@ -9,8 +29,8 @@ $due_date_ymd = date('Y-m-d', strtotime($order->fecha_vencimiento));
 $errors = $this->session->flashdata('errors');
 $old = $this->session->flashdata('old');
 $csrf = array(
-	'name' => $this->security->get_csrf_token_name(),
-	'hash' => $this->security->get_csrf_hash()
+		'name' => $this->security->get_csrf_token_name(),
+		'hash' => $this->security->get_csrf_hash()
 );
 $full_name = $customer->nombre_razon_social;
 $phone = $customer->telefono;
@@ -46,39 +66,48 @@ foreach ($full_address_array as $key => $val) {
 	}
 }
 ?>
-<?php if( !empty($order->eliminado_en) ): ?>
-    <span class="cancelled-watermark">Cancelado</span>
+<?php if (!empty($order->eliminado_en)): ?>
+	<span class="cancelled-watermark">Cancelado</span>
 <?php endif; ?>
-<img class="logo" src="<?php echo $_SERVER["DOCUMENT_ROOT"] . '/assets/img/logo.jpg'; ?>">
-<div class="company-info">
-	<h3>MARÍA ELENA COCOM CHAY</h3>
-	<p>REG. 219, MZA. 27, LTE. 14, A 2 CUADRAS DE LA AV. TALLERES, 1ERA. ENTRADA DE LA REG. 94, CANCÚN, Q. ROO.</p>
-</div>
-<div class="due-date">
-	<span>FECHA DE VENCIMIENTO</span>
-	<span><?php echo $due_date_dmy ?></span>
-</div>
-<table class="number-and-date">
+<table>
 	<tr>
-		<td>
-			<table class="number">
-				<tr>
-					<th>Pedido</th>
-				</tr>
-				<tr>
-					<td><?php echo $order->folio ?></td>
-				</tr>
-			</table>
+		<td class="logo">
+			<img src="<?php echo $_SERVER["DOCUMENT_ROOT"] . $company_logo ?>">
 		</td>
-	</tr>
-	<tr>
-		<td>
-			<table class="date">
+		<td class="company-info">
+			<h3><?php echo $company_name ?></h3>
+			<h4><?php echo $business_name ?></h4>
+			<p><?php echo $company_address ?></p>
+		</td>
+		<td class="due-date">
+			<span>FECHA DE VENCIMIENTO</span>
+			<span><?php echo $due_date_dmy ?></span>
+		</td>
+		<td class="number-and-date">
+			<table>
 				<tr>
-					<th>Fecha</th>
+					<td>
+						<table class="number">
+							<tr>
+								<th>Pedido</th>
+							</tr>
+							<tr>
+								<td><?php echo $order->folio ?></td>
+							</tr>
+						</table>
+					</td>
 				</tr>
 				<tr>
-					<td><?php echo $current_date_dmy ?></td>
+					<td>
+						<table class="date">
+							<tr>
+								<th>Fecha</th>
+							</tr>
+							<tr>
+								<td><?php echo $current_date_dmy ?></td>
+							</tr>
+						</table>
+					</td>
 				</tr>
 			</table>
 		</td>
@@ -98,7 +127,7 @@ foreach ($full_address_array as $key => $val) {
 			<span>Dirección</span>
 		</th>
 		<td>
-			<span><?php echo text_truncate( $full_address, 420) ?></span>
+			<span><?php echo text_truncate($full_address, 420) ?></span>
 		</td>
 	</tr>
 	<tr>
@@ -111,7 +140,8 @@ foreach ($full_address_array as $key => $val) {
 	</tr>
 </table>
 <?php $items = 1; ?>
-<?php foreach ($lines as $i=>$line): ?>
+<?php foreach ($lines
+as $i => $line): ?>
 <table class="lines">
 	<?php if ($i == 0): ?>
 		<tr>
@@ -127,13 +157,13 @@ foreach ($full_address_array as $key => $val) {
 		</td>
 		<td class="item">
 			<span
-				class="name"><?php echo text_truncate($line->nombre, 130) ?></span>
+					class="name"><?php echo text_truncate($line->nombre, 130) ?></span>
 			<span class="description">
 				<?php echo text_truncate($line->descripcion, 400) ?>
 			</span>
 		</td>
 		<td class="unit-price">
-			<span><?php echo text_truncate(  "$" . number_format($line->precio_unitario, 4) , 13) ?></span>
+			<span><?php echo text_truncate("$" . number_format($line->precio_unitario, 4), 13) ?></span>
 		</td>
 		<td class="total">
 			<span><?php echo text_truncate("$" . number_format($line->total, 2), 13) ?></span>
@@ -143,13 +173,13 @@ foreach ($full_address_array as $key => $val) {
 		<tr class="notes-and-summary">
 			<td class="notes" colspan="2" rowspan="5">
 				<span class="notes-label">Notas</span>
-				<span class="notes-text"><?php echo text_truncate($order->notas , 430) ?></span>
+				<span class="notes-text"><?php echo text_truncate($order->notas, 430) ?></span>
 			</td>
 			<th>
 				<span class="summary-label">Sub-total</span>
 			</th>
 			<td>
-				<span class="summary-text"><?php echo text_truncate(   "$" . number_format($order->sub_total, 2)   , 13) ?></span>
+				<span class="summary-text"><?php echo text_truncate("$" . number_format($order->sub_total, 2), 13) ?></span>
 			</td>
 		</tr>
 		<tr class="summary">
@@ -157,7 +187,7 @@ foreach ($full_address_array as $key => $val) {
 				<span class="summary-label">Descuento</span>
 			</th>
 			<td>
-				<span class="summary-text"><?php echo text_truncate( "-$" . number_format($order->cantidad_descontada, 2), 13) ?></span>
+				<span class="summary-text"><?php echo text_truncate("-$" . number_format($order->cantidad_descontada, 2), 13) ?></span>
 			</td>
 		</tr>
 		<tr class="summary">
@@ -176,14 +206,14 @@ foreach ($full_address_array as $key => $val) {
 				<span class="summary-text"><?php echo text_truncate("$" . number_format($order->total, 2), 13) ?></span>
 			</td>
 		</tr>
-        <tr class="summary">
-            <th>
-                <span class="summary-label">Saldo</span>
-            </th>
-            <td>
-                <span class="summary-text"><?php echo text_truncate("$" . number_format($order->saldo, 2), 13) ?></span>
-            </td>
-        </tr>
+		<tr class="summary">
+			<th>
+				<span class="summary-label">Saldo</span>
+			</th>
+			<td>
+				<span class="summary-text"><?php echo text_truncate("$" . number_format($order->saldo, 2), 13) ?></span>
+			</td>
+		</tr>
 	<?php endif; ?>
 	<?php endforeach; ?>
 </table>

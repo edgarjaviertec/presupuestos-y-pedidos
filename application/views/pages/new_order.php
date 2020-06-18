@@ -1,4 +1,24 @@
 <?php
+if (!empty($company_settings['company_logo'])) {
+	$company_logo = "/uploads/{$company_settings['company_logo']}";
+} else {
+	$company_logo = "/assets/img/default-logo.png";
+}
+if (!empty($company_settings['business_name'])) {
+	$business_name = $company_settings['business_name'];
+} else {
+	$business_name = 'Empresa sin razón social';
+}
+if (!empty($company_settings['company_name'])) {
+	$company_name = $company_settings['company_name'];
+} else {
+	$company_name = 'Empresa sin nombre';
+}
+if (!empty($company_settings['company_address'])) {
+	$company_address = $company_settings['company_address'];
+} else {
+	$company_address = 'Empresa sin dirección conocida';
+}
 $current_date_ymd = date('Y-m-d');
 $due_date_dmy = date('d/m/Y', strtotime($current_date_ymd . ' +30 day'));
 $due_date_ymd = date('Y-m-d', strtotime($current_date_ymd . ' +30 day'));
@@ -32,17 +52,16 @@ $csrf = array(
                   action="<?php echo base_url('admin/orders/new_order_validation') ?>">
                 <input type="hidden" name="<?= $csrf['name']; ?>" value="<?= $csrf['hash']; ?>"/>
                 <div class="meta-data">
-                    <div class="logo">
-                        <img src="/assets/img/logo.jpg" alt="">
-                    </div>
-                    <div class="company-info">
-                        <p>
-                            Reg. 219, Mza. 27, Lte. 14,
-                            a 2 cuadras de de la Av. Talleres
-                            1era. entrada de la Reg. 94,
-                            Cancún, Q. Roo.
-                        </p>
-                    </div>
+					<div class="logo">
+						<img src="<?php echo $company_logo ?>" alt="">
+					</div>
+					<div class="company-info">
+						<div class="company-info-wrapper">
+							<span class="company-name"><?php echo $company_name ?></span>
+							<span class="business-name "><?php echo $business_name ?></span>
+							<span class="company-address"><?php echo $company_address ?></span>
+						</div>
+					</div>
                     <div class="number-and-date">
                         <div class="panel-container">
                             <div class="number-panel">

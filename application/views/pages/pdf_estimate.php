@@ -1,4 +1,24 @@
 <?php
+if (!empty($company_settings['company_logo'])) {
+	$company_logo = "/uploads/{$company_settings['company_logo']}";
+} else {
+	$company_logo = "/assets/img/default-logo.png";
+}
+if (!empty($company_settings['business_name'])) {
+	$business_name = $company_settings['business_name'];
+} else {
+	$business_name = 'Empresa sin razón social';
+}
+if (!empty($company_settings['company_name'])) {
+	$company_name = $company_settings['company_name'];
+} else {
+	$company_name = 'Empresa sin nombre';
+}
+if (!empty($company_settings['company_address'])) {
+	$company_address = $company_settings['company_address'];
+} else {
+	$company_address = 'Empresa sin dirección conocida';
+}
 $estimate = (isset($estimate)) ? $estimate : NULL;
 $lines = (isset($lines)) ? $lines : NULL;
 $customer = (isset($customer)) ? $customer : NULL;
@@ -49,41 +69,55 @@ foreach ($full_address_array as $key => $val) {
 <?php if( !empty($estimate->eliminado_en) ): ?>
     <span class="cancelled-watermark">Cancelado</span>
 <?php endif; ?>
-<img class="logo" src="<?php echo $_SERVER["DOCUMENT_ROOT"] . '/assets/img/logo.jpg'; ?>">
-<div class="company-info">
-	<h3>MARÍA ELENA COCOM CHAY</h3>
-	<p>REG. 219, MZA. 27, LTE. 14, A 2 CUADRAS DE LA AV. TALLERES, 1ERA. ENTRADA DE LA REG. 94, CANCÚN, Q. ROO.</p>
-</div>
-<div class="due-date">
-	<span>FECHA DE VENCIMIENTO</span>
-	<span><?php echo $due_date_dmy ?></span>
-</div>
-<table class="number-and-date">
+
+
+<table>
 	<tr>
-		<td>
-			<table class="number">
-				<tr>
-					<th>Presupuesto</th>
-				</tr>
-				<tr>
-					<td><?php echo $estimate->folio ?></td>
-				</tr>
-			</table>
+		<td class="logo">
+			<img src="<?php echo $_SERVER["DOCUMENT_ROOT"] . $company_logo ?>">
 		</td>
-	</tr>
-	<tr>
-		<td>
-			<table class="date">
+		<td class="company-info">
+			<h3><?php echo $company_name ?></h3>
+			<h4><?php echo $business_name ?></h4>
+			<p><?php echo $company_address ?></p>
+		</td>
+		<td class="due-date">
+			<span>FECHA DE VENCIMIENTO</span>
+			<span><?php echo $due_date_dmy ?></span>
+		</td>
+		<td class="number-and-date">
+			<table>
 				<tr>
-					<th>Fecha</th>
+					<td>
+						<table class="number">
+							<tr>
+								<th>Presupuesto</th>
+							</tr>
+							<tr>
+								<td><?php echo $estimate->folio ?></td>
+							</tr>
+						</table>
+					</td>
 				</tr>
 				<tr>
-					<td><?php echo $current_date_dmy ?></td>
+					<td>
+						<table class="date">
+							<tr>
+								<th>Fecha</th>
+							</tr>
+							<tr>
+								<td><?php echo $current_date_dmy ?></td>
+							</tr>
+						</table>
+					</td>
 				</tr>
 			</table>
 		</td>
 	</tr>
 </table>
+
+
+
 <table class="customer-info">
 	<tr>
 		<th>
