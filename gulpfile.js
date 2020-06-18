@@ -169,7 +169,20 @@ const configuration = {
 				"./assets-src/js/vendor/sweetalert2/sweetalert2.all.min.js",
 				"./assets-src/js/common/super-fresco.js",
 			]
-		}
+		},
+		{
+			bundle_name: 'settings.vendor.min.js',
+			src: [
+
+				"./assets-src/js/vendor/jquery/jquery.min.js",
+				"./assets-src/js/vendor/bootstrap/bootstrap.bundle.min.js",
+				"./assets-src/js/vendor/croppie/croppie.min.js",
+				"./assets-src/js/vendor/jquery-validation/jquery.validate.min.js",
+				"./assets-src/js/common/super-fresco.js",
+			]
+		},
+
+
 	]
 };
 

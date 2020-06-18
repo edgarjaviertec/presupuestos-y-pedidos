@@ -79,3 +79,4 @@ $route['admin/pedidos/nuevo'] = 'admin/orders/new_order';
 $route['admin/pedidos/(:num)'] = 'admin/orders/edit_order/$1';
 $route['admin/pedidos/pdf/(:num)'] = 'admin/orders/get_pdf/$1';
 
+$route['admin/configuracion'] = 'admin/settings/edit_settings';

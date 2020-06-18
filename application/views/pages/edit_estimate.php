@@ -1,4 +1,25 @@
 <?php
+$company_settings = !empty($company_settings) ? $company_settings : [];
+if (!empty($company_settings['company_logo'])) {
+	$company_logo = "/uploads/{$company_settings['company_logo']}";
+} else {
+	$company_logo = "/assets/img/default-logo.png";
+}
+if (!empty($company_settings['business_name'])) {
+	$business_name = $company_settings['business_name'];
+} else {
+	$business_name = 'Empresa sin razón social';
+}
+if (!empty($company_settings['company_name'])) {
+	$company_name = $company_settings['company_name'];
+} else {
+	$company_name = 'Empresa sin nombre';
+}
+if (!empty($company_settings['company_address'])) {
+	$company_address = $company_settings['company_address'];
+} else {
+	$company_address = 'Empresa sin dirección conocida';
+}
 $estimate = (isset($estimate)) ? $estimate : NULL;
 $lines = (isset($lines)) ? $lines : NULL;
 $customer = (isset($customer)) ? $customer : NULL;
@@ -77,17 +98,16 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                 <input type="hidden" name="<?= $csrf['name']; ?>" value="<?= $csrf['hash']; ?>"/>
                 <input type="hidden" name="id" value="<?php echo isset($estimate->id) ? $estimate->id : '' ?>">
                 <div class="meta-data">
-                    <div class="logo">
-                        <img src="/assets/img/logo.jpg" alt="">
-                    </div>
-                    <div class="company-info">
-                        <p>
-                            Reg. 219, Mza. 27, Lte. 14,
-                            a 2 cuadras de de la Av. Talleres
-                            1era. entrada de la Reg. 94,
-                            Cancún, Q. Roo.
-                        </p>
-                    </div>
+					<div class="logo">
+						<img src="<?php echo $company_logo ?>" alt="">
+					</div>
+					<div class="company-info">
+						<div class="company-info-wrapper">
+							<span class="company-name"><?php echo $company_name ?></span>
+							<span class="business-name "><?php echo $business_name ?></span>
+							<span class="company-address"><?php echo $company_address ?></span>
+						</div>
+					</div>
                     <div class="number-and-date">
                         <div class="panel-container">
                             <div class="number-panel">

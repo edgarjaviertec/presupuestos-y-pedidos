@@ -11,7 +11,8 @@ class Orders extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Orders_model', 'orders');
+		$this->load->model('Setting_model', 'settings');
+		$this->load->model('Orders_model', 'orders');
         $this->load->model('Customers_model', 'customers');
         $this->load->model('Products_model', 'products');
         $this->load->model('Payments_model', 'payments');
@@ -46,7 +47,24 @@ class Orders extends CI_Controller
 
     public function new_order()
     {
-        $next_order_number = $this->orders->get_next_order_number(date("Y"));
+
+
+		$company_logo = $this->settings->get_setting('logo_empresa');
+		$business_name = $this->settings->get_setting('razon_social');
+		$company_name = $this->settings->get_setting('nombre_empresa');
+		$company_address = $this->settings->get_setting('domicilio_fiscal');
+
+
+		$data['company_settings'] = [
+			'company_logo' => $company_logo,
+			'business_name' => $business_name,
+			'company_name' => $company_name,
+			'company_address' => $company_address
+		];
+
+
+
+		$next_order_number = $this->orders->get_next_order_number(date("Y"));
         $data['next_order_number'] = $next_order_number;
         $data['page'] = 'new_order';
         $data['title'] = 'Nuevo pedido';
@@ -124,7 +142,11 @@ class Orders extends CI_Controller
 
     public function edit_order($id)
     {
-        $order = $this->orders->get_order_by_id($id);
+
+
+
+
+		$order = $this->orders->get_order_by_id($id);
         if (!$order) {
             show_404();
         }
@@ -134,7 +156,24 @@ class Orders extends CI_Controller
             'id' => $order->id,
             'customer_id' => $order->cliente_id
         ];
-        $payments_made = $this->payments->get_all_payments_made($data);
+
+
+
+		$company_logo = $this->settings->get_setting('logo_empresa');
+		$business_name = $this->settings->get_setting('razon_social');
+		$company_name = $this->settings->get_setting('nombre_empresa');
+		$company_address = $this->settings->get_setting('domicilio_fiscal');
+
+
+		$data['company_settings'] = [
+			'company_logo' => $company_logo,
+			'business_name' => $business_name,
+			'company_name' => $company_name,
+			'company_address' => $company_address
+		];
+
+
+		$payments_made = $this->payments->get_all_payments_made($data);
         $total_paid = $this->payments->get_total_paid($data);
         $data['page'] = 'edit_order';
         $data['title'] = 'Editar pedido ' . $order->folio;
@@ -372,6 +411,21 @@ class Orders extends CI_Controller
 
     public function get_pdf($id)
     {
+
+		$company_logo = $this->settings->get_setting('logo_empresa');
+		$business_name = $this->settings->get_setting('razon_social');
+		$company_name = $this->settings->get_setting('nombre_empresa');
+		$company_address = $this->settings->get_setting('domicilio_fiscal');
+
+
+		$data['company_settings'] = [
+			'company_logo' => $company_logo,
+			'business_name' => $business_name,
+			'company_name' => $company_name,
+			'company_address' => $company_address
+		];
+
+
         $order = $this->orders->get_any_order_by_id($id);
         if (!$order) {
             show_404();

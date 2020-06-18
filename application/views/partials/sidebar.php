@@ -52,6 +52,15 @@ $logged_in_user = $this->session->userdata('logged_in_user');
                     <span>Usuarios</span>
                 </a>
             </li>
+
+			<li class="nav-item">
+				<a class="nav-link <?php echo is_active('admin/configuracion') ? 'active' : '' ?>"
+				   href="<?php echo base_url('admin/configuracion') ?>">
+					<i class="fas fa-cog"></i>
+					<span>Configuración</span>
+				</a>
+			</li>
         </ul>
     <?php endif ?>
+
 </aside>
