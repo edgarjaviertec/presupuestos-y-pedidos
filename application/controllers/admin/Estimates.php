@@ -326,6 +326,7 @@ class Estimates extends CI_Controller
         p.id,
         p.folio,
         c.nombre_razon_social as cliente,
+        c.correo_electronico as email,
         p.fecha_presupuesto,
         p.total,
         CASE WHEN p.eliminado_en IS NULL
@@ -337,7 +338,8 @@ class Estimates extends CI_Controller
         ON p.cliente_id = c.id
         ORDER BY p.folio DESC';
         $datatables->query($sql);
-        $datatables->hide('id');
+		$datatables->hide('id');
+		$datatables->hide('email');
         $datatables->edit('folio', function ($data) {
             return '<strong>' . $data['folio'] . '</strong>';
         });
@@ -378,11 +380,19 @@ class Estimates extends CI_Controller
 
             $data['url'] = base_url('admin/presupuestos/pdf/') . $data['id'];
             $view_button = $this->load->view('partials/view_button', $data, true);
-
+			$mail_is_enabled = $this->settings->get_setting('mail_is_enabled');
+			if ((integer)$mail_is_enabled === 1 && $data['email']) {
+				$data['id'] =  $data['id'];
+				$data['company_name'] = $this->settings->get_setting('nombre_empresa');
+				$data['document_id'] = $data['folio'];
+				$data['email'] = $data['email'];
+				$email_button = $this->load->view('partials/email_button', $data, true);
+			} else {
+				$email_button = '';
+			}
             $data['url'] = base_url('admin/presupuestos/') . $data['id'];
             $data['status'] = $status;
             $edit_button = $this->load->view('partials/edit_button', $data, true);
-
             $data['url'] = base_url('admin/estimates/delete_estimate');
             $data['id'] = $data['id'];
             $data['status'] = $status;
@@ -393,8 +403,7 @@ class Estimates extends CI_Controller
             $data['status'] = $status;
             $data['csrf_name'] = $csrf['name'];
             $data['csrf_hash'] = $csrf['hash'];
-            $more_button = $this->load->view('partials/more_button_1', $data, true);
-            return $view_button . $edit_button . $delete_button . $more_button;
+			return $view_button . $email_button . $edit_button . $delete_button;
         });
         echo $datatables->generate();
     }

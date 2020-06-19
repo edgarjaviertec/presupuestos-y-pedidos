@@ -52,6 +52,100 @@ $(document).ready(function () {
 			}
 		})
 	});
+
+	function encodeRFC5987ValueChars(str) {
+		return encodeURIComponent(str).
+			// Note that although RFC3986 reserves "!", RFC5987 does not,
+			// so we do not need to escape it
+			replace(/['()]/g, escape). // i.e., %27 %28 %29
+			replace(/\*/g, '%2A').
+			// The following are not required for percent-encoding per RFC5987,
+			// so we can allow for a little better readability over the wire: |`^
+			replace(/%(?:7C|60|5E)/g, unescape);
+	}
+
+
+	$('#dataTables').on('click', '.send-by-email-btn', function (e) {
+		e.preventDefault();
+		let id = $(this).data('id');
+		let companyName = $(this).data('company-name');
+		let documentId = $(this).data('document-id');
+		let email = $(this).data('email') ? $(this).data('email').trim() : '';
+		Swal.fire({
+			title: `Enviar presupuesto`,
+			html: `
+<div class="text-left">
+<div class="form-group">
+<label class="col-form-label font-weight-bold">Para</label>
+  <input type="text" readonly class="form-control-plaintext" value="${email}">
+</div>
+<div class="form-group">
+<label class="font-weight-bold">Asunto</label>
+<input type="text"
+id="subject"
+class="form-control"
+placeholder="Asunto" value="Presupuesto  ${documentId} -  ${companyName}" />
+</div>
+<div class="form-group">
+<label class="font-weight-bold">Mensaje</label>
+<textarea type="password"
+id="message"
+class="form-control"
+placeholder="Mensaje"
+rows="5">
+Hola,
+
+Aquí tiene el presupuesto ${documentId} en formato PDF.
+
+Atentamente:
+${companyName}</textarea>	
+</div>
+</div>
+`,
+			showLoaderOnConfirm: true,
+			showCancelButton: true,
+			confirmButtonText: 'Enviar',
+			cancelButtonText: 'Cancelar',
+			reverseButtons: true,
+			preConfirm: () => {
+				let subject = Swal.getPopup().querySelector('#subject').value
+				let message = Swal.getPopup().querySelector('#message').value
+				if (subject === '' || message === '') {
+					Swal.showValidationMessage(`Asunto y mensaje no pueden estar vacíos`)
+				}
+				subject = btoa(subject);
+				subject = encodeRFC5987ValueChars(subject);
+				message = message.split('\n').join('<br>').split(' ').join('&nbsp;');
+				message = btoa(message);
+				message = encodeRFC5987ValueChars(message);
+				let url = `/admin/email/send_estimate/${id}?to=${email}&subject=${subject}&message=${message}`;
+				return fetch(url)
+					.then(response => {
+						if (!response.ok) {
+							throw new Error(response.statusText)
+						}
+						return response.json()
+					})
+					.catch(error => {
+						Swal.showValidationMessage(
+							`Solicitud fallida: ${error}`
+						)
+					});
+			},
+			allowOutsideClick: () => !Swal.isLoading()
+		}).then((result) => {
+			if (result.value) {
+				Swal.fire(
+					'Presupuesto enviado',
+					'El presupuesto se ha enviado correctamente al correo del cliente',
+					'success'
+				)
+			}
+		})
+	});
+
+
+
 	$('#dataTables').on('click', '.change-status-btn', function (e) {
 		e.preventDefault();
 		var form = $(this).closest("form");
