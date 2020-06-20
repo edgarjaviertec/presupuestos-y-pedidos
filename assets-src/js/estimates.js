@@ -1,5 +1,9 @@
+window.onload = function () {
+	$("#spinner").fadeOut("slow");
+	$("#pageContent").removeClass("d-none");
+};
 $(document).ready(function () {
-	$.fn.DataTable.ext.pager.numbers_length = 6;
+	$.fn.DataTable.ext.pager.numbers_length = 5;
 	if (typeof $("#dataTables").data('flash-msg-type') !== 'undefined' && typeof $("#dataTables").data('flash-msg-title') !== 'undefined') {
 		Swal.fire({
 			customClass: {
@@ -143,7 +147,6 @@ ${companyName}</textarea>
 			}
 		})
 	});
-
 
 
 	$('#dataTables').on('click', '.change-status-btn', function (e) {
