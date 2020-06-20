@@ -1,4 +1,9 @@
+window.onload = function () {
+	$("#spinner").fadeOut("slow");
+	$("#pageContent").removeClass("d-none");
+};
 $(document).ready(function () {
+	$.fn.DataTable.ext.pager.numbers_length = 5;
 	if (typeof $("#dataTables").data('flash-msg-type') !== 'undefined' && typeof $("#dataTables").data('flash-msg-title') !== 'undefined') {
 		Swal.fire({
 			customClass: {
@@ -23,7 +28,13 @@ $(document).ready(function () {
 			}
 		],
 		"order": [[0, "desc"]],
-		"language": spanishLang
+		"language": {
+			...spanishLang,
+			"paginate": {
+				"previous": '<i class="fa fa-step-backward"></i>',
+				"next": '<i class="fa fa-step-forward"></i>'
+			}
+		}
 	});
 	$('#dataTables').on('click', '.delete_btn', function (e) {
 		e.preventDefault();
@@ -46,18 +57,10 @@ $(document).ready(function () {
 		})
 	});
 
-
 	function encodeRFC5987ValueChars(str) {
-		return encodeURIComponent(str).
-			// Note that although RFC3986 reserves "!", RFC5987 does not,
-			// so we do not need to escape it
-			replace(/['()]/g, escape). // i.e., %27 %28 %29
-			replace(/\*/g, '%2A').
-			// The following are not required for percent-encoding per RFC5987,
-			// so we can allow for a little better readability over the wire: |`^
-			replace(/%(?:7C|60|5E)/g, unescape);
+		return encodeURIComponent(str).replace(/['()]/g, escape). // i.e., %27 %28 %29
+			replace(/\*/g, '%2A').replace(/%(?:7C|60|5E)/g, unescape);
 	}
-
 
 	$('#dataTables').on('click', '.send-by-email-btn', function (e) {
 		e.preventDefault();
@@ -137,7 +140,6 @@ ${companyName}</textarea>
 			}
 		})
 	});
-
 	$('#dataTables').on('click', '.change-status-btn', function (e) {
 		e.preventDefault();
 		var form = $(this).closest("form");
