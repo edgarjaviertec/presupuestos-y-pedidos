@@ -1,16 +1,13 @@
 <?php
-
 if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 if (!function_exists('is_active')) {
 	function is_active($uri)
 	{
 		$ci = get_instance();
-		return $ci->uri->uri_string()  === $uri;
+		return $ci->uri->uri_string() === $uri;
 	}
 }
-
-
 
 if (!function_exists('remove_commas')) {
 	function remove_commas($str)
@@ -19,19 +16,13 @@ if (!function_exists('remove_commas')) {
 	}
 }
 
-
-
-
 if (!function_exists('text_truncate')) {
-	function text_truncate($in,$length=50)
+	function text_truncate($in, $length = 50)
 	{
-		$out = strlen($in) > $length ? substr($in,0,$length)."..." : $in;
+		$out = strlen($in) > $length ? substr($in, 0, $length) . "..." : $in;
 		return $out;
 	}
 }
-
-
-
 
 if (!function_exists('get_timestamp')) {
 	function get_timestamp()
@@ -75,8 +66,3 @@ if (!function_exists('get_external_js')) {
 		}
 	}
 }
-
-?>
-
-
-
