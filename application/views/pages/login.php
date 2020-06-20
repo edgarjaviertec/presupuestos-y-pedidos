@@ -12,7 +12,7 @@ $csrf = array(
             <div class="text-white mb-4 d-flex justify-content-center">
                 <div>
                     <i class="fas fa-file-invoice-dollar brand fa-4x logo"></i>
-                    <span class="ml-3 brand-text h2 font-weight-bold">Pedidos <sup>1.0</sup></span>
+                    <span class="ml-3 brand-text h2 font-weight-bold">Pedidos </span>
                 </div>
             </div>
             <?php if (!empty($errors)): ?>

@@ -7,7 +7,7 @@ $logged_in_user = $this->session->userdata('logged_in_user');
 	</button>
 	<a class="navbar-brand" href="<?php echo base_url('admin/clientes') ?>">
 		<i class="fas fa-file-invoice-dollar brand"></i>
-		<span class="brand-text">Pedidos <sup>1.0</sup></span>
+		<span class="brand-text">Pedidos </span>
 	</a>
 	<ul class="navbar-nav ml-auto">
 		<li class="nav-item dropdown avatar-dropdown">
