@@ -48,6 +48,25 @@ class Orders extends CI_Controller
 	public function new_order()
 	{
 
+		if ($this->input->get('reuse')) {
+			$order = $this->orders->get_order_by_id($this->input->get('reuse'));
+
+
+
+			if (!empty($order)) {
+				$data['order'] = $order;
+				$data['customer'] = $this->customers->get_customer_by_id($order->cliente_id);
+				$data['lines'] = $this->orders->get_lines_by_id(
+					$this->input->get('reuse')
+				);
+				$data['total_paid'] = $this->payments->get_total_paid([
+					'id' => $order->id,
+					'customer_id' => $order->cliente_id
+				]);
+
+			}
+		}
+
 
 		$company_logo = $this->settings->get_setting('logo_empresa');
 		$business_name = $this->settings->get_setting('razon_social');
@@ -61,6 +80,9 @@ class Orders extends CI_Controller
 			'company_name' => $company_name,
 			'company_address' => $company_address
 		];
+
+
+
 
 
 		$next_order_number = $this->orders->get_next_order_number(date("Y"));
@@ -254,52 +276,101 @@ class Orders extends CI_Controller
 	public function get_orders_ajax()
 	{
 		$datatables = new Datatables(new CodeigniterAdapter);
-		$sql = 'SELECT
-                p.id,
-                p.folio,
-                c.nombre_razon_social as cliente,
-                c.correo_electronico as email,
-                p.fecha_pedido,
-                p.total,
-                p.saldo,
-                CASE WHEN p.eliminado_en IS NULL
-                THEN p.status
-                ELSE "cancelled"
-                END AS estado
-                FROM pedidos p
-                INNER JOIN clientes c
-                ON p.cliente_id = c.id
-                ORDER BY p.folio DESC';
+		$sql = '
+	
+	SELECT 
+		  p.id, 
+		  p.folio, 
+		  c.nombre_razon_social as cliente, 
+		  c.correo_electronico as email, 
+		  CASE WHEN MONTH(p.fecha_pedido) = 1 THEN CONCAT(
+			p.fecha_pedido, 
+			"/", 
+			"Enero"
+		  ) WHEN MONTH(p.fecha_pedido) = 2 THEN CONCAT(
+			p.fecha_pedido, 
+			"/", 
+			"Febrero"
+		  ) WHEN MONTH(p.fecha_pedido) = 3 THEN CONCAT(
+			p.fecha_pedido, 
+			"/", 
+			"Marzo"
+		  ) WHEN MONTH(p.fecha_pedido) = 4 THEN CONCAT(
+			p.fecha_pedido, 
+			"/", 
+			"Abril"
+		  ) WHEN MONTH(p.fecha_pedido) = 5 THEN CONCAT(
+			p.fecha_pedido, 
+			"/", 
+			"Mayo"
+		  ) WHEN MONTH(p.fecha_pedido) = 6 THEN CONCAT(
+			p.fecha_pedido, 
+			"/", 
+			"Junio"
+		  ) WHEN MONTH(p.fecha_pedido) = 7 THEN CONCAT(
+			p.fecha_pedido, 
+			"/", 
+			"Julio"
+		  ) WHEN MONTH(p.fecha_pedido) = 8 THEN CONCAT(
+			p.fecha_pedido, 
+			"/", 
+			"Agosto"
+		  ) WHEN MONTH(p.fecha_pedido) = 9 THEN CONCAT(
+			p.fecha_pedido, 
+			"/", 
+			"Septiembre"
+		  ) WHEN MONTH(p.fecha_pedido) = 10 THEN CONCAT(
+			p.fecha_pedido, 
+			"/", 
+			"Octubre"
+		  ) WHEN MONTH(p.fecha_pedido) = 11 THEN CONCAT(
+			p.fecha_pedido, 
+			"/", 
+			"Noviembre"
+		  ) ELSE CONCAT(
+			p.fecha_pedido, 
+			"/", 
+			"Diciembre"
+		  ) END AS fecha, 
+		  p.total, 
+		  p.saldo, 
+		  CASE WHEN p.status = "paid" 
+		  AND p.eliminado_en IS NULL THEN "Pagado" WHEN p.status = "partially_paid" 
+		  AND p.eliminado_en IS NULL THEN "Parcialmente pagado" WHEN p.status = "unpaid" 
+		  AND p.eliminado_en IS NULL THEN "No pagado" ELSE "cancelado" END AS estado, 
+		  CASE WHEN p.status = "paid" 
+		  AND p.eliminado_en IS NULL THEN "success" WHEN p.status = "partially_paid" 
+		  AND p.eliminado_en IS NULL THEN "info" WHEN p.status = "unpaid" 
+		  AND p.eliminado_en IS NULL THEN "warning" ELSE "danger" END AS color_fondo 
+		FROM 
+		  pedidos p 
+		  INNER JOIN clientes c ON p.cliente_id = c.id 
+		ORDER BY 
+		  p.folio DESC
+	
+	
+		';
 		$datatables->query($sql);
 		$datatables->hide('id');
 		$datatables->hide('email');
+		$datatables->hide('color_fondo');
 		$datatables->edit('folio', function ($data) {
 			return '<strong>' . $data['folio'] . '</strong>';
 		});
-		$datatables->edit('fecha_pedido', function ($data) {
-			$date_dmy = date('d/m/Y', strtotime($data['fecha_pedido']));
+
+		$datatables->edit('fecha', function ($data) {
+			$full_date = explode("/", $data['fecha']);
+			$day = date('d', strtotime($full_date[0]));
+			$month = $full_date[1];
+			$year = date('Y', strtotime($full_date[0]));
+			$date_dmy = $day . '/' . $month . '/' . $year;
 			return $date_dmy;
 		});
+
 		$datatables->edit('estado', function ($data) {
 			$status = $data['estado'];
-			switch ($status) {
-				case 'cancelled':
-					$bg_color = 'danger';
-					$status_text = 'cancelado';
-					break;
-				case 'paid':
-					$bg_color = 'success';
-					$status_text = 'Pagado';
-					break;
-				case 'partially_paid':
-					$bg_color = 'info';
-					$status_text = 'Parcialmente pagado';
-					break;
-				default:
-					$bg_color = 'warning';
-					$status_text = 'No pagado';
-			}
-			return '<span class="py-2 px-3 badge badge-pill badge-' . $bg_color . '"><span class="font-weight-bold">' . strtoupper($status_text) . '</span></span>';
+			$bg_color = $data['color_fondo'];
+			return '<span class="py-2 px-3 badge badge-pill badge-' . $bg_color . '"><span class="font-weight-bold">' . strtoupper($status) . '</span></span>';
 		});
 		$datatables->edit('total', function ($data) {
 			return "$" . number_format($data['total'], 2);
@@ -307,39 +378,86 @@ class Orders extends CI_Controller
 		$datatables->edit('saldo', function ($data) {
 			return "$" . number_format($data['saldo'], 2);
 		});
+//		$datatables->add('action', function ($data) {
+//			$csrf = array(
+//				'name' => $this->security->get_csrf_token_name(),
+//				'hash' => $this->security->get_csrf_hash()
+//			);
+//			$status = $data['estado'];
+//			$data['url'] = base_url('admin/pedidos/pdf/') . $data['id'];
+//			$view_button = $this->load->view('partials/view_button', $data, true);
+//			$mail_is_enabled = $this->settings->get_setting('mail_is_enabled');
+//			if ((integer)$mail_is_enabled === 1 && $data['email']) {
+//				$data['id'] =  $data['id'];
+//				$data['company_name'] = $this->settings->get_setting('nombre_empresa');
+//				$data['document_id'] = $data['folio'];
+//				$data['email'] = $data['email'];
+//				$email_button = $this->load->view('partials/email_button', $data, true);
+//			} else {
+//				$email_button = '';
+//			}
+//			$data['url'] = base_url('admin/pedidos/') . $data['id'];
+//			$data['status'] = $status;
+//			$edit_button = $this->load->view('partials/edit_button', $data, true);
+//			$data['url'] = base_url('admin/orders/delete_order');
+//			$data['id'] = $data['id'];
+//			$data['csrf_name'] = $csrf['name'];
+//			$data['csrf_hash'] = $csrf['hash'];
+//			$data['status'] = $status;
+//			$delete_button = $this->load->view('partials/cancel_button', $data, true);
+//			$data['id'] = $data['id'];
+//			$data['csrf_name'] = $csrf['name'];
+//			$data['csrf_hash'] = $csrf['hash'];
+//			return $view_button . $email_button . $edit_button . $delete_button;
+//		});
+
+
 		$datatables->add('action', function ($data) {
-			$csrf = array(
+			$csrf = [
 				'name' => $this->security->get_csrf_token_name(),
 				'hash' => $this->security->get_csrf_hash()
-			);
-			$status = $data['estado'];
-			$data['url'] = base_url('admin/pedidos/pdf/') . $data['id'];
-			$view_button = $this->load->view('partials/view_button', $data, true);
+			];
+
 			$mail_is_enabled = $this->settings->get_setting('mail_is_enabled');
-			if ((integer)$mail_is_enabled === 1 && $data['email']) {
-				$data['id'] =  $data['id'];
+
+			$data['id'] = $data['id'];
+			$data['status'] = $data['estado'];
+			$data['csrf_name'] = $csrf['name'];
+			$data['csrf_hash'] = $csrf['hash'];
+
+			$data['url'] = base_url('admin/pedidos/pdf/') . $data['id'];
+
+			$email_button = '';
+			$view_button = $this->load->view('partials/view_button', $data, true);
+			$edit_button = '';
+			$delete_button = '';
+			$reuse_button = '';
+
+			if ((integer)$mail_is_enabled === 1 && !empty($data['email'])) {
 				$data['company_name'] = $this->settings->get_setting('nombre_empresa');
 				$data['document_id'] = $data['folio'];
 				$data['email'] = $data['email'];
 				$email_button = $this->load->view('partials/email_button', $data, true);
-			} else {
-				$email_button = '';
 			}
-			$data['url'] = base_url('admin/pedidos/') . $data['id'];
-			$data['status'] = $status;
-			$edit_button = $this->load->view('partials/edit_button', $data, true);
-			$data['url'] = base_url('admin/orders/delete_order');
-			$data['id'] = $data['id'];
-			$data['csrf_name'] = $csrf['name'];
-			$data['csrf_hash'] = $csrf['hash'];
-			$data['status'] = $status;
-			$delete_button = $this->load->view('partials/cancel_button', $data, true);
-			$data['id'] = $data['id'];
-			$data['csrf_name'] = $csrf['name'];
-			$data['csrf_hash'] = $csrf['hash'];
-			$more_button = $this->load->view('partials/more_button_1', $data, true);
-			return $view_button . $email_button . $edit_button . $delete_button;
+
+			if ($data['estado'] !== 'cancelado') {
+				$data['url'] = base_url('admin/pedidos/') . $data['id'];
+				$edit_button = $this->load->view('partials/edit_button', $data, true);
+
+				$data['url'] = base_url('admin/orders/delete_order');
+				$delete_button = $this->load->view('partials/cancel_button', $data, true);
+
+				$data['url'] = base_url('admin/orders/new_order');
+				$reuse_button = $this->load->view('partials/reuse_button', $data, true);
+
+
+			}
+
+			return $view_button . $email_button . $reuse_button . $edit_button . $delete_button;
+
 		});
+
+
 		echo $datatables->generate();
 	}
 

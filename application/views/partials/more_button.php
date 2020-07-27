@@ -1,11 +1,10 @@
 <?php
 $id = isset($id) ? $id : NULL;
-$status = isset($status) ? $status : NULL;
 $csrf_name = isset($csrf_name) ? $csrf_name : NULL;
 $csrf_hash = isset($csrf_hash) ? $csrf_hash : NULL;
 ?>
 <div class="dropdown d-inline-block">
-    <button class="ml-2 btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" title="Más opciones" <?php echo ($status==='cancelled') ? 'disabled': '' ?>>
+    <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" title="Más opciones">
         <i class="fas fa-ellipsis-h"></i>
     </button>
     <div class="dropdown-menu dropdown-menu-right">
@@ -36,14 +35,5 @@ $csrf_hash = isset($csrf_hash) ? $csrf_hash : NULL;
                 <span>Marcar como rechazado</span>
             </button>
         </form>
-        <div class="dropdown-divider"></div>
-        <form method="POST" action="<?php echo base_url('admin/estimates/convert_to_order') ?>">
-            <input type="hidden" name="id" value="<?php echo $id ?>">
-            <input type="hidden" name="<?php echo $csrf_name ?>" value="<?php echo $csrf_hash ?>">
-            <button class="dropdown-item convert-to-btn" type="button">
-                <i class="fas fa-file-invoice mr-1"></i>
-                <span>Convertir a pedido</span>
-            </button>
-        </form>
-    </div>
+     </div>
 </div>

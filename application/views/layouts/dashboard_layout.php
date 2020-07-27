@@ -13,7 +13,7 @@
 	<?php $this->load->view('partials/sidebar'); ?>
 	<main id="main" class="main">
 		<?php $this->load->view('partials/top_navbar'); ?>
-		<div class="container py-4 py-md-5">
+		<div class="container-fluid py-4 py-md-5">
 			<?php isset($page) ? load_page($page) : '' ?>
 		</div>
 	</main>
