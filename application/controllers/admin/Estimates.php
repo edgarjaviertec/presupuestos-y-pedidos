@@ -8,45 +8,56 @@ use Dompdf\Dompdf;
 
 class Estimates extends CI_Controller
 {
-    public function __construct()
-    {
-        parent::__construct();
+	public function __construct()
+	{
+		parent::__construct();
 		$this->load->model('Setting_model', 'settings');
 		$this->load->model('Estimates_model', 'estimates');
-        $this->load->model('Orders_model', 'orders');
-        $this->load->model('Customers_model', 'customers');
-        $this->load->model('Products_model', 'products');
-        $this->load->helper('app');
-        $this->load->library(['form_validation']);
-        $this->load->helper('path');
-        $logged_in_user = $this->session->userdata('logged_in_user');
-        if (!$logged_in_user) {
-            redirect('auth/login');
-        }
-    }
+		$this->load->model('Orders_model', 'orders');
+		$this->load->model('Customers_model', 'customers');
+		$this->load->model('Products_model', 'products');
+		$this->load->helper('app');
+		$this->load->library(['form_validation']);
+		$this->load->helper('path');
+		$logged_in_user = $this->session->userdata('logged_in_user');
+		if (!$logged_in_user) {
+			redirect('auth/login');
+		}
+	}
 
-    public function index()
-    {
-        if ($this->estimates->count_all_records() <= 0) {
-            $data['page'] = 'no_estimates';
-            $data['title'] = 'No hay presupuestos';
-            $data['js_files'] = [
-                base_url('assets/js/empty.vendor.min.js'),
-            ];
-            $this->load->view('layouts/dashboard_layout', $data);
-        } else {
-            $data['page'] = 'estimate_list';
-            $data['title'] = 'Presupuestos';
-            $data['js_files'] = [
-                base_url('assets/js/estimates.vendor.min.js'),
-                base_url('assets/js/estimates.min.js')
-            ];
-            $this->load->view('layouts/dashboard_layout', $data);
-        }
-    }
+	public function index()
+	{
+		if ($this->estimates->count_all_records() <= 0) {
+			$data['page'] = 'no_estimates';
+			$data['title'] = 'No hay presupuestos';
+			$data['js_files'] = [
+				base_url('assets/js/empty.vendor.min.js'),
+			];
+			$this->load->view('layouts/dashboard_layout', $data);
+		} else {
+			$data['page'] = 'estimate_list';
+			$data['title'] = 'Presupuestos';
+			$data['js_files'] = [
+				base_url('assets/js/estimates.vendor.min.js'),
+				base_url('assets/js/estimates.min.js')
+			];
+			$this->load->view('layouts/dashboard_layout', $data);
+		}
+	}
 
-    public function new_estimate()
-    {
+	public function new_estimate()
+	{
+		if ($this->input->get('reuse')) {
+			$estimate = $this->estimates->get_estimate_by_id($this->input->get('reuse'));
+			if (!empty($estimate)) {
+				$data['estimate'] = $estimate;
+				$data['customer'] = $this->customers->get_customer_by_id($estimate->cliente_id);
+				$data['lines'] = $this->estimates->get_lines_by_id(
+					$this->input->get('reuse')
+				);
+			}
+		}
+
 		$company_logo = $this->settings->get_setting('logo_empresa');
 		$business_name = $this->settings->get_setting('razon_social');
 		$company_name = $this->settings->get_setting('nombre_empresa');
@@ -59,83 +70,82 @@ class Estimates extends CI_Controller
 			'company_address' => $company_address
 		];
 		$data['next_estimate_number'] = $next_estimate_number;
-        $data['page'] = 'new_estimate';
-        $data['title'] = 'Nuevo presupuesto';
-        $data['js_files'] = [
-            base_url('assets/js/document.vendor.min.js'),
-            base_url('assets/js/document.min.js')
-        ];
-        $this->load->view('layouts/dashboard_layout', $data);
-    }
+		$data['page'] = 'new_estimate';
+		$data['title'] = 'Nuevo presupuesto';
+		$data['js_files'] = [
+			base_url('assets/js/document.vendor.min.js'),
+			base_url('assets/js/document.min.js')
+		];
+		$this->load->view('layouts/dashboard_layout', $data);
+	}
 
-    public function new_estimate_validation()
-    {
-        if ($this->input->server('REQUEST_METHOD') != 'POST') {
-            show_404();
-        }
-        $error_messages = [
-            'required' => 'El campo "%s" es requerido',
-            'max_length' => 'El tamaño máximo del campo "%s" es de %s caracteres',
-            'numeric' => 'El campo "%s" debe contener solo números',
-            'greater_than' => 'El campo "%s" debe contener un número mayor que %s',
-            'less_than' => 'El campo "%s" debe contener un número menor que %s',
-            'in_list' => 'El campo "%s" debe ser alguno de los siguientes valores: %s',
-            'integer' => 'El campo "%s" debe ser entero'
-        ];
-        $this->form_validation->set_rules('number', 'Folio', 'trim|required|max_length[255]', $error_messages);
-        $this->form_validation->set_rules('date', 'Fecha de emisión ', 'trim|required|max_length[255]', $error_messages);
-        $this->form_validation->set_rules('validity_in_days', 'Fecha de vencimiento', 'trim|required|integer|greater_than[-1]', $error_messages);
-        $this->form_validation->set_rules('due_date', 'Fecha de vencimiento', 'trim|required|max_length[255]', $error_messages);
-        $this->form_validation->set_rules('status', 'Estado', 'trim|required', $error_messages);
-        $this->form_validation->set_rules('customer_id', 'ID del cliente', 'trim|required|integer', $error_messages);
-        $this->form_validation->set_rules('sub_total', 'Subtotal', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
-        $this->form_validation->set_rules('discount_type', 'Tipo de descuento', 'trim|in_list[fixed,percentage]', $error_messages);
-        $this->form_validation->set_rules('discount', 'Descuento', 'trim|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
-        $this->form_validation->set_rules('discount_val', 'Cantidad a descontar', 'trim|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
-        $this->form_validation->set_rules('include_tax', 'Con IVA', 'trim|required|integer|in_list[1,0]', $error_messages);
-        $this->form_validation->set_rules('tax', 'IVA', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
-        $this->form_validation->set_rules('total', 'Total', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
-        $items = $this->input->post('items');
-        if (!empty($items)) {
-            foreach ($items as $key => $val) {
-                $this->form_validation->set_rules('items[' . $key . '][product_id]', 'ID del producto', 'trim|integer|greater_than[-1]', $error_messages);
-                $this->form_validation->set_rules('items[' . $key . '][qty]', 'Cantidad', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
-                $this->form_validation->set_rules('items[' . $key . '][name]', 'Nombre', 'trim|required|max_length[255]', $error_messages);
-                $this->form_validation->set_rules('items[' . $key . '][description]', 'descripción', 'trim|max_length[255]', $error_messages);
-                $this->form_validation->set_rules('items[' . $key . '][unit_price]', 'Precio unitario', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
-                $this->form_validation->set_rules('items[' . $key . '][total]', 'Precio unitario', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
-            }
-        }
-        $this->form_validation->set_rules('notes', 'Notas', 'trim|max_length[255]', $error_messages);
-        if ($this->form_validation->run() == FALSE) {
-            $this->session->set_flashdata('errors', $this->form_validation->error_array());
-            $this->session->set_flashdata('old', $this->input->post());
-            redirect('admin/presupuestos/nuevo');
-        } else {
-            $trans = $this->estimates->create_estimate($this->input->post());
-            if ($trans) {
-                $this->session->set_flashdata('flash_message', [
-                    'type' => 'success',
-                    'title' => 'El presupuesto se creó con éxito',
-                ]);
-                redirect('/admin/presupuestos');
-            }
-        }
-    }
+	public function new_estimate_validation()
+	{
+		if ($this->input->server('REQUEST_METHOD') != 'POST') {
+			show_404();
+		}
+		$error_messages = [
+			'required' => 'El campo "%s" es requerido',
+			'max_length' => 'El tamaño máximo del campo "%s" es de %s caracteres',
+			'numeric' => 'El campo "%s" debe contener solo números',
+			'greater_than' => 'El campo "%s" debe contener un número mayor que %s',
+			'less_than' => 'El campo "%s" debe contener un número menor que %s',
+			'in_list' => 'El campo "%s" debe ser alguno de los siguientes valores: %s',
+			'integer' => 'El campo "%s" debe ser entero'
+		];
+		$this->form_validation->set_rules('number', 'Folio', 'trim|required|max_length[255]', $error_messages);
+		$this->form_validation->set_rules('date', 'Fecha de emisión ', 'trim|required|max_length[255]', $error_messages);
+		$this->form_validation->set_rules('validity_in_days', 'Fecha de vencimiento', 'trim|required|integer|greater_than[-1]', $error_messages);
+		$this->form_validation->set_rules('due_date', 'Fecha de vencimiento', 'trim|required|max_length[255]', $error_messages);
+		$this->form_validation->set_rules('status', 'Estado', 'trim|required', $error_messages);
+		$this->form_validation->set_rules('customer_id', 'ID del cliente', 'trim|required|integer', $error_messages);
+		$this->form_validation->set_rules('sub_total', 'Subtotal', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
+		$this->form_validation->set_rules('discount_type', 'Tipo de descuento', 'trim|in_list[fixed,percentage]', $error_messages);
+		$this->form_validation->set_rules('discount', 'Descuento', 'trim|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
+		$this->form_validation->set_rules('discount_val', 'Cantidad a descontar', 'trim|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
+		$this->form_validation->set_rules('include_tax', 'Con IVA', 'trim|required|integer|in_list[1,0]', $error_messages);
+		$this->form_validation->set_rules('tax', 'IVA', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
+		$this->form_validation->set_rules('total', 'Total', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
+		$items = $this->input->post('items');
+		if (!empty($items)) {
+			foreach ($items as $key => $val) {
+				$this->form_validation->set_rules('items[' . $key . '][product_id]', 'ID del producto', 'trim|integer|greater_than[-1]', $error_messages);
+				$this->form_validation->set_rules('items[' . $key . '][qty]', 'Cantidad', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
+				$this->form_validation->set_rules('items[' . $key . '][name]', 'Nombre', 'trim|required|max_length[255]', $error_messages);
+				$this->form_validation->set_rules('items[' . $key . '][description]', 'descripción', 'trim|max_length[255]', $error_messages);
+				$this->form_validation->set_rules('items[' . $key . '][unit_price]', 'Precio unitario', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
+				$this->form_validation->set_rules('items[' . $key . '][total]', 'Precio unitario', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
+			}
+		}
+		$this->form_validation->set_rules('notes', 'Notas', 'trim|max_length[255]', $error_messages);
+		if ($this->form_validation->run() == FALSE) {
+			$this->session->set_flashdata('errors', $this->form_validation->error_array());
+			$this->session->set_flashdata('old', $this->input->post());
+			redirect('admin/presupuestos/nuevo');
+		} else {
+			$trans = $this->estimates->create_estimate($this->input->post());
+			if ($trans) {
+				$this->session->set_flashdata('flash_message', [
+					'type' => 'success',
+					'title' => 'El presupuesto se creó con éxito',
+				]);
+				redirect('/admin/presupuestos');
+			}
+		}
+	}
 
-    public function edit_estimate($id)
-    {
-
+	public function edit_estimate($id)
+	{
 		$company_logo = $this->settings->get_setting('logo_empresa');
 		$business_name = $this->settings->get_setting('razon_social');
 		$company_name = $this->settings->get_setting('nombre_empresa');
 		$company_address = $this->settings->get_setting('domicilio_fiscal');
 		$estimate = $this->estimates->get_estimate_by_id($id);
-        if (!$estimate) {
-            show_404();
-        }
-        $customer = $this->customers->get_customer_by_id($estimate->cliente_id);
-        $lines = $this->estimates->get_lines_by_id($id);
+		if (!$estimate) {
+			show_404();
+		}
+		$customer = $this->customers->get_customer_by_id($estimate->cliente_id);
+		$lines = $this->estimates->get_lines_by_id($id);
 		$data['company_settings'] = [
 			'company_logo' => $company_logo,
 			'business_name' => $business_name,
@@ -143,371 +153,443 @@ class Estimates extends CI_Controller
 			'company_address' => $company_address
 		];
 		$data['page'] = 'edit_estimate';
-        $data['title'] = 'Editar presupuesto ' . $estimate->folio;
-        $data['js_files'] = [
-            base_url('assets/js/document.vendor.min.js'),
-            base_url('assets/js/document.min.js')
-        ];
-        $data['customer'] = $customer;
-        $data['estimate'] = $estimate;
-        $data['lines'] = $lines;
-        $this->load->view('layouts/dashboard_layout', $data);
-    }
+		$data['title'] = 'Editar presupuesto ' . $estimate->folio;
+		$data['js_files'] = [
+			base_url('assets/js/document.vendor.min.js'),
+			base_url('assets/js/document.min.js')
+		];
+		$data['customer'] = $customer;
+		$data['estimate'] = $estimate;
+		$data['lines'] = $lines;
+		$this->load->view('layouts/dashboard_layout', $data);
+	}
 
-    public function edit_estimate_validation()
-    {
-        if ($this->input->server('REQUEST_METHOD') != 'POST') {
-            show_404();
-        }
-        $error_messages = [
-            'required' => 'El campo "%s" es requerido',
-            'max_length' => 'El tamaño máximo del campo "%s" es de %s caracteres',
-            'numeric' => 'El campo "%s" debe contener solo números',
-            'greater_than' => 'El campo "%s" debe contener un número mayor que %s',
-            'less_than' => 'El campo "%s" debe contener un número menor que %s',
-            'in_list' => 'El campo "%s" debe ser alguno de los siguientes valores: %s',
-            'integer' => 'El campo "%s" debe ser entero'
-        ];
-        $this->form_validation->set_rules('number', 'Folio', 'trim|required|max_length[255]', $error_messages);
-        $this->form_validation->set_rules('date', 'Fecha de emisión ', 'trim|required|max_length[255]', $error_messages);
-        $this->form_validation->set_rules('validity_in_days', 'Fecha de vencimiento', 'trim|required|integer|greater_than[-1]', $error_messages);
-        $this->form_validation->set_rules('due_date', 'Fecha de vencimiento', 'trim|required|max_length[255]', $error_messages);
-        $this->form_validation->set_rules('status', 'Estado', 'trim|required', $error_messages);
-        $this->form_validation->set_rules('customer_id', 'ID del cliente', 'trim|required|integer', $error_messages);
-        $this->form_validation->set_rules('sub_total', 'Subtotal', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
-        $this->form_validation->set_rules('discount_type', 'Tipo de descuento', 'trim|in_list[fixed,percentage]', $error_messages);
-        $this->form_validation->set_rules('discount', 'Descuento', 'trim|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
-        $this->form_validation->set_rules('discount_val', 'Cantidad a descontar', 'trim|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
-        $this->form_validation->set_rules('include_tax', 'Con IVA', 'trim|required|integer|in_list[1,0]', $error_messages);
-        $this->form_validation->set_rules('tax', 'IVA', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
-        $this->form_validation->set_rules('total', 'Total', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
-        $items = $this->input->post('items');
-        if (!empty($items)) {
-            foreach ($items as $key => $val) {
-                $this->form_validation->set_rules('items[' . $key . '][product_id]', 'ID del producto', 'trim|integer|greater_than[-1]', $error_messages);
-                $this->form_validation->set_rules('items[' . $key . '][qty]', 'Cantidad', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
-                $this->form_validation->set_rules('items[' . $key . '][name]', 'Nombre', 'trim|required|max_length[255]', $error_messages);
-                $this->form_validation->set_rules('items[' . $key . '][description]', 'descripción', 'trim|max_length[255]', $error_messages);
-                $this->form_validation->set_rules('items[' . $key . '][unit_price]', 'Precio unitario', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
-                $this->form_validation->set_rules('items[' . $key . '][total]', 'Precio unitario', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
-            }
-        }
-        $this->form_validation->set_rules('notes', 'Notas', 'trim|max_length[255]', $error_messages);
-        if ($this->form_validation->run() == FALSE) {
-            $this->session->set_flashdata('errors', $this->form_validation->error_array());
-            $this->session->set_flashdata('old', $this->input->post());
-            redirect('admin/presupuestos/' . $this->input->post('id'));
-        } else {
-            $trans = $this->estimates->update_estimate($this->input->post());
-            if ($trans) {
-                $this->session->set_flashdata('flash_message', [
-                    'type' => 'success',
-                    'title' => 'Los datos se actualizaron correctamente',
-                ]);
-                redirect('/admin/presupuestos');
-            }
-        }
-    }
+	public function edit_estimate_validation()
+	{
+		if ($this->input->server('REQUEST_METHOD') != 'POST') {
+			show_404();
+		}
+		$error_messages = [
+			'required' => 'El campo "%s" es requerido',
+			'max_length' => 'El tamaño máximo del campo "%s" es de %s caracteres',
+			'numeric' => 'El campo "%s" debe contener solo números',
+			'greater_than' => 'El campo "%s" debe contener un número mayor que %s',
+			'less_than' => 'El campo "%s" debe contener un número menor que %s',
+			'in_list' => 'El campo "%s" debe ser alguno de los siguientes valores: %s',
+			'integer' => 'El campo "%s" debe ser entero'
+		];
+		$this->form_validation->set_rules('number', 'Folio', 'trim|required|max_length[255]', $error_messages);
+		$this->form_validation->set_rules('date', 'Fecha de emisión ', 'trim|required|max_length[255]', $error_messages);
+		$this->form_validation->set_rules('validity_in_days', 'Fecha de vencimiento', 'trim|required|integer|greater_than[-1]', $error_messages);
+		$this->form_validation->set_rules('due_date', 'Fecha de vencimiento', 'trim|required|max_length[255]', $error_messages);
+		$this->form_validation->set_rules('status', 'Estado', 'trim|required', $error_messages);
+		$this->form_validation->set_rules('customer_id', 'ID del cliente', 'trim|required|integer', $error_messages);
+		$this->form_validation->set_rules('sub_total', 'Subtotal', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
+		$this->form_validation->set_rules('discount_type', 'Tipo de descuento', 'trim|in_list[fixed,percentage]', $error_messages);
+		$this->form_validation->set_rules('discount', 'Descuento', 'trim|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
+		$this->form_validation->set_rules('discount_val', 'Cantidad a descontar', 'trim|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
+		$this->form_validation->set_rules('include_tax', 'Con IVA', 'trim|required|integer|in_list[1,0]', $error_messages);
+		$this->form_validation->set_rules('tax', 'IVA', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
+		$this->form_validation->set_rules('total', 'Total', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
+		$items = $this->input->post('items');
+		if (!empty($items)) {
+			foreach ($items as $key => $val) {
+				$this->form_validation->set_rules('items[' . $key . '][product_id]', 'ID del producto', 'trim|integer|greater_than[-1]', $error_messages);
+				$this->form_validation->set_rules('items[' . $key . '][qty]', 'Cantidad', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
+				$this->form_validation->set_rules('items[' . $key . '][name]', 'Nombre', 'trim|required|max_length[255]', $error_messages);
+				$this->form_validation->set_rules('items[' . $key . '][description]', 'descripción', 'trim|max_length[255]', $error_messages);
+				$this->form_validation->set_rules('items[' . $key . '][unit_price]', 'Precio unitario', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
+				$this->form_validation->set_rules('items[' . $key . '][total]', 'Precio unitario', 'trim|required|numeric|greater_than[-1]|less_than[1000000]', $error_messages);
+			}
+		}
+		$this->form_validation->set_rules('notes', 'Notas', 'trim|max_length[255]', $error_messages);
+		if ($this->form_validation->run() == FALSE) {
+			$this->session->set_flashdata('errors', $this->form_validation->error_array());
+			$this->session->set_flashdata('old', $this->input->post());
+			redirect('admin/presupuestos/' . $this->input->post('id'));
+		} else {
+			$trans = $this->estimates->update_estimate($this->input->post());
+			if ($trans) {
+				$this->session->set_flashdata('flash_message', [
+					'type' => 'success',
+					'title' => 'Los datos se actualizaron correctamente',
+				]);
+				redirect('/admin/presupuestos');
+			}
+		}
+	}
 
-    public function duplicate_estimate()
-    {
-        if ($this->input->server('REQUEST_METHOD') != 'POST') {
-            show_404();
-        }
-        if ($this->input->post('id')) {
-            $id = $this->input->post('id');
-            $estimate = $this->estimates->get_estimate_by_id($id);
-            $next_estimate_number = $this->estimates->get_next_estimate_number(date("Y"));
-            $lines = $this->estimates->get_lines_by_id($id);
-            $new_items = [];
-            foreach ($lines as $line) {
-                array_push($new_items, [
-                    'name' => $line->nombre,
-                    'description' => $line->descripcion,
-                    'qty' => $line->cantidad,
-                    'unit_price' => $line->precio_unitario,
-                    'total' => $line->total,
-                    'product_id' => $line->producto_id
-                ]);
-            }
-            $new_estimate = [
-                'number' => $next_estimate_number,
-                'date' => $estimate->fecha_presupuesto,
-                'validity_in_days' => $estimate->validez_en_dias,
-                'due_date' => $estimate->fecha_vencimiento,
-                'status' => $estimate->status,
-                'notes' => $estimate->notas,
-                'sub_total' => $estimate->sub_total,
-                'discount_type' => $estimate->tipo_descuento,
-                'discount' => $estimate->descuento,
-                'discount_val' => $estimate->cantidad_descontada,
-                'include_tax' => $estimate->incluir_impuesto,
-                'tax' => $estimate->impuesto,
-                'total' => $estimate->total,
-                'customer_id' => $estimate->cliente_id,
-                'items' => $new_items,
-            ];
-            $trans = $this->estimates->create_estimate($new_estimate);
-            if ($trans) {
-                $this->session->set_flashdata('flash_message', [
-                    'type' => 'success',
-                    'title' => 'El presupuesto se duplicó con éxito',
-                ]);
-                $estimate = $this->estimates->get_estimate_by_number($next_estimate_number);
-                if ($estimate) {
-                    $this->session->set_flashdata('flash_message', [
-                        'type' => 'success',
-                        'title' => 'El presupuesto se duplicó con éxito',
-                    ]);
-                    redirect('admin/presupuestos/' . $estimate->id);
-                }
-            }
-        }
-    }
+	public function duplicate_estimate()
+	{
+		if ($this->input->server('REQUEST_METHOD') != 'POST') {
+			show_404();
+		}
+		if ($this->input->post('id')) {
+			$id = $this->input->post('id');
+			$estimate = $this->estimates->get_estimate_by_id($id);
+			$next_estimate_number = $this->estimates->get_next_estimate_number(date("Y"));
+			$lines = $this->estimates->get_lines_by_id($id);
+			$new_items = [];
+			foreach ($lines as $line) {
+				array_push($new_items, [
+					'name' => $line->nombre,
+					'description' => $line->descripcion,
+					'qty' => $line->cantidad,
+					'unit_price' => $line->precio_unitario,
+					'total' => $line->total,
+					'product_id' => $line->producto_id
+				]);
+			}
+			$new_estimate = [
+				'number' => $next_estimate_number,
+				'date' => $estimate->fecha_presupuesto,
+				'validity_in_days' => $estimate->validez_en_dias,
+				'due_date' => $estimate->fecha_vencimiento,
+				'status' => $estimate->status,
+				'notes' => $estimate->notas,
+				'sub_total' => $estimate->sub_total,
+				'discount_type' => $estimate->tipo_descuento,
+				'discount' => $estimate->descuento,
+				'discount_val' => $estimate->cantidad_descontada,
+				'include_tax' => $estimate->incluir_impuesto,
+				'tax' => $estimate->impuesto,
+				'total' => $estimate->total,
+				'customer_id' => $estimate->cliente_id,
+				'items' => $new_items,
+			];
+			$trans = $this->estimates->create_estimate($new_estimate);
+			if ($trans) {
+				$this->session->set_flashdata('flash_message', [
+					'type' => 'success',
+					'title' => 'El presupuesto se duplicó con éxito',
+				]);
+				$estimate = $this->estimates->get_estimate_by_number($next_estimate_number);
+				if ($estimate) {
+					$this->session->set_flashdata('flash_message', [
+						'type' => 'success',
+						'title' => 'El presupuesto se duplicó con éxito',
+					]);
+					redirect('admin/presupuestos/' . $estimate->id);
+				}
+			}
+		}
+	}
 
-    public function convert_to_order()
-    {
-        if ($this->input->server('REQUEST_METHOD') != 'POST') {
-            show_404();
-        }
-        if ($this->input->post('id')) {
-            $id = $this->input->post('id');
-            $estimate = $this->estimates->get_estimate_by_id($id);
-            $next_order_number = $this->orders->get_next_order_number(date("Y"));
-            $lines = $this->estimates->get_lines_by_id($id);
-            $estimate_items = [];
-            foreach ($lines as $line) {
-                array_push($estimate_items, [
-                    'name' => $line->nombre,
-                    'description' => $line->descripcion,
-                    'qty' => $line->cantidad,
-                    'unit_price' => $line->precio_unitario,
-                    'total' => $line->total,
-                    'product_id' => $line->producto_id
-                ]);
-            }
-            $estimate_data = [
-                'number' => $next_order_number,
-                'date' => $estimate->fecha_presupuesto,
-                'validity_in_days' => $estimate->validez_en_dias,
-                'due_date' => $estimate->fecha_vencimiento,
-                'status' => 'unpaid',
-                'notes' => $estimate->notas,
-                'sub_total' => $estimate->sub_total,
-                'discount_type' => $estimate->tipo_descuento,
-                'discount' => $estimate->descuento,
-                'discount_val' => $estimate->cantidad_descontada,
-                'include_tax' => $estimate->incluir_impuesto,
-                'tax' => $estimate->impuesto,
-                'total' => $estimate->total,
-                'amount_due' => $estimate->total,
-                'customer_id' => $estimate->cliente_id,
-                'items' => $estimate_items,
-                'payments' => [],
-            ];
-            $trans = $this->orders->create_order($estimate_data);
-            if ($trans) {
-                $new_order = $this->orders->get_order_by_number($next_order_number);
-                if ($new_order) {
-                    $this->session->set_flashdata('flash_message', [
-                        'type' => 'success',
-                        'title' => 'El presupuesto se convirtió en pedido con éxito',
-                    ]);
-                    redirect('admin/pedidos/' . $new_order->id);
-                }
-            }
-        }
-    }
+	public function convert_to_order()
+	{
+		if ($this->input->server('REQUEST_METHOD') != 'POST') {
+			show_404();
+		}
+		if ($this->input->post('id')) {
+			$id = $this->input->post('id');
+			$estimate = $this->estimates->get_estimate_by_id($id);
+			$next_order_number = $this->orders->get_next_order_number(date("Y"));
+			$lines = $this->estimates->get_lines_by_id($id);
+			$estimate_items = [];
+			foreach ($lines as $line) {
+				array_push($estimate_items, [
+					'name' => $line->nombre,
+					'description' => $line->descripcion,
+					'qty' => $line->cantidad,
+					'unit_price' => $line->precio_unitario,
+					'total' => $line->total,
+					'product_id' => $line->producto_id
+				]);
+			}
+			$estimate_data = [
+				'number' => $next_order_number,
+				'date' => $estimate->fecha_presupuesto,
+				'validity_in_days' => $estimate->validez_en_dias,
+				'due_date' => $estimate->fecha_vencimiento,
+				'status' => 'unpaid',
+				'notes' => $estimate->notas,
+				'sub_total' => $estimate->sub_total,
+				'discount_type' => $estimate->tipo_descuento,
+				'discount' => $estimate->descuento,
+				'discount_val' => $estimate->cantidad_descontada,
+				'include_tax' => $estimate->incluir_impuesto,
+				'tax' => $estimate->impuesto,
+				'total' => $estimate->total,
+				'amount_due' => $estimate->total,
+				'customer_id' => $estimate->cliente_id,
+				'items' => $estimate_items,
+				'payments' => [],
+			];
+			$trans = $this->orders->create_order($estimate_data);
+			if ($trans) {
+				$new_order = $this->orders->get_order_by_number($next_order_number);
+				if ($new_order) {
+					$this->session->set_flashdata('flash_message', [
+						'type' => 'success',
+						'title' => 'El presupuesto se convirtió en pedido con éxito',
+					]);
+					redirect('admin/pedidos/' . $new_order->id);
+				}
+			}
+		}
+	}
 
-    public function get_estimates_ajax()
-    {
-        $datatables = new Datatables(new CodeigniterAdapter);
-        $sql = 'SELECT
-        p.id,
-        p.folio,
-        c.nombre_razon_social as cliente,
-        c.correo_electronico as email,
-        p.fecha_presupuesto,
-        p.total,
-        CASE WHEN p.eliminado_en IS NULL
-        THEN p.status
-        ELSE "cancelled"
-        END AS estado
-        FROM presupuestos p
-        INNER JOIN clientes c
-        ON p.cliente_id = c.id
-        ORDER BY p.folio DESC';
-        $datatables->query($sql);
+	public function get_estimates_ajax()
+	{
+		$datatables = new Datatables(new CodeigniterAdapter);
+		$sql = '
+		SELECT 
+		  p.id, 
+		  p.folio, 
+		  c.nombre_razon_social as cliente, 
+		  c.correo_electronico as email, 
+		  
+		  
+		  
+		  
+		  CASE WHEN MONTH(p.fecha_presupuesto) = 1 THEN CONCAT(
+			p.fecha_presupuesto, 
+			"/", 
+			"Enero"
+		  ) WHEN MONTH(p.fecha_presupuesto) = 2 THEN CONCAT(
+			p.fecha_presupuesto, 
+			"/", 
+			"Febrero"
+		  ) WHEN MONTH(p.fecha_presupuesto) = 3 THEN CONCAT(
+			p.fecha_presupuesto, 
+			"/", 
+			"Marzo"
+		  ) WHEN MONTH(p.fecha_presupuesto) = 4 THEN CONCAT(
+			p.fecha_presupuesto, 
+			"/", 
+			"Abril"
+		  ) WHEN MONTH(p.fecha_presupuesto) = 5 THEN CONCAT(
+			p.fecha_presupuesto, 
+			"/", 
+			"Mayo"
+		  ) WHEN MONTH(p.fecha_presupuesto) = 6 THEN CONCAT(
+			p.fecha_presupuesto, 
+			"/", 
+			"Junio"
+		  ) WHEN MONTH(p.fecha_presupuesto) = 7 THEN CONCAT(
+			p.fecha_presupuesto, 
+			"/", 
+			"Julio"
+		  ) WHEN MONTH(p.fecha_presupuesto) = 8 THEN CONCAT(
+			p.fecha_presupuesto, 
+			"/", 
+			"Agosto"
+		  ) WHEN MONTH(p.fecha_presupuesto) = 9 THEN CONCAT(
+			p.fecha_presupuesto, 
+			"/", 
+			"Septiembre"
+		  ) WHEN MONTH(p.fecha_presupuesto) = 10 THEN CONCAT(
+			p.fecha_presupuesto, 
+			"/", 
+			"Octubre"
+		  ) WHEN MONTH(p.fecha_presupuesto) = 11 THEN CONCAT(
+			p.fecha_presupuesto, 
+			"/", 
+			"Noviembre"
+		  ) ELSE CONCAT(
+			p.fecha_presupuesto, 
+			"/", 
+			"Diciembre"
+		  ) END AS fecha, 
+		  
+		  
+		  
+		  
+		  p.total, 
+		  CASE WHEN p.status = "accepted" 
+		  AND p.eliminado_en IS NULL THEN "aceptado" WHEN p.status = "rejected" 
+		  AND p.eliminado_en IS NULL THEN "rechazado" WHEN p.status = "draft" 
+		  AND p.eliminado_en IS NULL THEN "borrador" ELSE "cancelado" END AS estado, 
+		  CASE WHEN p.status = "accepted" 
+		  AND p.eliminado_en IS NULL THEN "success" WHEN p.status = "rejected" 
+		  AND p.eliminado_en IS NULL THEN "warning" WHEN p.status = "draft" 
+		  AND p.eliminado_en IS NULL THEN "light" ELSE "danger" END AS color_fondo 
+		FROM 
+		  presupuestos p 
+		  INNER JOIN clientes c ON p.cliente_id = c.id 
+		ORDER BY 
+		  p.folio DESC
+		';
+		$datatables->query($sql);
 		$datatables->hide('id');
 		$datatables->hide('email');
-        $datatables->edit('folio', function ($data) {
-            return '<strong>' . $data['folio'] . '</strong>';
-        });
-        $datatables->edit('fecha_presupuesto', function ($data) {
-            $date_dmy = date('d/m/Y', strtotime($data['fecha_presupuesto']));
-            return $date_dmy;
-        });
-        $datatables->edit('estado', function ($data) {
-            $status = $data['estado'];
-            switch ($status) {
-                case 'cancelled':
-                    $bg_color = 'danger';
-                    $status_text = 'cancelado';
-                    break;
-                case 'accepted':
-                    $bg_color = 'success';
-                    $status_text = 'aceptado';
-                    break;
-                case 'rejected':
-                    $bg_color = 'warning';
-                    $status_text = 'rechazado';
-                    break;
-                default:
-                    $bg_color = 'light';
-                    $status_text = 'borrador';
-            }
-            return '<span class="py-2 px-3 badge badge-pill badge-' . $bg_color . '">' . strtoupper($status_text) . '</span>';
-        });
-        $datatables->edit('total', function ($data) {
-            return "$" . number_format($data['total'], 2);
-        });
-        $datatables->add('action', function ($data) {
-            $csrf = array(
-                'name' => $this->security->get_csrf_token_name(),
-                'hash' => $this->security->get_csrf_hash()
-            );
-            $status = $data['estado'];
+		$datatables->hide('color_fondo');
 
-            $data['url'] = base_url('admin/presupuestos/pdf/') . $data['id'];
-            $view_button = $this->load->view('partials/view_button', $data, true);
+		$datatables->edit('folio', function ($data) {
+			return '<strong>' . $data['folio'] . '</strong>';
+		});
+
+
+		$datatables->edit('fecha', function ($data) {
+			$full_date = explode("/", $data['fecha']);
+			$day = date('d', strtotime($full_date[0]));
+			$month = $full_date[1];
+			$year = date('Y', strtotime($full_date[0]));
+			$date_dmy = $day
+				. '/' . $month . '/' . $year;
+			return $date_dmy;
+		});
+
+		$datatables->edit('estado', function ($data) {
+			$status = $data['estado'];
+			$bg_color = $data['color_fondo'];
+			return '<span class="py-2 px-3 badge badge-pill badge-' . $bg_color . '">' . strtoupper($status) . '</span>';
+		});
+
+		$datatables->edit('total', function ($data) {
+			return "$" . number_format($data['total'], 2);
+		});
+
+		$datatables->add('action', function ($data) {
+			$csrf = [
+				'name' => $this->security->get_csrf_token_name(),
+				'hash' => $this->security->get_csrf_hash()
+			];
+
 			$mail_is_enabled = $this->settings->get_setting('mail_is_enabled');
-			if ((integer)$mail_is_enabled === 1 && $data['email']) {
-				$data['id'] =  $data['id'];
+
+			$data['id'] = $data['id'];
+			$data['status'] = $data['estado'];
+			$data['csrf_name'] = $csrf['name'];
+			$data['csrf_hash'] = $csrf['hash'];
+
+			$data['url'] = base_url('admin/presupuestos/pdf/') . $data['id'];
+
+			$email_button = '';
+			$view_button = $this->load->view('partials/view_button', $data, true);
+			$edit_button = '';
+			$delete_button = '';
+			$reuse_button = '';
+			$more_button = '';
+
+			if ((integer)$mail_is_enabled === 1 && !empty($data['email'])) {
 				$data['company_name'] = $this->settings->get_setting('nombre_empresa');
 				$data['document_id'] = $data['folio'];
 				$data['email'] = $data['email'];
 				$email_button = $this->load->view('partials/email_button', $data, true);
-			} else {
-				$email_button = '';
 			}
-            $data['url'] = base_url('admin/presupuestos/') . $data['id'];
-            $data['status'] = $status;
-            $edit_button = $this->load->view('partials/edit_button', $data, true);
-            $data['url'] = base_url('admin/estimates/delete_estimate');
-            $data['id'] = $data['id'];
-            $data['status'] = $status;
-            $data['csrf_name'] = $csrf['name'];
-            $data['csrf_hash'] = $csrf['hash'];
-            $delete_button = $this->load->view('partials/cancel_button', $data, true);
-            $data['id'] = $data['id'];
-            $data['status'] = $status;
-            $data['csrf_name'] = $csrf['name'];
-            $data['csrf_hash'] = $csrf['hash'];
-			return $view_button . $email_button . $edit_button . $delete_button;
-        });
-        echo $datatables->generate();
-    }
 
-    public function delete_estimate()
-    {
-        if ($this->input->server('REQUEST_METHOD') != 'POST') {
-            show_404();
-        }
-        if ($this->input->post('id')) {
-            $affected_rows = $this->estimates->delete_estimate($this->input->post('id'));
-            if ($affected_rows > 0) {
-                $this->session->set_flashdata('flash_message', [
-                    'type' => 'success',
-                    'title' => 'El presupuesto se canceló con éxito',
-                ]);
-                $this->session->set_flashdata('old', $this->input->post());
-                redirect('admin/presupuestos');
-            }
-        }
-    }
+			if ($data['estado'] !== 'cancelado') {
+				$data['url'] = base_url('admin/presupuestos/') . $data['id'];
+				$edit_button = $this->load->view('partials/edit_button', $data, true);
 
-    public function change_status()
-    {
-        if ($this->input->server('REQUEST_METHOD') != 'POST') {
-            show_404();
-        }
-        if ($this->input->post('id') && $this->input->post('status')) {
-            $affected_rows = $this->estimates->change_status($this->input->post());
-            if ($affected_rows >= 0) {
-                $status = $this->input->post('status');
-                switch ($status) {
-                    case 'accepted':
-                        $status_text = 'aceptado';
-                        break;
-                    case 'rejected':
-                        $status_text = 'rechazado';
-                        break;
-                    default:
-                        $status_text = 'borrador';
-                }
-                $this->session->set_flashdata('flash_message', [
-                    'type' => 'success',
-                    'title' => 'Presupuesto marcado como ' . $status_text,
-                ]);
-                $this->session->set_flashdata('old', $this->input->post());
-                redirect('admin/presupuestos');
-            }
-        }
-    }
+				$data['url'] = base_url('admin/estimates/delete_estimate');
+				$delete_button = $this->load->view('partials/cancel_button', $data, true);
 
-    public function get_products_ajax()
-    {
-        $errors = [];
-        if (is_null($this->input->get('search'))) {
-            $errors['search'] = 'El parámetro search es requerido';
-        }
-        if (count($errors) > 0) {
-            $this->output
-                ->set_header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request')
-                ->set_content_type('application/json')
-                ->set_output(json_encode($errors, JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE));
-        } else {
-            $search = $this->input->get('search');
-            $data = $this->products->get_products_for_typeahead($search);
-            $this->output
-                ->set_header($_SERVER['SERVER_PROTOCOL'] . ' 200 OK')
-                ->set_content_type('application/json')
-                ->set_output(json_encode($data, JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE));
-        }
-    }
+				$data['url'] = base_url('admin/estimates/new_estimate');
+				$reuse_button = $this->load->view('partials/reuse_button', $data, true);
 
-    public function get_customers_ajax()
-    {
-        $errors = [];
-        if (is_null($this->input->get('start')) || trim($this->input->get('start')) == '') {
-            $errors['start'] = 'El parámetro start es requerido';
-        } elseif (!preg_match("/^[0-9]*$/", $this->input->get('start'))) {
-            $errors['start'] = 'El parámetro start debe ser un numero entero';
-        }
-        if (is_null($this->input->get('length')) || trim($this->input->get('length')) == '') {
-            $errors['length'] = 'El parámetro length es requerido';
-        } elseif (!preg_match("/^[0-9]*$/", $this->input->get('length'))) {
-            $errors['length'] = 'El parámetro length debe ser un numero entero';
-        }
-        if (count($errors) > 0) {
-            $this->output
-                ->set_header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request')
-                ->set_content_type('application/json')
-                ->set_output(json_encode($errors, JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE));
-        } else {
-            $start = $this->input->get('start');
-            $length = $this->input->get('length');
-            $search = $this->input->get('search');
-            $data = $this->customers->get_customers_for_select2($start, $length, $search);
-            $this->output
-                ->set_header($_SERVER['SERVER_PROTOCOL'] . ' 200 OK')
-                ->set_content_type('application/json')
-                ->set_output(json_encode($data, JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE));
-        }
-    }
+				$more_button = $this->load->view('partials/more_button', $data, true);
 
-    public function get_pdf($id)
-    {
+			}
+
+			return $view_button . $email_button . $reuse_button . $edit_button . $delete_button . $more_button;
+
+		});
+
+		echo $datatables->generate();
+	}
+
+	public function delete_estimate()
+	{
+		if ($this->input->server('REQUEST_METHOD') != 'POST') {
+			show_404();
+		}
+		if ($this->input->post('id')) {
+			$affected_rows = $this->estimates->delete_estimate($this->input->post('id'));
+			if ($affected_rows > 0) {
+				$this->session->set_flashdata('flash_message', [
+					'type' => 'success',
+					'title' => 'El presupuesto se canceló con éxito',
+				]);
+				$this->session->set_flashdata('old', $this->input->post());
+				redirect('admin/presupuestos');
+			}
+		}
+	}
+
+	public function change_status()
+	{
+		if ($this->input->server('REQUEST_METHOD') != 'POST') {
+			show_404();
+		}
+		if ($this->input->post('id') && $this->input->post('status')) {
+			$affected_rows = $this->estimates->change_status($this->input->post());
+			if ($affected_rows >= 0) {
+				$status = $this->input->post('status');
+				switch ($status) {
+					case 'accepted':
+						$status_text = 'aceptado';
+						break;
+					case 'rejected':
+						$status_text = 'rechazado';
+						break;
+					default:
+						$status_text = 'borrador';
+				}
+				$this->session->set_flashdata('flash_message', [
+					'type' => 'success',
+					'title' => 'Presupuesto marcado como ' . $status_text,
+				]);
+				$this->session->set_flashdata('old', $this->input->post());
+				redirect('admin/presupuestos');
+			}
+		}
+	}
+
+	public function get_products_ajax()
+	{
+		$errors = [];
+		if (is_null($this->input->get('search'))) {
+			$errors['search'] = 'El parámetro search es requerido';
+		}
+		if (count($errors) > 0) {
+			$this->output
+				->set_header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request')
+				->set_content_type('application/json')
+				->set_output(json_encode($errors, JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE));
+		} else {
+			$search = $this->input->get('search');
+			$data = $this->products->get_products_for_typeahead($search);
+			$this->output
+				->set_header($_SERVER['SERVER_PROTOCOL'] . ' 200 OK')
+				->set_content_type('application/json')
+				->set_output(json_encode($data, JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE));
+		}
+	}
+
+	public function get_customers_ajax()
+	{
+		$errors = [];
+		if (is_null($this->input->get('start')) || trim($this->input->get('start')) == '') {
+			$errors['start'] = 'El parámetro start es requerido';
+		} elseif (!preg_match("/^[0-9]*$/", $this->input->get('start'))) {
+			$errors['start'] = 'El parámetro start debe ser un numero entero';
+		}
+		if (is_null($this->input->get('length')) || trim($this->input->get('length')) == '') {
+			$errors['length'] = 'El parámetro length es requerido';
+		} elseif (!preg_match("/^[0-9]*$/", $this->input->get('length'))) {
+			$errors['length'] = 'El parámetro length debe ser un numero entero';
+		}
+		if (count($errors) > 0) {
+			$this->output
+				->set_header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request')
+				->set_content_type('application/json')
+				->set_output(json_encode($errors, JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE));
+		} else {
+			$start = $this->input->get('start');
+			$length = $this->input->get('length');
+			$search = $this->input->get('search');
+			$data = $this->customers->get_customers_for_select2($start, $length, $search);
+			$this->output
+				->set_header($_SERVER['SERVER_PROTOCOL'] . ' 200 OK')
+				->set_content_type('application/json')
+				->set_output(json_encode($data, JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE));
+		}
+	}
+
+	public function get_pdf($id)
+	{
 
 		$company_logo = $this->settings->get_setting('logo_empresa');
 		$business_name = $this->settings->get_setting('razon_social');
@@ -524,78 +606,78 @@ class Estimates extends CI_Controller
 
 
 		$estimate = $this->estimates->get_any_estimate_by_id($id);
-        if (!$estimate) {
-            show_404();
-        }
-        $customer = $this->customers->get_customer_by_id($estimate->cliente_id);
-        $lines = $this->estimates->get_lines_by_id($id);
-        $estimate_number = $estimate->folio;
-        $data['page'] = 'pdf_estimate';
-        $data['title'] = 'Presupuesto ' . $estimate_number;
-        $data['css_files'] = [
-            base_url('assets/css/print.min.css'),
-        ];
-        $data['customer'] = $customer;
-        $data['estimate'] = $estimate;
-        $data['lines'] = $lines;
-        $html = $this->load->view('layouts/pdf_layout', $data, true);
-        $dompdf = new Dompdf();
-        $html = preg_replace('/>\s+</', "><", $html);
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('letter', 'portrait');
-        $dompdf->render();
-        $dompdf->stream('presupuesto-' . strtolower($estimate_number) . '.pdf', array("Attachment" => false));
-    }
+		if (!$estimate) {
+			show_404();
+		}
+		$customer = $this->customers->get_customer_by_id($estimate->cliente_id);
+		$lines = $this->estimates->get_lines_by_id($id);
+		$estimate_number = $estimate->folio;
+		$data['page'] = 'pdf_estimate';
+		$data['title'] = 'Presupuesto ' . $estimate_number;
+		$data['css_files'] = [
+			base_url('assets/css/print.min.css'),
+		];
+		$data['customer'] = $customer;
+		$data['estimate'] = $estimate;
+		$data['lines'] = $lines;
+		$html = $this->load->view('layouts/pdf_layout', $data, true);
+		$dompdf = new Dompdf();
+		$html = preg_replace('/>\s+</', "><", $html);
+		$dompdf->loadHtml($html);
+		$dompdf->setPaper('letter', 'portrait');
+		$dompdf->render();
+		$dompdf->stream('presupuesto-' . strtolower($estimate_number) . '.pdf', array("Attachment" => false));
+	}
 
-    public function generate_pdf_report()
-    {
-        $spanish_months = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
-        $report_type = $this->input->get('report_type');
-        $month = $this->input->get('month');
-        $year = $this->input->get('year');
-        if (!$report_type || !$month || !$year || intval($month) > 12) {
-            show_404();
-        }
-        if (!is_numeric($month) && $month !== 'all') {
-            show_404();
-        }
-        $spanish_month = ($month == 'all') ? 'anual' : $spanish_months[intval($month) - 1];
-        $title = ($month == 'all') ? 'Presupuestos del ' . $year : 'Presupuestos de ' . $spanish_month . ' del ' . $year;
-        if ($month == 'all') {
-            if ($report_type == 'estimates') {
-                $estimates = $this->estimates->get_annual_report($year);
-                $data['page'] = 'pdf_estimate_report';
-            } else {
-                $estimates = $this->estimates->get_annual_report_by_customers($year);
-                $data['page'] = 'pdf_estimate_report_2';
-            }
-            $sum_of_total = $this->estimates->get_annual_sum($year);
-        } else {
-            if ($report_type == 'estimates') {
-                $estimates = $this->estimates->get_monthly_report($month, $year);
-                $data['page'] = 'pdf_estimate_report';
-            } else {
-                $estimates = $this->estimates->get_monthly_report_by_customers($month, $year);
-                $data['page'] = 'pdf_estimate_report_2';
-            }
-            $sum_of_total = $this->estimates->get_monthly_sum($month, $year);
-        }
-        $data['title'] = $title;
-        $data['css_files'] = [
-            base_url('assets/css/report-to-print.min.css'),
-        ];
-        $data['estimates'] = $estimates;
-        $data['month'] = $spanish_month;
-        $data['year'] = $year;
-        $data['sum_of_total'] = $sum_of_total;
-        $html = $this->load->view('layouts/pdf_layout', $data, true);
-        $dompdf = new Dompdf();
-        $html = preg_replace('/>\s+</', "><", $html);
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('letter', 'portrait');
-        $dompdf->render();
-        $dompdf->stream('reporte_presupuestos_' . strtolower($spanish_month) . '_' . $year . '.pdf', array("Attachment" => false));
-    }
+	public function generate_pdf_report()
+	{
+		$spanish_months = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
+		$report_type = $this->input->get('report_type');
+		$month = $this->input->get('month');
+		$year = $this->input->get('year');
+		if (!$report_type || !$month || !$year || intval($month) > 12) {
+			show_404();
+		}
+		if (!is_numeric($month) && $month !== 'all') {
+			show_404();
+		}
+		$spanish_month = ($month == 'all') ? 'anual' : $spanish_months[intval($month) - 1];
+		$title = ($month == 'all') ? 'Presupuestos del ' . $year : 'Presupuestos de ' . $spanish_month . ' del ' . $year;
+		if ($month == 'all') {
+			if ($report_type == 'estimates') {
+				$estimates = $this->estimates->get_annual_report($year);
+				$data['page'] = 'pdf_estimate_report';
+			} else {
+				$estimates = $this->estimates->get_annual_report_by_customers($year);
+				$data['page'] = 'pdf_estimate_report_2';
+			}
+			$sum_of_total = $this->estimates->get_annual_sum($year);
+		} else {
+			if ($report_type == 'estimates') {
+				$estimates = $this->estimates->get_monthly_report($month, $year);
+				$data['page'] = 'pdf_estimate_report';
+			} else {
+				$estimates = $this->estimates->get_monthly_report_by_customers($month, $year);
+				$data['page'] = 'pdf_estimate_report_2';
+			}
+			$sum_of_total = $this->estimates->get_monthly_sum($month, $year);
+		}
+		$data['title'] = $title;
+		$data['css_files'] = [
+			base_url('assets/css/report-to-print.min.css'),
+		];
+		$data['estimates'] = $estimates;
+		$data['month'] = $spanish_month;
+		$data['year'] = $year;
+		$data['sum_of_total'] = $sum_of_total;
+		$html = $this->load->view('layouts/pdf_layout', $data, true);
+		$dompdf = new Dompdf();
+		$html = preg_replace('/>\s+</', "><", $html);
+		$dompdf->loadHtml($html);
+		$dompdf->setPaper('letter', 'portrait');
+		$dompdf->render();
+		$dompdf->stream('reporte_presupuestos_' . strtolower($spanish_month) . '_' . $year . '.pdf', array("Attachment" => false));
+	}
 }
 
 ?>
