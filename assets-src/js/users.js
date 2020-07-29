@@ -30,8 +30,8 @@ $(document).ready(function () {
 		"language": {
 			...spanishLang,
 			"paginate": {
-				"previous": '<i class="fa fa-step-backward"></i>',
-				"next": '<i class="fa fa-step-forward"></i>'
+				"previous": '<i class="fa fa-chevron-left"></i>',
+				"next": '<i class="fa fa-chevron-right"></i>'
 			}
 		}
 	});
