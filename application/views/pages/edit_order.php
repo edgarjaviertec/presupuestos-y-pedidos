@@ -36,6 +36,7 @@ $csrf = array(
     'name' => $this->security->get_csrf_token_name(),
     'hash' => $this->security->get_csrf_hash()
 );
+$rfc = $customer->rfc;
 $full_name = $customer->nombre_razon_social;
 $phone = $customer->telefono;
 $mobilePhone = $customer->telefono_celular;
@@ -189,6 +190,10 @@ if (isset($flash_message["type"]) && isset($flash_message["title"])) {
                                 <span class="label">Nombre</span>
                                 <span class="text" id="nameInput"><?php echo $full_name ?></span>
                             </div>
+							<div class="field">
+								<span class="label">RFC</span>
+								<span class="text" id="rfcInput"><?php echo $rfc?></span>
+							</div>
                             <div class="field">
                                 <span class="label">Dirección</span>
                                 <span class="text" id="addressInput"><?php echo $full_address ?></span>

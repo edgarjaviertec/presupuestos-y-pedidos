@@ -1,40 +1,8 @@
 <?php
-//if (!empty($company_settings['company_logo'])) {
-//	$company_logo = "/uploads/{$company_settings['company_logo']}";
-//} else {
-//	$company_logo = "/assets/img/default-logo.png";
-//}
-//if (!empty($company_settings['business_name'])) {
-//	$business_name = $company_settings['business_name'];
-//} else {
-//	$business_name = 'Empresa sin razón social';
-//}
-//if (!empty($company_settings['company_name'])) {
-//	$company_name = $company_settings['company_name'];
-//} else {
-//	$company_name = 'Empresa sin nombre';
-//}
-//if (!empty($company_settings['company_address'])) {
-//	$company_address = $company_settings['company_address'];
-//} else {
-//	$company_address = 'Empresa sin dirección conocida';
-//}
-//$current_date_ymd = date('Y-m-d');
-//$due_date_dmy = date('d/m/Y', strtotime($current_date_ymd . ' +30 day'));
-//$due_date_ymd = date('Y-m-d', strtotime($current_date_ymd . ' +30 day'));
-//$current_date_dmy = date('d/m/Y');
-//$errors = $this->session->flashdata('errors');
-//$old = $this->session->flashdata('old');
-//$csrf = array(
-//    'name' => $this->security->get_csrf_token_name(),
-//    'hash' => $this->security->get_csrf_hash()
-//);
-
 $company_logo = !empty($company_settings['company_logo']) ? "/uploads/{$company_settings['company_logo']}" : "/assets/img/default-logo.png";
 $business_name = !empty($company_settings['business_name']) ? $company_settings['business_name'] : 'Empresa sin razón social';
 $company_name = !empty($company_settings['company_name']) ? $company_settings['company_name'] : 'Empresa sin nombre';
 $company_address = !empty($company_settings['company_address']) ? $company_settings['company_address'] : 'Empresa sin dirección conocida';
-
 $current_date_ymd = date('Y-m-d');
 $due_date_dmy = date('d/m/Y', strtotime($current_date_ymd . ' +30 day'));
 $due_date_ymd = date('Y-m-d', strtotime($current_date_ymd . ' +30 day'));
@@ -43,20 +11,19 @@ $csrf = [
 		'name' => $this->security->get_csrf_token_name(),
 		'hash' => $this->security->get_csrf_hash()
 ];
-
 $subtotal = 0;
 $discount_type = 'fixed';
 $discount = 0;
 $discount_val = 0;
-$has_taxes = false;
+$has_taxes = true;
 $taxes = 0;
 $total = 0;
 $notes = '';
 $customer_id = '';
 $full_name = '';
+$rfc = '';
 $phone_or_mobile_phone = '';
 $full_address = '';
-
 if (!empty($order)) {
 	$customer_id = $order->cliente_id;
 	$subtotal = $order->sub_total;
@@ -68,9 +35,9 @@ if (!empty($order)) {
 	$total = $order->total;
 	$notes = $order->notas;
 }
-
 if (!empty($customer)) {
 	$full_name = $customer->nombre_razon_social;
+	$rfc = $customer->rfc;
 	$phone = $customer->telefono;
 	$mobile_phone = $customer->telefono_celular;
 	$phone_or_mobile_phone = (empty($phone) && !empty($mobile_phone)) ? $mobile_phone : $phone;
@@ -83,8 +50,6 @@ if (!empty($customer)) {
 	}
 	$full_address = join(" ", $full_address_array);
 }
-
-
 ?>
 <div class="row justify-content-center">
 	<div class="col-12">
@@ -388,6 +353,10 @@ if (!empty($customer)) {
 							<div class="field">
 								<span class="label">Nombre</span>
 								<span class="text" id="nameInput"><?php echo $full_name ?></span>
+							</div>
+							<div class="field">
+								<span class="label">RFC</span>
+								<span class="text" id="rfcInput"><?php echo $rfc ?></span>
 							</div>
 							<div class="field">
 								<span class="label">Dirección</span>
