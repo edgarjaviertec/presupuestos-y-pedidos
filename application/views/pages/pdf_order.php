@@ -32,6 +32,7 @@ $csrf = array(
 		'name' => $this->security->get_csrf_token_name(),
 		'hash' => $this->security->get_csrf_hash()
 );
+$rfc = $customer->rfc;
 $full_name = $customer->nombre_razon_social;
 $phone = $customer->telefono;
 $mobilePhone = $customer->telefono_celular;
@@ -120,6 +121,14 @@ foreach ($full_address_array as $key => $val) {
 		</th>
 		<td>
 			<span><?php echo text_truncate($full_name, 105) ?></span>
+		</td>
+	</tr>
+	<tr>
+		<th>
+			<span>RFC</span>
+		</th>
+		<td>
+			<span><?php echo text_truncate($rfc, 105) ?></span>
 		</td>
 	</tr>
 	<tr>

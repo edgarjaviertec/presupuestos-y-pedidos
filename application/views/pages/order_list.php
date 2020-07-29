@@ -30,6 +30,7 @@ $current_year = intval(date("Y"));
 				<tr>
 					<th>Folio</th>
 					<th>Cliente</th>
+					<th>RFC</th>
 					<th>Fecha</th>
 					<th>Total</th>
 					<th>Saldo</th>

@@ -282,6 +282,7 @@ class Orders extends CI_Controller
 		  p.id, 
 		  p.folio, 
 		  c.nombre_razon_social as cliente, 
+		  c.rfc, 
 		  c.correo_electronico as email, 
 		  CASE WHEN MONTH(p.fecha_pedido) = 1 THEN CONCAT(
 			p.fecha_pedido, 
